@@ -1,0 +1,1 @@
+cat schema.sql scopes/versions.sql scopes/heads.sql scopes/current.sql actions/*.sql specs/pipeline.sql

@@ -1,0 +1,57 @@
+
+<section class="summary{{#item.errors}} errors{{/item.errors}}">
+	<h1>{{title}}</h1>
+
+	<menu type="context">
+		<li><a href="?method=delete">Delete</a></li>
+		<li><a href="./edit">Edit</a></li>
+	</menu>
+</section>
+<section class="details">
+	<dl>
+{{#item}}
+	{{#meta:columns}}
+		{{#type:string}}
+			{{#parent:by:name}}
+				<dt>{{name}}</dt>
+				<dd>{{parent:by:name}}</dd>
+			{{/parent:by:name}}
+		{{/type:string}}
+		{{#type:text}}
+			{{#parent:by:name}}
+				<dt>{{name}}</dt>
+				<dd>{{parent:by:name}}</dd>
+			{{/parent:by:name}}
+		{{/type:text}}
+	{{/meta:columns}}
+{{/item}}
+	</dl>
+</section>
+
+
+
+<section id="meta" class="optional summary details">
+
+	<menu type="context">
+		<li><a href="#meta" class="more">Show more</a></li>
+	</menu>
+	<dl>
+{{#item}}
+	{{#meta:columns}}
+		{{#type:integer}}
+			{{#parent:by:name}}
+				<dt>{{name}}</dt>
+				<dd>{{parent:by:name}}</dd>
+			{{/parent:by:name}}
+		{{/type:integer}}
+		{{#type:timestamp}}
+			{{#parent:by:name}}
+				<dt>{{name}}</dt>
+				<dd>{{parent:by:name:DATETIME}} - 
+				{{parent:by:name}}</dd>
+			{{/parent:by:name}}
+		{{/type:timestamp}}
+	{{/parent::columns}}
+{{/item}}
+	</dl>
+</section>

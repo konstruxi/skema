@@ -1,0 +1,419 @@
+body,html {
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	min-height: 100%;
+}
+
+html {
+	background: #333;
+	background: linear-gradient(to right, #333, #222);
+	width: 0em;
+	padding-left: 10.4rem;
+	border-right: 0.1em solid #000;
+}
+body {
+	width: calc(100vw - 10.45em);
+	margin-left: 0.05em;
+	background: #fff;
+}
+
+
+
+body > * {
+	flex-grow: 0;
+	padding: 1rem 2rem 1rem 1rem;
+	box-sizing: padding-box;
+}
+body > footer, body > header, body > .summary, body > .flash, body > .breadcrumbs, body > nav {
+	padding: 1rem 1rem;
+}
+
+body > nav {
+	background: rgba(0,0,0,0.1);
+	font-size: 1.4rem;
+	display: inline;
+	padding: 0;
+}
+body > nav > *{
+	padding: 1rem 1rem;
+	display: inline-block;
+}
+
+body > .summary, body > form {
+	margin-top: 3rem;
+	border-top: 0;
+}
+
+.breadcrumbs {
+	background: linear-gradient(90deg, #eee, #fff);
+}
+.breadcrumbs h2{
+	color: #ccc;
+	font-weight: normal;
+}
+
+.breadcrumbs .home {
+	font: 0/0 '0';
+	vertical-align: top;
+	display: inline-block;
+
+}
+
+.breadcrumbs .home:hover:before {
+	background-color: green;
+	color: #fff;
+}
+.breadcrumbs .home:hover:after {
+	border-left-color: green;
+}
+.breadcrumbs .home:before {
+	font: 3rem/0.45 Helvetica;
+	content: '\2302';
+	margin: -1rem 0 -1rem -1rem;
+	background: #f7f7f7;
+	width: 0.5rem;
+	overflow: visible;
+	vertical-align: baseline;
+	padding: 1.20rem 1rem;
+	display: inline-block;
+	position: relative;
+	color: #ccc;
+	vertical-align: top;
+}
+.breadcrumbs .home:after {
+	display: inline-block;
+	content: '';
+	width: 0; 
+	height: 0; 
+	border-top: 1.9rem solid transparent;
+	border-bottom: 1.9rem solid transparent;
+	border-left: 1.9rem solid #f7f7f7;
+	margin: -1rem 0rem -1rem 0;
+	vertical-align: top;
+	display: inline-block;
+}
+
+body > footer, body > header {
+	padding: 1rem 1rem 1.5rem;
+}
+
+
+
+
+body > section:last-of-type, body > form:last-of-type {
+	flex-grow: 1;
+}
+a {
+	color: #999;
+}
+body {
+	font-family: Helvetica;
+}
+
+header {
+	border-bottom: 1px solid #ddd;
+}
+section, form {
+	padding-top: 1rem;
+	border-top: 1px solid #eaeaea;
+}
+header h1 {
+	margin-bottom: 0.5em;
+}
+
+footer aside {
+	position: absolute;
+	left: 1rem;
+	line-height: 2rem;
+	width: 8.5rem;
+	text-align: right;
+	padding: 0.5rem 0;
+}
+
+footer aside img {
+	width: 2em;
+	height: 2em;
+	border-radius: 50%;
+	border: 1px solid #eaeaea;
+	vertical-align: middle;
+	display: inline-block;
+	float: right;
+	margin-left: 0.3rem;
+	opacity: 0.8;
+}
+footer aside img.error:not(:hover) {
+	opacity: 0.2;
+}
+
+footer aside .profile_link {
+	color: #eee;
+}
+
+footer aside .sign_out_link {
+	margin-left: 1em;
+	position: absolute;
+	top: -2rem;
+	right: 0;
+	font-size: 0.8rem;
+	width: 6rem;
+}
+
+footer {
+	border-top: 1px solid #eaeaea;
+}
+
+body > .message {
+	padding: 1em 1em;
+	font-weight: normal;
+	background-color: #eee;
+	display: block;
+	position: relative;
+	z-index: 1;
+
+	background: repeating-linear-gradient(45deg, rgba(255,255,255,.5), rgba(255,255,255,.5) 2rem, transparent 2rem, transparent 4rem), linear-gradient(90deg, #eee, #fff);
+
+}
+
+.breadcrumbs ~ .message {
+	border-top: 1px solid #f7f7f7;
+	border-bottom: 1px solid #f7f7f7;
+}
+
+
+body > .message .undo {
+	display: inline-block;
+	margin: 0 -1em -1em 0.5em;
+	padding: 1em;
+	position: absolute;
+	left: -5.5rem;
+	width: 3rem;
+	text-align: right;
+	top: 0;
+
+}
+body > .message .undo:hover {
+	background: red;
+	color: white;
+}
+
+form h2 {
+	margin-bottom: 1em;
+}
+form .field {
+	display: block;
+	clear: both;
+	margin-bottom: 1em;
+	margin-left: -10rem;
+}
+
+form .field:after {
+	content: '';
+	display: block;
+	clear: left;
+}
+
+form .field label {
+	font-size: 1.5em;
+	line-height: 1.5em;
+	float: left;
+	margin-right: 2rem;
+	width: 8rem;
+	text-align: right;
+	color: #eee;
+}
+
+form .field input, form .field textarea {
+	margin: 0 0 -2px 0;
+	border-width: 0px 0 2px 0;
+	border-color: #ccc;
+	font-size: 1.5em;
+	line-height: 1.5em;
+	font-family: Georgia;
+	padding: 0 0.35em;
+	float: left;
+	border-style: solid;
+}
+
+form .field input:focus, form.field textarea:focus {
+	border-color: transparent;
+}
+
+form .field select {
+	font-size: 1.5em;
+}
+
+form .field .error {
+	margin-top: 0.7em;
+	margin-left: 1em;
+	display: inline-block;
+	color: #666;
+	font-style: italic;
+
+}
+form .field.errored input {
+	border-color: red;
+}
+
+form .field.errored label {
+	color: red;
+}
+
+.controls {
+	line-height: 2rem;
+	margin-top: 2em;
+	display: block;
+}
+
+.controls .alternative em {
+	padding: 0 0.5em;
+	font-style: normal;
+	display: inline-block;
+}
+
+input[type=submit] {
+	background: #ccc;
+	border-style: solid;
+	border-width: 2px;
+	border-color: #999;
+	font-size: 1.25rem;
+	padding: 0.25rem 0.5rem;
+	margin: -2px 0;
+}
+
+menu[type="context"] {
+	margin: 0;
+	padding: 0;
+}
+
+.summary {
+	position: relative;
+}
+.summary menu {
+	position: absolute;
+	top: 0;
+	left: -7rem;
+	width: 6rem;
+	text-align: right;
+	line-height: 2rem;
+	padding: 1.1rem 0;
+	list-style: none;
+}
+.summary menu li {
+	display: inline-block;
+}
+.summary menu li + li{
+	margin-left: 1rem;
+}
+
+
+
+aside.above {
+	position: absolute;
+	top: 0;
+	left: 1rem;
+	width: 6.5rem;
+	text-align: right;
+	padding: 2rem;
+}
+
+
+
+aside.aside {
+	position: absolute;
+	left: 1rem;
+	width: 6.5rem;
+	text-align: right;
+	padding: 1.5rem 2rem;
+}
+
+
+.summary menu[type="context"] > li {
+	margin-bottom: -0.5rem;
+}
+
+
+h1,h2,h3, dl, dt, dd {
+	padding: 0;
+	margin: 0;
+}
+
+dl {
+	margin-left: -10.5rem;
+}
+dl dt {
+	color: #eee;
+}
+
+
+dl {
+	padding: 1em 0;
+	line-height: 1.35rem;
+}
+dl dt {
+	float: left;
+	clear: both;
+	width: 8.5rem;
+	margin-bottom: 1em;
+	text-align: right;
+	font-size: 0.8rem;
+}
+
+
+dl dd {
+	float: left;
+	margin-left: 2em;
+	margin-bottom: 0.5em;
+	font-family: Georgia;
+}
+
+dl:after {
+	content: '';
+	display: block;
+	clear: both;
+
+}
+
+section.optional > dl{
+	display: none;
+}
+section.optional:target > dl{
+	display: block;
+}
+section.optional:target .more{
+	display: none;
+}
+section.optional .more {
+	display: inline-block;
+	line-height: 0.8em;
+	text-decoration: none;
+	border-bottom: 1px dashed #999;
+}
+
+.summary {
+	padding-bottom: 0;
+}
+.summary + .details {
+	padding-top: 0;
+}
+.summary h1 {
+	display: inline-block;
+	margin-right: 1em;
+}
+ul, li {
+	padding: 0;
+	margin: 0;
+}
+
+ul > li + li {
+	border-top: 1px dashed #ccc;
+}
+
+section > ul {
+	margin-top: 1em;
+}
+section > ul > li{
+	padding-top: 1.5em;
+	list-style: none;
+}

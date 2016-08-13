@@ -1,0 +1,141 @@
+
+{{#action}}
+	<form action="{{action}}" method="POST" accept-charset="utf-8">
+{{/action}}
+{{^action}}
+	<form action="./" method="POST" accept-charset="utf-8">
+{{/action}}
+
+<h2>{{title}}</h2>
+{{#meta:columns}}
+	{{#is_editable}}
+		{{#type:integer}}
+
+			{{#is_select}}
+				<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+					<label for="{{meta:singular}}_{{name}}_select">
+						{{name}}:
+					</label>
+					<select id="{{meta:singular}}_{{name}}_select" name="{{meta:singular}}[{{name}}]">
+						{{#meta:options:by:name}}
+								<option value="{{id}}" 
+
+								{{#parent::item:by:name}}
+									{{#parent::item:by:name:is:id}}selected{{/parent::item:by:name:is:id}}
+								{{/parent::item:by:name}}
+								{{^parent::item:by:name}}
+									{{#meta:parent_resource_key:is:parent:name}}
+										{{#id:is:meta:parent_resource_id}}
+										selected
+										{{/id:is:meta:parent_resource_id}}
+									{{/meta:parent_resource_key:is:parent:name}}
+								{{/parent::item:by:name}}> {{email}} </option>
+
+						{{/meta:options:by:name}}
+					 </select>
+				 </span>
+
+			{{/is_select}}
+			{{^is_select}}
+				<span class="integer field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+					<label for="{{meta:singular}}_{{name}}_number">
+						{{name}}:
+					</label>
+					{{#parent:item}}
+						<input type="number" id="{{meta:singular}}_{{name}}_number" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
+					{{/parent:item}}
+					{{^parent:item}}
+						<input type="number" id="{{meta:singular}}_{{name}}_number" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
+					{{/parent:item}}
+				</span>
+			{{/is_select}}
+
+		{{/type:integer}}
+
+		{{#type:array}}
+
+			{{#is_select}}
+				<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+					<label for="{{meta:singular}}_{{name}}_select">
+						{{name}}:
+					</label>
+					<select multiple id="{{meta:singular}}_{{name}}_select" name="{{meta:singular}}[{{name}}][]">
+						{{#meta:options:by:name}}
+								<option value="{{id}}"
+								{{#parent::item:by:parent:name}}
+									{{#this:is:parent:id}}selected{{/this:is:parent:id}}
+								{{/parent::item:by:parent:name}}
+								{{^parent::item:by:name}}
+									{{#meta:parent_resource_key:is:parent:name}}
+										{{#parent::item:order_id:is:meta:parent_resource_id}}
+										selected
+										{{/parent::item:order_id:is:meta:parent_resource_id}}
+									{{/meta:parent_resource_key:is:parent:name}}
+								{{/parent::item:by:name}}> {{email}}{{comment}} </option>
+
+						{{/meta:options:by:name}}
+					 </select>
+				 </span>
+
+			{{/is_select}}
+			{{^is_select}}
+				<span class="integer field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+					<label for="{{meta:singular}}_{{name}}_number">
+						{{name}}:
+					</label>
+					{{#parent:item}}
+						<input type="number" id="{{meta:singular}}_{{name}}_number" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
+					{{/parent:item}}
+					{{^parent:item}}
+						<input type="number" id="{{meta:singular}}_{{name}}_number" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
+					{{/parent:item}}
+				</span>
+			{{/is_select}}
+
+		{{/type:array}}
+
+		{{#type:string}}
+			<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+				<label for="{{meta:singular}}_{{name}}_text">
+					{{name}}:
+				</label>
+				{{#parent:item:errors:by:name}}
+					<span class="error">{{parent:item:errors:by:name}}</span>
+				{{/parent:item:errors:by:name}}
+
+
+				{{#parent:item:by:name}}
+					<input type="text" id="{{meta:singular}}_{{name}}_text" name="{{meta:singular}}[{{name}}]" value="{{parent:item:by:name}}" />
+				{{/parent:item:by:name}}
+				{{^parent:item:by:name}}
+					<input type="text" id="{{meta:singular}}_{{name}}_text" name="{{meta:singular}}[{{name}}]" />
+				{{/parent:item:by:name}}
+			</span>
+
+		{{/type:string}}
+
+		{{#type:text}}
+			<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+				<label for="{{meta:singular}}_{{name}}_text">
+					{{name}}:
+				</label>
+				{{#parent:item:errors:by:name}}
+					<span class="error">{{parent:item:errors:by:name}}</span>
+				{{/parent:item:errors:by:name}}
+
+				<textarea id="{{meta:singular}}_{{name}}_text" name="{{meta:singular}}[{{name}}]">{{parent:item:by:name}}</textarea>
+			</span>
+
+		{{/type:text}}
+
+	{{/is_editable}}
+
+{{/meta:columns}}
+
+	<span class="controls after">
+		<input type="submit" value="{{#label}}{{label}}{{/label}}{{^label}}Submit{{/label}}"/>
+		<span class="alternative">
+			<em>or</em> <a href="./">Cancel</a>
+		</span>
+	</span>
+</form>
