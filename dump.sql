@@ -44,7 +44,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 SET search_path = public, pg_catalog;
 
 --
--- Name: convert_arrays(json); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: convert_arrays(json); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION convert_arrays(input json) RETURNS json
@@ -67,10 +67,10 @@ CREATE FUNCTION convert_arrays(input json) RETURNS json
 $_$;
 
 
-ALTER FUNCTION public.convert_arrays(input json) OWNER TO invizko;
+ALTER FUNCTION public.convert_arrays(input json) OWNER TO root;
 
 --
--- Name: create_item(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: create_item(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION create_item() RETURNS trigger
@@ -115,10 +115,10 @@ CREATE FUNCTION create_item() RETURNS trigger
 end $$;
 
 
-ALTER FUNCTION public.create_item() OWNER TO invizko;
+ALTER FUNCTION public.create_item() OWNER TO root;
 
 --
--- Name: create_order(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: create_order(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION create_order() RETURNS trigger
@@ -164,10 +164,10 @@ CREATE FUNCTION create_order() RETURNS trigger
 end $$;
 
 
-ALTER FUNCTION public.create_order() OWNER TO invizko;
+ALTER FUNCTION public.create_order() OWNER TO root;
 
 --
--- Name: create_variant(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: create_variant(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION create_variant() RETURNS trigger
@@ -212,10 +212,10 @@ CREATE FUNCTION create_variant() RETURNS trigger
 end $$;
 
 
-ALTER FUNCTION public.create_variant() OWNER TO invizko;
+ALTER FUNCTION public.create_variant() OWNER TO root;
 
 --
--- Name: delete_and_return_new(text, integer); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: delete_and_return_new(text, integer); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION delete_and_return_new(relname text, id integer) RETURNS json
@@ -239,10 +239,10 @@ END;
 $_$;
 
 
-ALTER FUNCTION public.delete_and_return_new(relname text, id integer) OWNER TO invizko;
+ALTER FUNCTION public.delete_and_return_new(relname text, id integer) OWNER TO root;
 
 --
--- Name: delete_current_item(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: delete_current_item(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION delete_current_item() RETURNS trigger
@@ -255,10 +255,10 @@ CREATE FUNCTION delete_current_item() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION public.delete_current_item() OWNER TO invizko;
+ALTER FUNCTION public.delete_current_item() OWNER TO root;
 
 --
--- Name: delete_current_order(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: delete_current_order(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION delete_current_order() RETURNS trigger
@@ -271,10 +271,10 @@ CREATE FUNCTION delete_current_order() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION public.delete_current_order() OWNER TO invizko;
+ALTER FUNCTION public.delete_current_order() OWNER TO root;
 
 --
--- Name: delete_current_variant(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: delete_current_variant(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION delete_current_variant() RETURNS trigger
@@ -287,10 +287,10 @@ CREATE FUNCTION delete_current_variant() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION public.delete_current_variant() OWNER TO invizko;
+ALTER FUNCTION public.delete_current_variant() OWNER TO root;
 
 --
--- Name: delete_item(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: delete_item(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION delete_item() RETURNS trigger
@@ -305,10 +305,10 @@ CREATE FUNCTION delete_item() RETURNS trigger
 $_$;
 
 
-ALTER FUNCTION public.delete_item() OWNER TO invizko;
+ALTER FUNCTION public.delete_item() OWNER TO root;
 
 --
--- Name: delete_item_head(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: delete_item_head(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION delete_item_head() RETURNS trigger
@@ -319,10 +319,10 @@ CREATE FUNCTION delete_item_head() RETURNS trigger
 end; $$;
 
 
-ALTER FUNCTION public.delete_item_head() OWNER TO invizko;
+ALTER FUNCTION public.delete_item_head() OWNER TO root;
 
 --
--- Name: delete_item_version(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: delete_item_version(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION delete_item_version() RETURNS trigger
@@ -346,10 +346,10 @@ CREATE FUNCTION delete_item_version() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION public.delete_item_version() OWNER TO invizko;
+ALTER FUNCTION public.delete_item_version() OWNER TO root;
 
 --
--- Name: delete_order(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: delete_order(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION delete_order() RETURNS trigger
@@ -364,10 +364,10 @@ CREATE FUNCTION delete_order() RETURNS trigger
 $_$;
 
 
-ALTER FUNCTION public.delete_order() OWNER TO invizko;
+ALTER FUNCTION public.delete_order() OWNER TO root;
 
 --
--- Name: delete_order_head(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: delete_order_head(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION delete_order_head() RETURNS trigger
@@ -378,10 +378,10 @@ CREATE FUNCTION delete_order_head() RETURNS trigger
 end; $$;
 
 
-ALTER FUNCTION public.delete_order_head() OWNER TO invizko;
+ALTER FUNCTION public.delete_order_head() OWNER TO root;
 
 --
--- Name: delete_order_version(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: delete_order_version(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION delete_order_version() RETURNS trigger
@@ -405,10 +405,10 @@ CREATE FUNCTION delete_order_version() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION public.delete_order_version() OWNER TO invizko;
+ALTER FUNCTION public.delete_order_version() OWNER TO root;
 
 --
--- Name: delete_variant(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: delete_variant(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION delete_variant() RETURNS trigger
@@ -423,10 +423,10 @@ CREATE FUNCTION delete_variant() RETURNS trigger
 $_$;
 
 
-ALTER FUNCTION public.delete_variant() OWNER TO invizko;
+ALTER FUNCTION public.delete_variant() OWNER TO root;
 
 --
--- Name: delete_variant_head(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: delete_variant_head(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION delete_variant_head() RETURNS trigger
@@ -437,10 +437,10 @@ CREATE FUNCTION delete_variant_head() RETURNS trigger
 end; $$;
 
 
-ALTER FUNCTION public.delete_variant_head() OWNER TO invizko;
+ALTER FUNCTION public.delete_variant_head() OWNER TO root;
 
 --
--- Name: delete_variant_version(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: delete_variant_version(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION delete_variant_version() RETURNS trigger
@@ -464,10 +464,10 @@ CREATE FUNCTION delete_variant_version() RETURNS trigger
 $$;
 
 
-ALTER FUNCTION public.delete_variant_version() OWNER TO invizko;
+ALTER FUNCTION public.delete_variant_version() OWNER TO root;
 
 --
--- Name: full_select_sql(text, json); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: full_select_sql(text, json); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION full_select_sql(relname text, structure json) RETURNS text
@@ -524,10 +524,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.full_select_sql(relname text, structure json) OWNER TO invizko;
+ALTER FUNCTION public.full_select_sql(relname text, structure json) OWNER TO root;
 
 --
--- Name: insert_sql(text, json); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: insert_sql(text, json); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION insert_sql(relname text, structure json) RETURNS text
@@ -554,10 +554,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.insert_sql(relname text, structure json) OWNER TO invizko;
+ALTER FUNCTION public.insert_sql(relname text, structure json) OWNER TO root;
 
 --
--- Name: item_head(integer, boolean, integer); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: item_head(integer, boolean, integer); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION item_head(integer, boolean DEFAULT true, integer DEFAULT 2147483646) RETURNS integer
@@ -567,10 +567,10 @@ CREATE FUNCTION item_head(integer, boolean DEFAULT true, integer DEFAULT 2147483
        ORDER BY version DESC$_$;
 
 
-ALTER FUNCTION public.item_head(integer, boolean, integer) OWNER TO invizko;
+ALTER FUNCTION public.item_head(integer, boolean, integer) OWNER TO root;
 
 --
--- Name: json_from(text); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: json_from(text); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION json_from(relname text) RETURNS json
@@ -587,10 +587,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.json_from(relname text) OWNER TO invizko;
+ALTER FUNCTION public.json_from(relname text) OWNER TO root;
 
 --
--- Name: options_for(text, text, json); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: options_for(text, text, json); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION options_for(relname text, preset text, structure json) RETURNS json
@@ -622,10 +622,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.options_for(relname text, preset text, structure json) OWNER TO invizko;
+ALTER FUNCTION public.options_for(relname text, preset text, structure json) OWNER TO root;
 
 --
--- Name: order_head(integer, boolean, integer); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: order_head(integer, boolean, integer); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION order_head(integer, boolean DEFAULT true, integer DEFAULT 2147483646) RETURNS integer
@@ -635,10 +635,10 @@ CREATE FUNCTION order_head(integer, boolean DEFAULT true, integer DEFAULT 214748
        ORDER BY version DESC$_$;
 
 
-ALTER FUNCTION public.order_head(integer, boolean, integer) OWNER TO invizko;
+ALTER FUNCTION public.order_head(integer, boolean, integer) OWNER TO root;
 
 --
--- Name: patch_sql(text, json); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: patch_sql(text, json); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION patch_sql(relname text, structure json) RETURNS text
@@ -669,10 +669,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.patch_sql(relname text, structure json) OWNER TO invizko;
+ALTER FUNCTION public.patch_sql(relname text, structure json) OWNER TO root;
 
 --
--- Name: pluralize(text); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: pluralize(text); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION pluralize(text) RETURNS text
@@ -686,10 +686,10 @@ CREATE FUNCTION pluralize(text) RETURNS text
 end $_$;
 
 
-ALTER FUNCTION public.pluralize(text) OWNER TO invizko;
+ALTER FUNCTION public.pluralize(text) OWNER TO root;
 
 --
--- Name: singularize(text); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: singularize(text); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION singularize(text) RETURNS text
@@ -699,10 +699,10 @@ CREATE FUNCTION singularize(text) RETURNS text
 end $_$;
 
 
-ALTER FUNCTION public.singularize(text) OWNER TO invizko;
+ALTER FUNCTION public.singularize(text) OWNER TO root;
 
 --
--- Name: update_item(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: update_item(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION update_item() RETURNS trigger
@@ -740,10 +740,10 @@ CREATE FUNCTION update_item() RETURNS trigger
 end $$;
 
 
-ALTER FUNCTION public.update_item() OWNER TO invizko;
+ALTER FUNCTION public.update_item() OWNER TO root;
 
 --
--- Name: update_item_head(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: update_item_head(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION update_item_head() RETURNS trigger
@@ -756,10 +756,10 @@ begin
 end; $$;
 
 
-ALTER FUNCTION public.update_item_head() OWNER TO invizko;
+ALTER FUNCTION public.update_item_head() OWNER TO root;
 
 --
--- Name: update_order(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: update_order(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION update_order() RETURNS trigger
@@ -799,10 +799,10 @@ CREATE FUNCTION update_order() RETURNS trigger
 end $$;
 
 
-ALTER FUNCTION public.update_order() OWNER TO invizko;
+ALTER FUNCTION public.update_order() OWNER TO root;
 
 --
--- Name: update_order_head(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: update_order_head(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION update_order_head() RETURNS trigger
@@ -815,10 +815,10 @@ begin
 end; $$;
 
 
-ALTER FUNCTION public.update_order_head() OWNER TO invizko;
+ALTER FUNCTION public.update_order_head() OWNER TO root;
 
 --
--- Name: update_sql(text, json); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: update_sql(text, json); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION update_sql(relname text, structure json) RETURNS text
@@ -838,10 +838,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.update_sql(relname text, structure json) OWNER TO invizko;
+ALTER FUNCTION public.update_sql(relname text, structure json) OWNER TO root;
 
 --
--- Name: update_variant(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: update_variant(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION update_variant() RETURNS trigger
@@ -879,10 +879,10 @@ CREATE FUNCTION update_variant() RETURNS trigger
 end $$;
 
 
-ALTER FUNCTION public.update_variant() OWNER TO invizko;
+ALTER FUNCTION public.update_variant() OWNER TO root;
 
 --
--- Name: update_variant_head(); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: update_variant_head(); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION update_variant_head() RETURNS trigger
@@ -895,14 +895,14 @@ begin
 end; $$;
 
 
-ALTER FUNCTION public.update_variant_head() OWNER TO invizko;
+ALTER FUNCTION public.update_variant_head() OWNER TO root;
 
 SET default_tablespace = '';
 
 SET default_with_oids = false;
 
 --
--- Name: items; Type: TABLE; Schema: public; Owner: invizko
+-- Name: items; Type: TABLE; Schema: public; Owner: root
 --
 
 CREATE TABLE items (
@@ -920,10 +920,10 @@ CREATE TABLE items (
 );
 
 
-ALTER TABLE items OWNER TO invizko;
+ALTER TABLE items OWNER TO root;
 
 --
--- Name: validate_item(items); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: validate_item(items); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION validate_item(new items) RETURNS jsonb
@@ -950,10 +950,10 @@ begin
 end $$;
 
 
-ALTER FUNCTION public.validate_item(new items) OWNER TO invizko;
+ALTER FUNCTION public.validate_item(new items) OWNER TO root;
 
 --
--- Name: orders; Type: TABLE; Schema: public; Owner: invizko
+-- Name: orders; Type: TABLE; Schema: public; Owner: root
 --
 
 CREATE TABLE orders (
@@ -972,10 +972,10 @@ CREATE TABLE orders (
 );
 
 
-ALTER TABLE orders OWNER TO invizko;
+ALTER TABLE orders OWNER TO root;
 
 --
--- Name: validate_order(orders); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: validate_order(orders); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION validate_order(new orders) RETURNS jsonb
@@ -998,10 +998,10 @@ begin
 end $_$;
 
 
-ALTER FUNCTION public.validate_order(new orders) OWNER TO invizko;
+ALTER FUNCTION public.validate_order(new orders) OWNER TO root;
 
 --
--- Name: variants; Type: TABLE; Schema: public; Owner: invizko
+-- Name: variants; Type: TABLE; Schema: public; Owner: root
 --
 
 CREATE TABLE variants (
@@ -1019,10 +1019,10 @@ CREATE TABLE variants (
 );
 
 
-ALTER TABLE variants OWNER TO invizko;
+ALTER TABLE variants OWNER TO root;
 
 --
--- Name: validate_variant(variants); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: validate_variant(variants); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION validate_variant(new variants) RETURNS jsonb
@@ -1049,10 +1049,10 @@ begin
 end $$;
 
 
-ALTER FUNCTION public.validate_variant(new variants) OWNER TO invizko;
+ALTER FUNCTION public.validate_variant(new variants) OWNER TO root;
 
 --
--- Name: variant_head(integer, boolean, integer); Type: FUNCTION; Schema: public; Owner: invizko
+-- Name: variant_head(integer, boolean, integer); Type: FUNCTION; Schema: public; Owner: root
 --
 
 CREATE FUNCTION variant_head(integer, boolean DEFAULT true, integer DEFAULT 2147483646) RETURNS integer
@@ -1062,10 +1062,10 @@ CREATE FUNCTION variant_head(integer, boolean DEFAULT true, integer DEFAULT 2147
        ORDER BY version DESC$_$;
 
 
-ALTER FUNCTION public.variant_head(integer, boolean, integer) OWNER TO invizko;
+ALTER FUNCTION public.variant_head(integer, boolean, integer) OWNER TO root;
 
 --
--- Name: items_versions; Type: VIEW; Schema: public; Owner: invizko
+-- Name: items_versions; Type: VIEW; Schema: public; Owner: root
 --
 
 CREATE VIEW items_versions AS
@@ -1085,10 +1085,10 @@ CREATE VIEW items_versions AS
   ORDER BY items.root_id, items.version DESC;
 
 
-ALTER TABLE items_versions OWNER TO invizko;
+ALTER TABLE items_versions OWNER TO root;
 
 --
--- Name: items_heads; Type: VIEW; Schema: public; Owner: invizko
+-- Name: items_heads; Type: VIEW; Schema: public; Owner: root
 --
 
 CREATE VIEW items_heads AS
@@ -1106,10 +1106,10 @@ CREATE VIEW items_heads AS
    FROM items_versions;
 
 
-ALTER TABLE items_heads OWNER TO invizko;
+ALTER TABLE items_heads OWNER TO root;
 
 --
--- Name: items_current; Type: VIEW; Schema: public; Owner: invizko
+-- Name: items_current; Type: VIEW; Schema: public; Owner: root
 --
 
 CREATE VIEW items_current AS
@@ -1128,10 +1128,10 @@ CREATE VIEW items_current AS
   WHERE (items_heads.deleted_at IS NULL);
 
 
-ALTER TABLE items_current OWNER TO invizko;
+ALTER TABLE items_current OWNER TO root;
 
 --
--- Name: items_id_seq; Type: SEQUENCE; Schema: public; Owner: invizko
+-- Name: items_id_seq; Type: SEQUENCE; Schema: public; Owner: root
 --
 
 CREATE SEQUENCE items_id_seq
@@ -1142,17 +1142,17 @@ CREATE SEQUENCE items_id_seq
     CACHE 1;
 
 
-ALTER TABLE items_id_seq OWNER TO invizko;
+ALTER TABLE items_id_seq OWNER TO root;
 
 --
--- Name: items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: invizko
+-- Name: items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
 --
 
 ALTER SEQUENCE items_id_seq OWNED BY items.id;
 
 
 --
--- Name: variants_versions; Type: VIEW; Schema: public; Owner: invizko
+-- Name: variants_versions; Type: VIEW; Schema: public; Owner: root
 --
 
 CREATE VIEW variants_versions AS
@@ -1172,10 +1172,10 @@ CREATE VIEW variants_versions AS
   ORDER BY variants.root_id, variants.version DESC;
 
 
-ALTER TABLE variants_versions OWNER TO invizko;
+ALTER TABLE variants_versions OWNER TO root;
 
 --
--- Name: variants_heads; Type: VIEW; Schema: public; Owner: invizko
+-- Name: variants_heads; Type: VIEW; Schema: public; Owner: root
 --
 
 CREATE VIEW variants_heads AS
@@ -1193,10 +1193,10 @@ CREATE VIEW variants_heads AS
    FROM variants_versions;
 
 
-ALTER TABLE variants_heads OWNER TO invizko;
+ALTER TABLE variants_heads OWNER TO root;
 
 --
--- Name: variants_current; Type: VIEW; Schema: public; Owner: invizko
+-- Name: variants_current; Type: VIEW; Schema: public; Owner: root
 --
 
 CREATE VIEW variants_current AS
@@ -1215,10 +1215,10 @@ CREATE VIEW variants_current AS
   WHERE (variants_heads.deleted_at IS NULL);
 
 
-ALTER TABLE variants_current OWNER TO invizko;
+ALTER TABLE variants_current OWNER TO root;
 
 --
--- Name: variants_json; Type: VIEW; Schema: public; Owner: invizko
+-- Name: variants_json; Type: VIEW; Schema: public; Owner: root
 --
 
 CREATE VIEW variants_json AS
@@ -1236,10 +1236,10 @@ CREATE VIEW variants_json AS
    FROM variants_current;
 
 
-ALTER TABLE variants_json OWNER TO invizko;
+ALTER TABLE variants_json OWNER TO root;
 
 --
--- Name: items_json; Type: VIEW; Schema: public; Owner: invizko
+-- Name: items_json; Type: VIEW; Schema: public; Owner: root
 --
 
 CREATE VIEW items_json AS
@@ -1263,10 +1263,10 @@ CREATE VIEW items_json AS
           GROUP BY items_1.id) items_variants ON ((items_variants.id = items.id)));
 
 
-ALTER TABLE items_json OWNER TO invizko;
+ALTER TABLE items_json OWNER TO root;
 
 --
--- Name: items_with_order; Type: VIEW; Schema: public; Owner: invizko
+-- Name: items_with_order; Type: VIEW; Schema: public; Owner: root
 --
 
 CREATE VIEW items_with_order AS
@@ -1284,10 +1284,10 @@ CREATE VIEW items_with_order AS
    FROM items_current;
 
 
-ALTER TABLE items_with_order OWNER TO invizko;
+ALTER TABLE items_with_order OWNER TO root;
 
 --
--- Name: orders_versions; Type: VIEW; Schema: public; Owner: invizko
+-- Name: orders_versions; Type: VIEW; Schema: public; Owner: root
 --
 
 CREATE VIEW orders_versions AS
@@ -1308,10 +1308,10 @@ CREATE VIEW orders_versions AS
   ORDER BY orders.root_id, orders.version DESC;
 
 
-ALTER TABLE orders_versions OWNER TO invizko;
+ALTER TABLE orders_versions OWNER TO root;
 
 --
--- Name: orders_heads; Type: VIEW; Schema: public; Owner: invizko
+-- Name: orders_heads; Type: VIEW; Schema: public; Owner: root
 --
 
 CREATE VIEW orders_heads AS
@@ -1330,10 +1330,10 @@ CREATE VIEW orders_heads AS
    FROM orders_versions;
 
 
-ALTER TABLE orders_heads OWNER TO invizko;
+ALTER TABLE orders_heads OWNER TO root;
 
 --
--- Name: orders_current; Type: VIEW; Schema: public; Owner: invizko
+-- Name: orders_current; Type: VIEW; Schema: public; Owner: root
 --
 
 CREATE VIEW orders_current AS
@@ -1353,10 +1353,10 @@ CREATE VIEW orders_current AS
   WHERE (orders_heads.deleted_at IS NULL);
 
 
-ALTER TABLE orders_current OWNER TO invizko;
+ALTER TABLE orders_current OWNER TO root;
 
 --
--- Name: orders_id_seq; Type: SEQUENCE; Schema: public; Owner: invizko
+-- Name: orders_id_seq; Type: SEQUENCE; Schema: public; Owner: root
 --
 
 CREATE SEQUENCE orders_id_seq
@@ -1367,17 +1367,17 @@ CREATE SEQUENCE orders_id_seq
     CACHE 1;
 
 
-ALTER TABLE orders_id_seq OWNER TO invizko;
+ALTER TABLE orders_id_seq OWNER TO root;
 
 --
--- Name: orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: invizko
+-- Name: orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
 --
 
 ALTER SEQUENCE orders_id_seq OWNED BY orders.id;
 
 
 --
--- Name: orders_json; Type: VIEW; Schema: public; Owner: invizko
+-- Name: orders_json; Type: VIEW; Schema: public; Owner: root
 --
 
 CREATE VIEW orders_json AS
@@ -1402,10 +1402,10 @@ CREATE VIEW orders_json AS
           GROUP BY orders_1.id) orders_items ON ((orders_items.id = orders.id)));
 
 
-ALTER TABLE orders_json OWNER TO invizko;
+ALTER TABLE orders_json OWNER TO root;
 
 --
--- Name: structures; Type: VIEW; Schema: public; Owner: invizko
+-- Name: structures; Type: VIEW; Schema: public; Owner: root
 --
 
 CREATE VIEW structures AS
@@ -1432,10 +1432,10 @@ CREATE VIEW structures AS
   GROUP BY columns.table_name;
 
 
-ALTER TABLE structures OWNER TO invizko;
+ALTER TABLE structures OWNER TO root;
 
 --
--- Name: structures_and_references; Type: VIEW; Schema: public; Owner: invizko
+-- Name: structures_and_references; Type: VIEW; Schema: public; Owner: root
 --
 
 CREATE VIEW structures_and_references AS
@@ -1452,10 +1452,10 @@ CREATE VIEW structures_and_references AS
           GROUP BY structures.table_name) x ON (((x.table_name)::text = (q.table_name)::text)));
 
 
-ALTER TABLE structures_and_references OWNER TO invizko;
+ALTER TABLE structures_and_references OWNER TO root;
 
 --
--- Name: structures_and_children; Type: VIEW; Schema: public; Owner: invizko
+-- Name: structures_and_children; Type: VIEW; Schema: public; Owner: root
 --
 
 CREATE VIEW structures_and_children AS
@@ -1478,10 +1478,10 @@ CREATE VIEW structures_and_children AS
           WHERE (("position"((rls.value ->> 'name'::text), '_id'::text) > 0) AND ("position"((rls.value ->> 'name'::text), '_ids'::text) = 0) AND ((rls.value ->> 'name'::text) <> 'root_id'::text))) s ON (((q.table_name)::text = (s.table_name)::text)));
 
 
-ALTER TABLE structures_and_children OWNER TO invizko;
+ALTER TABLE structures_and_children OWNER TO root;
 
 --
--- Name: structures_hierarchy; Type: VIEW; Schema: public; Owner: invizko
+-- Name: structures_hierarchy; Type: VIEW; Schema: public; Owner: root
 --
 
 CREATE VIEW structures_hierarchy AS
@@ -1514,10 +1514,10 @@ CREATE VIEW structures_hierarchy AS
             ''::character varying) grandparent ON ((((pluralize(replace((parent.column_name)::text, '_id'::text, ''::text)) = (grandparent.table_name)::text) AND (("position"((grandparent.column_name)::text, '_id'::text) > 0) AND ("position"((grandparent.column_name)::text, '_ids'::text) = 0)) AND ((grandparent.column_name)::text <> 'root_id'::text)) OR ((grandparent.table_name)::text = ''::text))));
 
 
-ALTER TABLE structures_hierarchy OWNER TO invizko;
+ALTER TABLE structures_hierarchy OWNER TO root;
 
 --
--- Name: structures_and_queries; Type: MATERIALIZED VIEW; Schema: public; Owner: invizko
+-- Name: structures_and_queries; Type: MATERIALIZED VIEW; Schema: public; Owner: root
 --
 
 CREATE MATERIALIZED VIEW structures_and_queries AS
@@ -1540,10 +1540,10 @@ CREATE MATERIALIZED VIEW structures_and_queries AS
   WITH NO DATA;
 
 
-ALTER TABLE structures_and_queries OWNER TO invizko;
+ALTER TABLE structures_and_queries OWNER TO root;
 
 --
--- Name: variants_id_seq; Type: SEQUENCE; Schema: public; Owner: invizko
+-- Name: variants_id_seq; Type: SEQUENCE; Schema: public; Owner: root
 --
 
 CREATE SEQUENCE variants_id_seq
@@ -1554,17 +1554,17 @@ CREATE SEQUENCE variants_id_seq
     CACHE 1;
 
 
-ALTER TABLE variants_id_seq OWNER TO invizko;
+ALTER TABLE variants_id_seq OWNER TO root;
 
 --
--- Name: variants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: invizko
+-- Name: variants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
 --
 
 ALTER SEQUENCE variants_id_seq OWNED BY variants.id;
 
 
 --
--- Name: variants_with_item; Type: VIEW; Schema: public; Owner: invizko
+-- Name: variants_with_item; Type: VIEW; Schema: public; Owner: root
 --
 
 CREATE VIEW variants_with_item AS
@@ -1582,31 +1582,31 @@ CREATE VIEW variants_with_item AS
    FROM variants_current;
 
 
-ALTER TABLE variants_with_item OWNER TO invizko;
+ALTER TABLE variants_with_item OWNER TO root;
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: invizko
+-- Name: id; Type: DEFAULT; Schema: public; Owner: root
 --
 
 ALTER TABLE ONLY items ALTER COLUMN id SET DEFAULT nextval('items_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: invizko
+-- Name: id; Type: DEFAULT; Schema: public; Owner: root
 --
 
 ALTER TABLE ONLY orders ALTER COLUMN id SET DEFAULT nextval('orders_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: invizko
+-- Name: id; Type: DEFAULT; Schema: public; Owner: root
 --
 
 ALTER TABLE ONLY variants ALTER COLUMN id SET DEFAULT nextval('variants_id_seq'::regclass);
 
 
 --
--- Data for Name: items; Type: TABLE DATA; Schema: public; Owner: invizko
+-- Data for Name: items; Type: TABLE DATA; Schema: public; Owner: root
 --
 
 COPY items (id, root_id, version, previous_version, next_version, errors, created_at, updated_at, deleted_at, comment, order_id) FROM stdin;
@@ -1633,14 +1633,14 @@ COPY items (id, root_id, version, previous_version, next_version, errors, create
 
 
 --
--- Name: items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: invizko
+-- Name: items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
 --
 
 SELECT pg_catalog.setval('items_id_seq', 19, true);
 
 
 --
--- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: invizko
+-- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: root
 --
 
 COPY orders (id, root_id, version, previous_version, next_version, errors, created_at, updated_at, deleted_at, email, name, items_ids) FROM stdin;
@@ -1717,14 +1717,14 @@ COPY orders (id, root_id, version, previous_version, next_version, errors, creat
 
 
 --
--- Name: orders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: invizko
+-- Name: orders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
 --
 
 SELECT pg_catalog.setval('orders_id_seq', 69, true);
 
 
 --
--- Data for Name: variants; Type: TABLE DATA; Schema: public; Owner: invizko
+-- Data for Name: variants; Type: TABLE DATA; Schema: public; Owner: root
 --
 
 COPY variants (id, root_id, version, previous_version, next_version, errors, created_at, updated_at, deleted_at, comment, item_id) FROM stdin;
@@ -1735,173 +1735,173 @@ COPY variants (id, root_id, version, previous_version, next_version, errors, cre
 
 
 --
--- Name: variants_id_seq; Type: SEQUENCE SET; Schema: public; Owner: invizko
+-- Name: variants_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
 --
 
 SELECT pg_catalog.setval('variants_id_seq', 3, true);
 
 
 --
--- Name: create_item; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: create_item; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER create_item BEFORE INSERT ON items FOR EACH ROW EXECUTE PROCEDURE create_item();
 
 
 --
--- Name: create_order; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: create_order; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER create_order BEFORE INSERT ON orders FOR EACH ROW EXECUTE PROCEDURE create_order();
 
 
 --
--- Name: create_variant; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: create_variant; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER create_variant BEFORE INSERT ON variants FOR EACH ROW EXECUTE PROCEDURE create_variant();
 
 
 --
--- Name: delete_current_item; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: delete_current_item; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER delete_current_item INSTEAD OF DELETE ON items_current FOR EACH ROW EXECUTE PROCEDURE delete_current_item();
 
 
 --
--- Name: delete_current_order; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: delete_current_order; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER delete_current_order INSTEAD OF DELETE ON orders_current FOR EACH ROW EXECUTE PROCEDURE delete_current_order();
 
 
 --
--- Name: delete_current_variant; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: delete_current_variant; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER delete_current_variant INSTEAD OF DELETE ON variants_current FOR EACH ROW EXECUTE PROCEDURE delete_current_variant();
 
 
 --
--- Name: delete_item; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: delete_item; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER delete_item BEFORE DELETE ON items FOR EACH ROW EXECUTE PROCEDURE delete_item();
 
 
 --
--- Name: delete_item_head; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: delete_item_head; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER delete_item_head INSTEAD OF DELETE ON items_heads FOR EACH ROW EXECUTE PROCEDURE delete_item_head();
 
 
 --
--- Name: delete_item_version; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: delete_item_version; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER delete_item_version INSTEAD OF DELETE ON items_versions FOR EACH ROW EXECUTE PROCEDURE delete_item_version();
 
 
 --
--- Name: delete_order; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: delete_order; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER delete_order BEFORE DELETE ON orders FOR EACH ROW EXECUTE PROCEDURE delete_order();
 
 
 --
--- Name: delete_order_head; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: delete_order_head; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER delete_order_head INSTEAD OF DELETE ON orders_heads FOR EACH ROW EXECUTE PROCEDURE delete_order_head();
 
 
 --
--- Name: delete_order_version; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: delete_order_version; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER delete_order_version INSTEAD OF DELETE ON orders_versions FOR EACH ROW EXECUTE PROCEDURE delete_order_version();
 
 
 --
--- Name: delete_variant; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: delete_variant; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER delete_variant BEFORE DELETE ON variants FOR EACH ROW EXECUTE PROCEDURE delete_variant();
 
 
 --
--- Name: delete_variant_head; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: delete_variant_head; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER delete_variant_head INSTEAD OF DELETE ON variants_heads FOR EACH ROW EXECUTE PROCEDURE delete_variant_head();
 
 
 --
--- Name: delete_variant_version; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: delete_variant_version; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER delete_variant_version INSTEAD OF DELETE ON variants_versions FOR EACH ROW EXECUTE PROCEDURE delete_variant_version();
 
 
 --
--- Name: update_item; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: update_item; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER update_item BEFORE UPDATE ON items FOR EACH ROW EXECUTE PROCEDURE update_item();
 
 
 --
--- Name: update_item_head; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: update_item_head; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER update_item_head INSTEAD OF UPDATE ON items_heads FOR EACH ROW EXECUTE PROCEDURE update_item_head();
 
 
 --
--- Name: update_order; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: update_order; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER update_order BEFORE UPDATE ON orders FOR EACH ROW EXECUTE PROCEDURE update_order();
 
 
 --
--- Name: update_order_head; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: update_order_head; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER update_order_head INSTEAD OF UPDATE ON orders_heads FOR EACH ROW EXECUTE PROCEDURE update_order_head();
 
 
 --
--- Name: update_variant; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: update_variant; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER update_variant BEFORE UPDATE ON variants FOR EACH ROW EXECUTE PROCEDURE update_variant();
 
 
 --
--- Name: update_variant_head; Type: TRIGGER; Schema: public; Owner: invizko
+-- Name: update_variant_head; Type: TRIGGER; Schema: public; Owner: root
 --
 
 CREATE TRIGGER update_variant_head INSTEAD OF UPDATE ON variants_heads FOR EACH ROW EXECUTE PROCEDURE update_variant_head();
 
 
 --
--- Name: structures_and_queries; Type: MATERIALIZED VIEW DATA; Schema: public; Owner: invizko
+-- Name: structures_and_queries; Type: MATERIALIZED VIEW DATA; Schema: public; Owner: root
 --
 
 REFRESH MATERIALIZED VIEW structures_and_queries;
 
 
 --
--- Name: public; Type: ACL; Schema: -; Owner: invizko
+-- Name: public; Type: ACL; Schema: -; Owner: root
 --
 
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
-REVOKE ALL ON SCHEMA public FROM invizko;
-GRANT ALL ON SCHEMA public TO invizko;
+REVOKE ALL ON SCHEMA public FROM root;
+GRANT ALL ON SCHEMA public TO root;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
