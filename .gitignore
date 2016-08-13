@@ -1,4 +1,6 @@
+.DS_Store
 c
 logs
 cache
-
+error.log
+access.log
