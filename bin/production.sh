@@ -1,0 +1,1 @@
+bin/nginx -p ./conf -c nginx.production.conf

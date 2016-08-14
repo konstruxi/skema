@@ -4,7 +4,7 @@ logs
 cache
 error.log
 access.log
-
+temp
 conf/fastcgi.conf
 conf/fastcgi.conf.default
 conf/fastcgi_params
