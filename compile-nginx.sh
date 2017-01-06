@@ -1,4 +1,5 @@
 if [ -z "$PCRE_PATH" ]; then PCRE_PATH="/usr/local/Cellar/pcre/8.39"; fi
+if [ -z "$APP_PATH" ]; then APP_PATH="../skema"; fi
 
 env CFLAGS="-Wno-error" ./configure \
 	--prefix=$APP_PATH/conf \
@@ -25,7 +26,8 @@ env CFLAGS="-Wno-error" ./configure \
 	--add-module=../ngx_postgres \
 	--add-module=../mustache-nginx-module \
 	--add-module=../echo-nginx-module \
-	--add-module=../nginx-eval-module;
+	--add-module=../nginx-eval-module \
+	--add-module=../ngx_coolkit;
 make install;
 rm -rf $APP_PATH/conf/fastcgi.conf;
 rm -rf $APP_PATH/conf/fastcgi.conf.default;

@@ -1,0 +1,23 @@
+{
+  "name": "Sample Konstruxi App",
+  "description": "Static website generator using nginx and postgresql",
+  "repository": "https://github.com/konstruxi/konstruxi-heroku-app",
+  "keywords": ["nginx", "cms"],
+  "env": {
+    "NGINX_ALLOW": {
+      "description": "IP address for whitelisting",
+      "value": "0.0.0.0"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "Standard-1X"
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "https://github.com/konstruxi/konstruxi-buildpack"
+    }
+  ]
+}

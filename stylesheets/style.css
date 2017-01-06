@@ -46,6 +46,8 @@ body > .summary, body > form {
 	border-top: 0;
 }
 
+
+
 .breadcrumbs {
 	background: linear-gradient(90deg, #eee, #fff);
 }
@@ -119,8 +121,23 @@ section, form {
 	padding-top: 1rem;
 	border-top: 1px solid #eaeaea;
 }
+form > span.field, form > fieldset, form > span.controls {
+	float: left;
+	clear: both;
+}
+form > .subform {
+	float: left;
+}
 header h1 {
 	margin-bottom: 0.5em;
+}
+
+fieldset {
+	border: 0;
+	margin: 0;
+	background: rgba(0,0,0,0.1);
+	margin-left: -11.5rem;
+	padding-left: 11.5rem; 
 }
 
 footer aside {
@@ -198,7 +215,7 @@ body > .message .undo:hover {
 	color: white;
 }
 
-form h2 {
+form h2, form h3 {
 	margin-bottom: 1em;
 }
 form .field {
@@ -214,6 +231,48 @@ form .field:after {
 	clear: left;
 }
 
+*[hidden] {
+	display: none;
+}
+input[hidden][type=checkbox] + label {
+	margin-left: 1em;
+
+}
+input[hidden][type=checkbox] + label span{
+	border-bottom: 1px dashed;
+}
+input[hidden][type=checkbox] + label + .subform fieldset.new{
+	display: none;
+}
+input[hidden][type=checkbox]:checked + label {
+	display: none;
+}
+input[hidden][type=checkbox]:checked + label + .subform{
+	clear: both;
+}
+input[hidden][type=checkbox]:checked + label + .subform fieldset.new{
+	display: block;
+}
+
+
+.subform fieldset ~ fieldset h3 {
+	display: none;
+}
+
+.subform fieldset + fieldset {
+	border-top: 1px dashed #555;
+}
+
+input[hidden][type=checkbox] + label {
+	float: left;
+}
+.subform {
+	clear: both;
+	margin-left: 0;
+}
+.subform fieldset {
+	padding-top: 1rem; 
+}
 form .field label {
 	font-size: 1.5em;
 	line-height: 1.5em;

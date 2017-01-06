@@ -1,3 +1,4 @@
+
 {{#action}}
 	<form action="{{action}}" method="POST" accept-charset="utf-8">
 {{/action}}
@@ -126,6 +127,78 @@
 			</span>
 
 		{{/type:text}}
+
+		{{#meta:references}}
+			{{#parent:relation_name:is:table_name}}
+				
+				<input type="checkbox" hidden id="new_{{table_name}}" onclick="new_{{table_name}}_fieldset.disabled = !this.checked" />
+				<label for="new_{{table_name}}">
+					or <span>create new
+					{{table_name}}</span>
+				</label>
+				<div class="subform">
+				{{#parent::item:by:table_name}}
+					<fieldset>
+					<h3>New {{parent:table_name}}</h3>
+					{{#parent:columns}}
+						{{#type:string}}
+							<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+								<label for="{{meta:singular}}_{{name}}_text">
+									{{name}}:
+								</label>
+								{{#parent:errors:by:name}}
+									<span class="error">{{parent:errors:by:name}}</span>
+								{{/parent:errors:by:name}}
+								<input type="text" name="{{meta:singular}}[{{parent::table_name}}][{{parent:id}}][{{name}}]" value="{{parent:by:name}}" />
+							</span>
+						{{/type:string}}
+						{{#type:text}}
+							<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+								<label for="{{meta:singular}}_{{name}}_text">
+									{{name}}:
+								</label>
+								{{#parent:errors:by:name}}
+									<span class="error">{{parent:errors:by:name}}</span>
+								{{/parent:errors:by:name}}
+								<textarea type="text" name="{{meta:singular}}[{{parent::table_name}}][{{parent:id}}][{{name}}]">{{parent:by:name}}</textarea>
+							</span>
+						{{/type:text}}
+					{{/parent:columns}}
+					</fieldset>
+				{{/parent::item:by:table_name}}
+				
+				<fieldset class="new" id="new_{{table_name}}_fieldset" disabled>
+					<h3>New {{table_name}}</h3>
+				{{#columns}}
+					{{#type:string}}
+						<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+							<label for="{{meta:singular}}_{{name}}_text">
+								{{name}}:
+							</label>
+							{{#parent:item:errors:by:name}}
+								<span class="error">{{parent:item:errors:by:name}}</span>
+							{{/parent:item:errors:by:name}}
+							<input type="text" name="{{meta:singular}}[{{parent:table_name}}][0][{{name}}]" />
+						</span>
+					{{/type:string}}
+					{{#type:text}}
+						<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+							<label for="{{meta:singular}}_{{name}}_text">
+								{{name}}:
+							</label>
+							{{#parent:item:errors:by:name}}
+								<span class="error">{{parent:item:errors:by:name}}</span>
+							{{/parent:item:errors:by:name}}
+
+							<textarea id="{{meta:singular}}_{{name}}_text" name="{{meta:singular}}[{{parent:table_name}}][0][{{name}}]">{{parent:item:by:name}}</textarea>
+						</span>
+					{{/type:text}}
+				{{/columns}}
+				</fieldset>
+				</div>
+			{{/parent:relation_name:is:table_name}}
+			
+		{{/meta:references}}
 
 	{{/is_editable}}
 

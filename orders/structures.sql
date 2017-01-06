@@ -5,7 +5,7 @@ CREATE OR REPLACE VIEW structures AS
 
 SELECT  
     columns.table_name,
-    json_agg(columns) as columns
+    json_agg(json_strip_nulls(row_to_json(columns))) as columns
 
 FROM (
   SELECT 
@@ -13,6 +13,11 @@ FROM (
   ''                                               as parent_name,
   ''                                               as grandparent_name,
   column_name                                      as name,
+  CASE WHEN position('_ids' in column_name) > 0
+  THEN replace(column_name, '_ids', '')
+  WHEN position('_id' in column_name) > 0
+  THEN pluralize(replace(column_name, '_id', ''))
+  END                                              as relation_name,
   CASE WHEN position('character' in data_type) > 0
   THEN 'string'
   ELSE lower(data_type) END                               as type,
@@ -53,7 +58,9 @@ LEFT JOIN(
   SELECT structures.table_name, json_agg(y) as refs
   FROM structures
   INNER JOIN structures y
-  ON (EXISTS(SELECT value FROM json_array_elements(y.columns) WHERE value->>'name' =(singularize(structures.table_name) || '_id')))
+  ON (EXISTS(SELECT value FROM json_array_elements(y.columns) WHERE 
+      value->>'name' =(singularize(structures.table_name) || '_id') OR
+      value->>'name' = structures.table_name || '_ids'))
   GROUP BY structures.table_name
 ) x ON (x.table_name = q.table_name);
 
@@ -84,9 +91,11 @@ LEFT JOIN (
     ) z
     GROUP BY z.table_name
   ) x
-  ON (x.table_name = pluralize(replace(value->>'name', '_id', '')))
+  ON (x.table_name = pluralize(replace(value->>'name', '_id', '')) or 
+      x.table_name = replace(value->>'name', '_ids', ''))
 
-  WHERE position('_id' in rls.value->>'name') > 0 and position('_ids' in rls.value->>'name') = 0 and rls.value->>'name' != 'root_id'
+  WHERE position('_id' in rls.value->>'name') > 0 
+    and rls.value->>'name' != 'root_id'
 
 ) s
 ON (q.table_name = s.table_name);
@@ -214,12 +223,15 @@ END $$;
 CREATE OR REPLACE FUNCTION convert_arrays(input json)
   RETURNS json language sql AS $ff$ 
     SELECT concat('{', string_agg(to_json("key") || ':' || 
-      (CASE WHEN value::text ~ '^\[[^\]]+\]$' THEN
-              regexp_replace( -- convert arrays to psql array strings
-                regexp_replace( -- remove newlines
-                  regexp_replace(value::text,  -- escape double quotes to adhere json syntax
-                    '"', '\\"', 'g'),
-                  '\n', ' ', 'g'),
+           (CASE WHEN value::text ~ '^\[[^\]\{\}]+\]$' THEN
+                -- convert arrays to psql array strings
+                regexp_replace(
+                  -- remove newlines
+                  regexp_replace(
+                    -- escape double quotes to adhere json syntax
+                    regexp_replace(value::text,
+                      '"', '\\"', 'g'),
+                   '\n', ' ', 'g'),
                 '^\[([^\]]+)\]$', '"{\1}"')
             ELSE
               value::text
@@ -228,6 +240,43 @@ CREATE OR REPLACE FUNCTION convert_arrays(input json)
     FROM json_each(input)
 
 $ff$;
+
+
+CREATE OR REPLACE FUNCTION insert_nested_object(name text, input json)
+RETURNS json language plpgsql as $ff$DECLARE
+ ret json;
+ columns text;
+ BEGIN
+
+  SELECT
+    string_agg(key::text, ', ')
+    FROM json_each(input)
+    WHERE key::text != 'id'
+    into columns;
+
+  EXECUTE 'WITH r AS (INSERT INTO ' || name || '(' || columns || ') SELECT ' || columns || ' FROM json_populate_record(null::'||name||', $1) RETURNING *) SELECT row_to_json(r) FROM r' USING input  
+  INTO ret;
+  RETURN ret  ;
+END;$ff$;
+
+CREATE OR REPLACE FUNCTION insert_nested_objects(name text, input json)
+RETURNS json language sql as $ff$
+  SELECT json_agg(insert_nested_object(name, value)) FROM json_array_elements(input)
+$ff$;
+
+CREATE OR REPLACE FUNCTION process_nested_attributes(input json)
+  RETURNS json language sql AS $ff$ 
+    SELECT concat('{', string_agg(to_json("key") || ':' || 
+      (CASE WHEN value::text ~ '^\[[\s\n]*\{.*\}[\s\n]*\]$' THEN
+          insert_nested_objects(key::text, value)::text
+        ELSE
+          value::text
+        END)
+      , ','), '}')::json
+    FROM json_each(input)
+
+$ff$;
+
 
 -- select possible parents
 CREATE OR REPLACE FUNCTION json_from(relname text)
