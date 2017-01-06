@@ -1,1 +1,1 @@
-web: bin/start-nginx echo 12345
+web: bin/start-nginx echo "Konstruxi Actif!"
