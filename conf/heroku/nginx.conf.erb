@@ -13,8 +13,12 @@ events {
 http {
     include ./mime.types;
     upstream database {
-        postgres_server  127.0.0.1 dbname=invizko
-                         user=root password=abcdef;
+        <% 
+          require('uri'); 
+          uri = URI(ENV["DATABASE_URL"])
+        %>
+        postgres_server  <%= uri.host %> dbname=<%= uri.path.gsub('/', '') %>
+                         user=<%= uri.user %> password=<%= uri.password %>;
           postgres_keepalive max=20;
     }
 
