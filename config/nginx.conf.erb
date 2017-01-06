@@ -1,1 +1,65 @@
-include ../conf/nginx.production.conf;
+daemon off;
+#Heroku dynos have at least 4 cores.
+worker_processes <%= ENV['NGINX_WORKERS'] || 4 %>;
+
+events {
+  use epoll;
+  accept_mutex on;
+  worker_connections 1024;
+}
+
+
+
+http {
+    include ../conf/mime.types;
+    upstream database {
+        postgres_server  127.0.0.1 dbname=invizko
+                         user=root password=abcdef;
+          postgres_keepalive max=20;
+    }
+
+
+    log_format l2met 'measure#nginx.service=$request_time request_id=$http_x_request_id';
+    access_log logs/nginx/access.log l2met;
+    error_log logs/nginx/error.log;
+    gzip on;
+    gzip_comp_level 2;
+    gzip_min_length 512;
+    server_tokens off;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+    keepalive_requests 500;
+
+    #Must read the body in 5 seconds.
+    client_body_timeout 5;
+
+    #log_format compression '"$request" $status $bytes_sent ';
+    #proxy_cache_path  /tmp/cache levels=1:2 keys_zone=my-test-cache:8m max_size=5000m inactive=300m;
+
+    server {
+        listen <%= ENV["PORT"] %>;
+        server_name _;
+        include ../conf/production/views.conf;
+        include ../conf/app/params.conf;
+
+        
+        root ..;
+        #error_log  /users/invizko/sites/data/logs/error.log debug ;
+
+        location /stylesheets {
+          try_files $uri $uri/;
+        }
+        location / {
+          autoindex on;
+          postgres_output  json;
+          default_type text/html;
+          #eval_subrequest_in_memory off;
+          eval_buffer_size 64k; # default 4k, truncated if overflown
+          eval_escalate on; # inherit status from preflight request
+          mustache on;
+
+          include ../conf/app/routes.conf;
+        }
+    }
+}
