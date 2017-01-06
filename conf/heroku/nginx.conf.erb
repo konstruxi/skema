@@ -1,6 +1,6 @@
 daemon off;
 #Heroku dynos have at least 4 cores.
-worker_processes <%= ENV['NGINX_WORKERS'] || 4 %>;
+worker_processes 1;
 
 events {
   use epoll;
@@ -19,7 +19,7 @@ http {
         %>
         postgres_server  <%= uri.host %> dbname=<%= uri.path.gsub('/', '') %>
                          user=<%= uri.user %> password=<%= uri.password %>;
-          postgres_keepalive max=20;
+        postgres_keepalive max=20;
     }
 
 
