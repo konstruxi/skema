@@ -1,1 +1,1 @@
-web: bin/start-nginx echo 1234
+web: bin/start-nginx echo 12345
