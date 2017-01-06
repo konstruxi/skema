@@ -19,7 +19,7 @@ http {
         %>
         postgres_server  <%= uri.host %> dbname=<%= uri.path.gsub('/', '') %>
                          user=<%= uri.user %> password=<%= uri.password %>;
-        postgres_keepalive max=20;
+        #postgres_keepalive max=20;
     }
 
 
