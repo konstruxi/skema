@@ -39,6 +39,6 @@ You will need to compile nginx with a bunch of modules. We provide a script that
 
 ## Heroku
 
-Use this buildpack to compile and run nginx in your heroku app.
+Use this buildpack to compile and run nginx in your heroku app. 
 
 github.com/konstruxi/konstruxi-buildpack
