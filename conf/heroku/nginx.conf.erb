@@ -11,7 +11,7 @@ events {
 
 
 http {
-    include ../mime.types;
+    include ./mime.types;
     upstream database {
         postgres_server  127.0.0.1 dbname=invizko
                          user=root password=abcdef;
@@ -20,8 +20,8 @@ http {
 
 
     log_format l2met 'measure#nginx.service=$request_time request_id=$http_x_request_id';
-    access_log ../../logs/access.log l2met;
-    error_log ../../logs/error.log;
+    access_log ././logs/access.log l2met;
+    error_log ././logs/error.log;
     gzip on;
     gzip_comp_level 2;
     gzip_min_length 512;
@@ -40,11 +40,11 @@ http {
     server {
         listen <%= ENV["PORT"] %>;
         server_name _;
-        include ../production/views.conf;
-        include ../app/params.conf;
+        include ./production/views.conf;
+        include ./app/params.conf;
 
         
-        root ..;
+        root ../..;
         #error_log  /users/invizko/sites/data/logs/error.log debug ;
 
         location /stylesheets {
@@ -59,7 +59,7 @@ http {
           eval_escalate on; # inherit status from preflight request
           mustache on;
 
-          include ../app/routes.conf;
+          include ./app/routes.conf;
         }
     }
 }
