@@ -9,12 +9,6 @@
       "value": "0.0.0.0"
     }
   },
-  "formation": {
-    "web": {
-      "quantity": 1,
-      "size": "Standard-1X"
-    }
-  },
   "buildpacks": [
     {
       "url": "https://github.com/konstruxi/konstruxi-buildpack"
