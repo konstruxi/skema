@@ -1,6 +1,7 @@
 daemon off;
 #Heroku dynos have at least 4 cores.
 worker_processes 1;#<%= ENV['NGINX_WORKERS'] || 4 %>;
+master_process off;
 
 events {
   use epoll;
