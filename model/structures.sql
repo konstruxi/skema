@@ -144,6 +144,8 @@ on ((pluralize(replace(parent.column_name, '_id', '')) = grandparent.table_name
   or grandparent.table_name = '');
 
 
+DROP MATERIALIZED VIEW structures_and_queries;
+
 CREATE MATERIALIZED VIEW structures_and_queries AS
   SELECT *, 
   CASE WHEN structures.parent_name != '' THEN

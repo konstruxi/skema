@@ -2,7 +2,7 @@
 
 DROP TABLE {resources} CASCADE;
 CREATE TABLE {resources} (
-  id bigserial PRIMARY KEY,             -- Serial ID
+  id serial PRIMARY KEY,             -- Serial ID
 {if 'actions/patch'
   root_id integer,                      -- ID of a first version
   version integer,                      -- Version number
