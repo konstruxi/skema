@@ -58,8 +58,8 @@ http {
           autoindex on;
           postgres_output  json;
           default_type text/html;
-          #eval_subrequest_in_memory off;
-          eval_buffer_size 64k; # default 4k, truncated if overflown
+          eval_subrequest_in_memory off;
+          eval_buffer_size 128k; # default 4k, truncated if overflown
           eval_escalate on; # inherit status from preflight request
           mustache on;
 
