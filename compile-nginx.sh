@@ -28,6 +28,7 @@ env CFLAGS="-Wno-error" ./configure \
 	--add-module=../echo-nginx-module \
 	--add-module=../nginx-eval-module \
 	--add-module=../ngx_coolkit;
+	
 make install;
 rm -rf $APP_PATH/conf/fastcgi.conf;
 rm -rf $APP_PATH/conf/fastcgi.conf.default;
