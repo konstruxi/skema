@@ -31,14 +31,14 @@ echo 'buildpack=nginx at=logs-initialized'
 ) &
 
 #Start App Server
-(
-  #Take the command passed to this bin and start it.
-  #E.g. bin/start-nginx bundle exec unicorn -c config/unicorn.rb
-        COMMAND=${@:$n}
-  echo "buildpack=nginx at=start-app cmd=$COMMAND"
-  $COMMAND
-  echo 'app' >$psmgr
-) &
+#(
+#  #Take the command passed to this bin and start it.
+#  #E.g. bin/start-nginx bundle exec unicorn -c config/unicorn.rb
+#        COMMAND=${@:$n}
+#  echo "buildpack=nginx at=start-app cmd=$COMMAND"
+#  $COMMAND
+#  echo 'app' >$psmgr
+#) &
 
 #if [[ -z "$FORCE" ]]
 #then
@@ -57,15 +57,15 @@ echo 'buildpack=nginx at=logs-initialized'
 #Start NGINX
   #We expect nginx to run in foreground.
   #We also expect a socket to be at /tmp/nginx.socket.
-(
+#(
   echo 'buildpack=nginx at=nginx-start'
   touch ./logs/access.log
   touch ./logs/error.log
   ulimit -S -c unlimited 
   cp .gdbinit ~/.gdbinit
-  bin/nginx -p ./conf -c ./heroku.conf
+  gdb --eval-command="run" --args bin/nginx -p ./conf -c ./heroku.conf
   echo 'nginx' >$psmgr
-) &
+#) &
 
 #This read will block the process waiting on a msg to be put into the fifo.
 #If any of the processes defined above should exit,
@@ -73,6 +73,6 @@ echo 'buildpack=nginx at=logs-initialized'
 #to un-block. The process putting the msg into the fifo
 #will use it's process name as a msg so that we can print the offending
 #process to stdout.
-read exit_process <$psmgr
-echo "buildpack=nginx at=exit process=$exit_process"
-exit 1
+#read exit_process <$psmgr
+#echo "buildpack=nginx at=exit process=$exit_process"
+#exit 1
