@@ -26,7 +26,7 @@ http {
 
     log_format l2met 'measure#nginx.service=$request_time request_id=$http_x_request_id';
     access_log ../logs/access.log l2met;
-    error_log ../logs/error.log;
+    error_log ../logs/error.log debug;
     #gzip on;
     #gzip_comp_level 2;
     #gzip_min_length 512;
