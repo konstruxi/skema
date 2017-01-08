@@ -48,6 +48,7 @@ http {
         server_name _;
         include ./production/views.conf;
         include ./app/params.conf;
+        lingering_close always;
 
         
         root ..;
