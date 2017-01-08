@@ -27,9 +27,9 @@ http {
     log_format l2met 'measure#nginx.service=$request_time request_id=$http_x_request_id';
     access_log ../logs/access.log l2met;
     error_log ../logs/error.log;
-    gzip on;
-    gzip_comp_level 2;
-    gzip_min_length 512;
+    #gzip on;
+    #gzip_comp_level 2;
+    #gzip_min_length 512;
     server_tokens off;
 
     #keepalive_timeout  0;
@@ -37,7 +37,7 @@ http {
     keepalive_requests 500;
 
     #Must read the body in 5 seconds.
-    client_body_timeout 5;
+    #client_body_timeout 5;
 
     #log_format compression '"$request" $status $bytes_sent ';
     #proxy_cache_path  /tmp/cache levels=1:2 keys_zone=my-test-cache:8m max_size=5000m inactive=300m;
