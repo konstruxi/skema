@@ -1,1 +1,1 @@
-web: bin/start-nginx echo "Konstruxi Actif!"
+web: bin/start-nginx-app echo "Konstruxi Actif!"
