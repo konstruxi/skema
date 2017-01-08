@@ -63,7 +63,7 @@ echo 'buildpack=nginx at=logs-initialized'
   touch ./logs/error.log
   ulimit -S -c unlimited 
   cp .gdbinit ~/.gdbinit
-  gdb --eval-command="run" --args bin/nginx -p ./conf -c ./heroku.conf
+  bin/nginx -p ./conf -c ./heroku.conf
   echo 'nginx' >$psmgr
 ) &
 
