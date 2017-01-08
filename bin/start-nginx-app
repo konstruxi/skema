@@ -57,6 +57,7 @@ echo 'buildpack=nginx at=logs-initialized'
 #Start NGINX
   #We expect nginx to run in foreground.
   #We also expect a socket to be at /tmp/nginx.socket.
+(
   echo 'buildpack=nginx at=nginx-start'
   touch ./logs/access.log
   touch ./logs/error.log
@@ -64,6 +65,7 @@ echo 'buildpack=nginx at=logs-initialized'
   cp .gdbinit ~/.gdbinit
   gdb --eval-command="run" --args bin/nginx -p ./conf -c ./heroku.conf
   echo 'nginx' >$psmgr
+) &
 
 #This read will block the process waiting on a msg to be put into the fifo.
 #If any of the processes defined above should exit,
