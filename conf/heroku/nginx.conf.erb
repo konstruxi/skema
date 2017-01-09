@@ -37,6 +37,7 @@ http {
     keepalive_requests 500;
     client_max_body_size 1mb;
     client_body_buffer_size 1mb;
+    client_body_in_single_buffer on;
 
 
     #Must read the body in 5 seconds.
