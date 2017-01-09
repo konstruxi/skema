@@ -50,6 +50,9 @@ http {
         include ./app/params.conf;
         lingering_close always;
         lingering_timeout 30s;
+
+        # Dont let nginx add heroku-specific port to redirects
+        port_in_redirect off;
         
         root ..;
         #error_log  /users/invizko/sites/data/logs/error.log debug ;
