@@ -20,7 +20,7 @@ http {
         %>
         postgres_server  <%= uri.host %>:<%= uri.port || 5432 %> dbname=<%= uri.path.gsub('/', '') %>
                          user=<%= uri.user %> password=<%= uri.password %>;
-        postgres_keepalive max=4 overflow=reject; # drop connections after 20 concurrency
+        postgres_keepalive max=5 overflow=reject; # drop connections after 20 concurrency
     }
 
 
