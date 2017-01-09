@@ -14,6 +14,7 @@ The system provides and end-to-end lifecycle for your data, and is friendly to b
 You will need to compile nginx with a bunch of modules. We provide a script that compiles nginx locally for the app (will not mess with nginx you may already have installed). You will only need one nginx compiled for multiple skema apps.
 
 
+
 		
 		# Make a folder
 		mkdir konstruxi-nginx
