@@ -8,7 +8,7 @@ env CFLAGS="-Wno-error" ./configure \
 	--with-ipv6 \
 	--sbin-path=../bin/nginx \
 	--with-cc-opt="-std=c99 -g -O0 -I/usr/local/include -I$PCRE_PATH/include" \
-	--with-ld-opt="-lm -L/usr/local/lib -L$PCRE_PATH/lib" \
+	--with-ld-opt="-lm -g -L/usr/local/lib -L$PCRE_PATH/lib" \
 	--conf-path=nginx.conf \
 	--pid-path=../temp/run/nginx.pid \
 	--lock-path=../temp/run/nginx.lock \

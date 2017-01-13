@@ -81,21 +81,21 @@
 			{{/meta:references}}
 			</nav>
 		{{/meta:action:show}}
-{{#meta:flash}}
+{{#vars:flash}}
 	<div class="message">
 		<span class="own flash">
-			{{meta:flash}}
+			{{vars:flash}}
 		</span>
 
-		{{#meta:undo}}
-			<a href="{{undo}}/undo" class="undo">Undo</a>
-		{{/meta:undo}}
-		{{^meta:undo}}
+		{{#vars:undo}}
+			<a href="{{vars:undo}}/undo" class="undo">Undo</a>
+		{{/vars:undo}}
+		{{^vars:undo}}
 			<a href="./undo" class="undo">Undo</a>
-		{{/meta:undo}}
+		{{/vars:undo}}
 	</div>
-{{/meta:flash}}
-{{^meta:flash}}
+{{/vars:flash}}
+{{^vars:flash}}
 	{{#parent:flash}}
 	<div class="message">
 		<span class="parent flash">
@@ -104,4 +104,4 @@
 
 	</div>
 	{{/parent:flash}}
-{{/meta:flash}}
+{{/vars:flash}}

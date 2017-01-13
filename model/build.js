@@ -1,29 +1,30 @@
 require('./chunks')
 
 var Configuration = {
-	orders: {
+	services: {
+		schema: {
+			name: ['varchar(255)'],
+			type: ['varchar(255)', {
+				'Service needs to be of known type': "is not null and new.type != ''"
+			}],
+			uuid: ['uuid',  'uuid_generate_v1()'],
+			url:  ['varchar(255)']
+		},
+		actions: [
+			//'delete',
+			'update',
+			'insert'//,
+			//'patch'
+		],
+	},
+
+	users: {
 		schema: {
 			email: ['varchar(255)', {
 				'Email is incorrect': " ~ '^[^@]+@.+\\..+$'"
 			}],
-			name: 'varchar(255)',
-
-			items_ids: 'integer[]'
+			name: 'varchar(255)'
 		},
-		//states: {
-		//	//created: {},
-		//	with_credit_cards: {
-		//		schema: {
-		//			'credit_card_number': ['text', {
-		//				'Please enter cc': 'is not null'
-		//			}]
-		//		}
-		//	}/*,
-		//	with_payments: {
-		//		schema: {
-		//		}
-		//	}*/
-		//},
 		actions: [
 			'delete',
 			'insert',
@@ -33,33 +34,25 @@ var Configuration = {
 			'versions',
 			'heads',
 			'current'
-		]//,
-		//specs: [
-		//	['versioning', {
-		//		field: 'email',
-		//		invalid1: 'abc',
-		//		invalid2: 'abcdefwerbgkaerg@geb',
-		//		valid1: 'abc@abc.ru',
-		//		valid2: '123@abc.ru',
-		//		valid3: 'abc@444.ru',
-		//		valid4: '123@abc.ru',
-		//		valid5: 'abc@abc.com'
-		//	}]
-		//]
+		]
 	},
-	items: {
+	posts: {
 		schema: {
-			comment: ['text', {
-				'Comment not provided': "is not null and new.comment != '' "
+			title: ['varchar(255)', {
+				'title not provided': "is not null and new.title != '' "
 			}],
-			order_id: ['integer', {
-				'Items has to belong to order': 'is not null'
-			}]
+			text: ['text', {
+				'text not provided': "is not null and new.text != '' "
+			}],
+			user_id: ['integer', {
+				'Posts have to belong to user': 'is not null'
+			}],
+			categories_ids: ['integer[]']
 		},
 		relations: [
 			['parent', {
-				target: 'order',
-				targets: 'orders'
+				target: 'user',
+				targets: 'users'
 			}]
 		],
 		actions: [
@@ -71,31 +64,12 @@ var Configuration = {
 			'versions',
 			'heads',
 			'current'
-		]/*,
-		specs: [
-			'target',
-			['versioning', {
-				extra_columns: ', order_id',
-				extra_values: ', 1',
-
-				field: 'comment',
-				invalid1: '',
-				invalid2: '',
-				valid1: 'abc@abc.ru',
-				valid2: '123@abc.ru',
-				valid3: 'abc@444.ru',
-				valid4: '123@abc.ru',
-				valid5: 'abc@abc.com'
-			}]
-		]*/
+		]
 	},
-	variants: {
+	categories: {
 		schema: {
-			comment: ['text', {
-				'Comment not provided': "is not null and new.comment != '' "
-			}],
-			item_id: ['integer', {
-				'Items has to belong to order': 'is not null'
+			name: ['varchar(255)', {
+				'Name not provided': "is not null and new.name != '' "
 			}]
 		},
 		relations: [
@@ -113,69 +87,8 @@ var Configuration = {
 			'versions',
 			'heads',
 			'current'
-		]/*,
-		specs: [
-			'target',
-			['versioning', {
-				extra_columns: ', item_id',
-				extra_values: ', 1',
-
-				field: 'comment',
-				invalid1: '',
-				invalid2: '',
-				valid1: 'abc@abc.ru',
-				valid2: '123@abc.ru',
-				valid3: 'abc@444.ru',
-				valid4: '123@abc.ru',
-				valid5: 'abc@abc.com'
-			}]
-		]*/
-	}/*,
-	fullfillments: {
-		schema: {
-			comment: ['text', {
-				'Comment not provided': "is not null and new.comment != '' "
-			}],
-			order_id: ['integer', {
-				'Fullfullment has to belong to order': 'is not null'
-			}],
-			order_email: {
-				text: true,
-			}
-		},
-		relations: [
-			['source', {
-				target: 'order',
-				targets: 'orders'
-			}]
-		],
-		actions: [
-			'delete',
-			'insert',
-			'patch'
-		],
-		scopes: [
-			'versions',
-			'heads',
-			'current'
-		],
-		specs: [
-			'target',
-			['versioning', {
-				extra_columns: ', order_id',
-				extra_values: ', 1',
-
-				field: 'comment',
-				invalid1: '',
-				invalid2: '',
-				valid1: 'abc@abc.ru',
-				valid2: '123@abc.ru',
-				valid3: 'abc@444.ru',
-				valid4: '123@abc.ru',
-				valid5: 'abc@abc.com'
-			}]
 		]
-	}*/
+	}
 }
 
 var substitute = function(path, name, context, config, content) {
@@ -188,7 +101,7 @@ var substitute = function(path, name, context, config, content) {
 		return content.replace(/(['"]\{[^}]*\}['"])|\{((?:[^{}]|\{(?:[^{}]*)\})+)\}(?!['"])/g, function(m, before, variable) {
 			if (before) return before
 			before = ''
-			var block = variable.match(/^\s*(assert|if)\s*'([^']+)'\s*?,?\s*?([\s\S]+)$/i)
+			var block = variable.match(/^\s*(assert|if|unless)\s*'([^']+)'\s*?,?\s*?([\s\S]+)$/i)
 			if (block) {
 				block[3] = substitute(path, name, context, config, block[3])
 				block[2] = substitute(path, name, context, config, block[2])
@@ -215,6 +128,14 @@ var substitute = function(path, name, context, config, content) {
 				}, config))
 					return before + block[3]
 				return before
+			} else if (block && block[1].toLowerCase() == 'unless') {
+				if (!block[2].split('/').reduce(function(config, value) {
+					if (config && config.push)
+						return config.indexOf(value) > -1
+					return config && config[value]
+				}, config))
+					return before + block[3]
+				return before
 			} else if (variable.match(/\s/)) {
 				var key
 				var string = variable.replace(/([a-z]+)\s?/ig, function(name, bit) {
@@ -227,6 +148,7 @@ var substitute = function(path, name, context, config, content) {
 				var r = ''
 				for (var k in context[key]) {
 					var ignored = false
+					var validating = false;
 					var val = [].concat(context[key][k]);
 					var row = string.replace(/\$(\d)/g, function(m, number) {
 						if (number == 1)
@@ -234,17 +156,25 @@ var substitute = function(path, name, context, config, content) {
 						if (number == 2) {
 							return val[0];
 						}
-						if (number == 3 && val.length == 1)
+						if (number == 3) {
+							if (!val[1] || typeof val[1] == 'object')
+								return 'NULL'
+							else
+								return val[1];
+						}
+						if (typeof val[val.length - 1] != 'object')
 							ignored = true;
+						else
+							validating = val[val.length - 1];
 						return m
 					}) + '\n'
 					if (!ignored) {
-						if (val[1]) {
-							for (var validation in val[1]) {
+						if (validating) {
+							for (var validation in validating) {
 								r += row.replace(/\$(\d)/g, function(m, number) {
-									if (number == 4)
+									if (number == 5)
 										return validation;
-									if (number == 3) {
+									if (number == 4) {
 										return val[1][validation];
 									}
 								}) + '\n'
@@ -316,6 +246,7 @@ var setup = function(name, object, root) {
 	return result + after
 }
 
+console.log('create extension "uuid-ossp";');
 for (var property in Configuration) {
 	console.log(setup(property, Configuration[property]))
 }

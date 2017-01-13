@@ -24,8 +24,8 @@ validate_{resource}(new {resources}) returns jsonb language plpgsql AS $$ declar
   errors jsonb := '{}';
 begin
   -- GENERATED: column validations
-{schema   IF NOT (new.$1 $3) THEN
-    SELECT jsonb_set(errors, '{$1}', '"$4"') into errors;
+{schema   IF NOT (new.$1 $4) THEN
+    SELECT jsonb_set(errors, '{$1}', '"$5"') into errors;
   END IF;}
 
   if errors::text = '{}' THEN
@@ -49,3 +49,9 @@ SELECT * from {resources}_heads;
 CREATE OR REPLACE 
 VIEW {resources}_json AS 
 SELECT * from {resources}_current;
+
+-- Scope: versions things
+CREATE OR REPLACE 
+VIEW {resources}_versions AS 
+
+SELECT * from {resources};
