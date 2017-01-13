@@ -1,0 +1,51 @@
+<aside class="aside">
+  <a href="new">Create new</a>
+</aside>
+<section>
+
+<h2>
+  Welcome to contruxi
+</h2>
+
+<ul>
+{{#items}}
+  <li>
+    <h3>
+      <a href="./{{id}}/">{{meta:singular}} #{{root_id}} {{#version}} v{{version}} {{/version}}</a>
+    </h3>
+    <dl>
+
+
+  {{#meta:relations}}
+    {{#parent:by:table_name}}
+      <dt>
+        {{parent:table_name}}
+      </dt>
+      <dd>
+        <a href="/{{parent:table_name}}/{{id}}/">
+        {{#parent:columns}}
+          {{#is_title}}
+            {{parent:by:name}}
+          {{/is_title}}
+        {{/parent:columns}}
+        </a>
+      </dd>
+    {{/parent:by:table_name}}
+  {{/meta:relations}}
+
+  {{#meta:columns}}
+    {{#parent:by:name}}
+      <dt>{{name}}</dt>
+      <dd>{{parent:by:name}}</dd>
+    {{/parent:by:name}}
+  {{/meta:columns}}
+
+
+
+    </dl>
+
+  </li>
+{{/items}}
+</ul>
+
+</section>
