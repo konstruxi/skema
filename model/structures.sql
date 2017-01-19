@@ -16,7 +16,7 @@ FROM (
   CASE WHEN position('_ids' in column_name) > 0
   THEN replace(column_name, '_ids', '')
   WHEN position('_id' in column_name) > 0
-  THEN pluralize(replace(column_name, '_id', ''))
+  THEN inflection_pluralize(replace(column_name, '_id', ''))
   END                                              as relation_name,
   CASE WHEN position('character' in data_type) > 0
   THEN 'string'
@@ -59,7 +59,7 @@ LEFT JOIN(
   FROM structures
   INNER JOIN structures y
   ON (EXISTS(SELECT value FROM json_array_elements(y.columns) WHERE 
-      value->>'name' =(singularize(structures.table_name) || '_id') OR
+      value->>'name' =(inflection_singularize(structures.table_name) || '_id') OR
       value->>'name' = structures.table_name || '_ids'))
   GROUP BY structures.table_name
 ) x ON (x.table_name = q.table_name);
@@ -78,7 +78,7 @@ LEFT JOIN (
   SELECT 
 
     structs.table_name, 
-    pluralize(replace(value->>'name', '_id', '')) as relation,
+    inflection_pluralize(replace(value->>'name', '_id', '')) as relation,
     row_to_json(x) as relations
     
     from structures structs, json_array_elements(structs.columns) as rls
@@ -91,7 +91,7 @@ LEFT JOIN (
     ) z
     GROUP BY z.table_name
   ) x
-  ON (x.table_name = pluralize(replace(value->>'name', '_id', '')) or 
+  ON (x.table_name = inflection_pluralize(replace(value->>'name', '_id', '')) or 
       x.table_name = replace(value->>'name', '_ids', ''))
 
   WHERE position('_id' in rls.value->>'name') > 0 
@@ -105,17 +105,17 @@ ON (q.table_name = s.table_name);
 CREATE OR REPLACE VIEW structures_hierarchy AS
 SELECT 
 structures.*,
-pluralize(replace(parent.column_name, '_id', ''))  as parent_name,
-pluralize(replace(grandparent.column_name, '_id', ''))             as grandparent_name,
+inflection_pluralize(replace(parent.column_name, '_id', ''))  as parent_name,
+inflection_pluralize(replace(grandparent.column_name, '_id', ''))             as grandparent_name,
 
 (SELECT columns 
   from structures q 
-  where table_name = pluralize(replace(parent.column_name, '_id', ''))
+  where table_name = inflection_pluralize(replace(parent.column_name, '_id', ''))
   LIMIT 1) as parent_structure, 
 
 (SELECT columns 
   from structures q 
-  where table_name = pluralize(replace(grandparent.column_name, '_id', ''))
+  where table_name = inflection_pluralize(replace(grandparent.column_name, '_id', ''))
   LIMIT 1) as grandparent_structure
 
 FROM structures_and_children structures
@@ -137,7 +137,7 @@ LEFT JOIN (
   from INFORMATION_SCHEMA.COLUMNS columns
   UNION SELECT '', ''
 ) grandparent
-on ((pluralize(replace(parent.column_name, '_id', '')) = grandparent.table_name
+on ((inflection_pluralize(replace(parent.column_name, '_id', '')) = grandparent.table_name
   AND (position('_id' in grandparent.column_name) > 0 
     AND position('_ids' in grandparent.column_name) = 0) 
   AND grandparent.column_name != 'root_id')
@@ -149,7 +149,7 @@ DROP MATERIALIZED VIEW structures_and_queries;
 CREATE MATERIALIZED VIEW structures_and_queries AS
   SELECT *, 
   CASE WHEN structures.parent_name != '' THEN
-    replace(full_select_sql(table_name, structures.columns), 'WHERE 1=1', 'WHERE ' || singularize(parent_name) || '_id = $parent_id')
+    replace(full_select_sql(table_name, structures.columns), 'WHERE 1=1', 'WHERE ' || inflection_singularize(parent_name) || '_id = $parent_id')
   ELSE
     full_select_sql(table_name, structures.columns) 
   END as select_sql,
@@ -202,7 +202,7 @@ BEGIN
       case when position('_ids' in cols.name) > 0 THEN
         json_from(replace(cols.name, '_ids', '') || '_current')
       when position('_id' in cols.name) > 0 THEN
-        json_from(pluralize(replace(cols.name, '_id', '')) || '_current')
+        json_from(inflection_pluralize(replace(cols.name, '_id', '')) || '_current')
       end)
       FROM cols 
       WHERE cols.name != 'root_id'

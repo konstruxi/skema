@@ -10,13 +10,14 @@ BEGIN
   WITH cols as (select
     value->>'name' as name,
     replace(value->>'name', '_id', '') as prefix,
-    substr(value->>'name', 0, 2) as alias,
+    inflection_pluralize(replace(value->>'name', '_id', '')) as plural,
+    value->>'name' || '_alias' as alias,
     value
   from json_array_elements(structure)
   WHERE position('_ids' in value->>'name') = 0)
 
   SELECT
-    string_agg(alias || '.json_agg as ' || prefix || 's', ',')
+    string_agg(alias || '.json_agg as ' || plural, ',')
     FROM cols
     WHERE cols.name != 'root_id' and prefix != name
     into names;
@@ -25,18 +26,18 @@ BEGIN
   WITH cols as (select
     value->>'name' as name,
     replace(value->>'name', '_id', '') as prefix,
-    pluralize(replace(value->>'name', '_id', '')) as prefix_plural,
-    substr(value->>'name', 0, 2) as alias,
+    inflection_pluralize(replace(value->>'name', '_id', '')) as plural,
+    value->>'name' || '_alias' as alias,
     value
   from json_array_elements(structure)
   WHERE position('_ids' in value->>'name') = 0)
 
   SELECT
     string_agg(
-      'LEFT JOIN (SELECT ' || relname || '.id, json_agg(' || prefix_plural || ')
+      'LEFT JOIN (SELECT ' || relname || '.id, json_agg(' || plural || ')
        from ' || relname || ' 
-       LEFT JOIN ' || prefix_plural || ' 
-       ON (' || relname || '.' || name || ' = ' || prefix_plural || '.id) 
+       LEFT JOIN ' || plural || ' 
+       ON (' || relname || '.' || name || ' = ' || plural || '.id) 
        GROUP BY ' || relname || '.id) ' || alias || ' 
        ON ' || alias || '.id = ' || relname || '.' || name, ',')
     FROM cols
