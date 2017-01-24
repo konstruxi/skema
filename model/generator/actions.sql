@@ -14,7 +14,9 @@ create_resource_actions(r jsonb) returns json language plpgsql AS $$ BEGIN
     PERFORM create_resource_update_action(r); 
   END IF;
 
-  -- Set up insertion validation trigger
   
-  return create_resource_insert_action(r);
+  -- Initialize file attachments functions
+  return create_resource_params_functions(
+          -- Set up insertion validation trigger
+          create_resource_insert_action(r));
 END $$;

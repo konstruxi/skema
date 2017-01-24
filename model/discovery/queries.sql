@@ -8,10 +8,18 @@ CREATE MATERIALIZED VIEW structures_and_queries AS
   ELSE
     full_select_sql(table_name, structures.columns) 
   END as select_sql,
-  update_sql(table_name, structures.columns) AS update_sql,
-  patch_sql(table_name, structures.columns)  AS patch_sql,
-  insert_sql(table_name, structures.columns) AS insert_sql,
-  (table_name = 'services')                  AS initialized
+
+  CASE WHEN EXISTS(SELECT 1 from json_array_elements(structures.columns) WHERE value->>'name' = 'version') THEN
+    patch_sql(table_name, structures.columns)  
+  ELSE
+    update_sql(table_name, structures.columns)
+  END AS update_sql,
+  insert_sql(table_name, structures.columns)  AS insert_sql,
+  file_sql(table_name, structures.columns)    AS file_sql,
+  columns_sql(table_name, structures.columns) AS columns_sql,
+
+  (table_name = 'services')                   AS initialized
+
   
   FROM structures_hierarchy structures;
 

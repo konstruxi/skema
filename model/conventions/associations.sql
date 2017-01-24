@@ -15,9 +15,9 @@ BEGIN
     SELECT
       json_object_agg(cols.name,
       case when position('_ids' in cols.name) > 0 THEN
-        json_from(replace(cols.name, '_ids', '') || '_current')
+        json_from(replace(cols.name, '_ids', ''))
       when position('_id' in cols.name) > 0 THEN
-        json_from(inflection_pluralize(replace(cols.name, '_id', '')) || '_current')
+        json_from(inflection_pluralize(replace(cols.name, '_id', '')))
       end)
       FROM cols 
       WHERE cols.name != 'root_id'

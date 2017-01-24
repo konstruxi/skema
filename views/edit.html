@@ -1,12 +1,19 @@
 
 {{#action}}
-	<form action="{{action}}?{{vars:args}}" method="POST" accept-charset="utf-8">
+	<form action="{{action}}?{{vars:args}}" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
 {{/action}}
 {{^action}}
-	<form action="./?{{vars:args}}" method="POST" accept-charset="utf-8">
+	<form action="./?{{vars:args}}" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
 {{/action}}
 
 <h2>{{title}}</h2>
+{{#item}}
+	{{#root_id}}
+		<input type="hidden" name="{{meta:singular}}[previous_version]" value="{{version}}" /> 
+		<input type="hidden" name="{{meta:singular}}[root_id]" value="{{root_id}}" /> 
+	{{/root_id}}
+{{/item}}
+
 {{#meta:columns}}
 	{{#is_editable}}
 		{{#type:integer}}
@@ -52,6 +59,40 @@
 
 		{{/type:integer}}
 
+		{{#type:file}}
+			<span class="file field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+				<label for="{{meta:singular}}_{{name}}_file">
+					{{name}}:
+				</label>
+				<div class="compound">
+					{{#parent:item:by:name}}
+						<label class="inline">
+							<input checked type="checkbox" name="{{meta:singular}}[{{parent:name}}]" value="{{name}}" />
+							{{name}} <em>{{size}}</em>
+						</label>
+					{{/parent:item:by:name}}
+					<input type="file" id="{{meta:singular}}_{{parent:name}}_file" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
+				</div>
+			</span>
+		{{/type:file}}
+
+		{{#type:files}}
+			<span class="file field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+				<label for="{{meta:singular}}_{{name}}_file">
+					{{name}}:
+				</label>
+				<div class="compound">
+					{{#parent:item:by:name}}
+						<label class="inline">
+							<input checked type="checkbox" name="{{meta:singular}}[{{parent:name}}][]" value="{{name}}" />
+							{{name}} <em>{{size}}</em>
+						</label>	
+					{{/parent:item:by:name}}
+					<input type="file" multiple id="{{meta:singular}}_{{parent:name}}_file" name="{{meta:singular}}[{{name}}][]" value="{{by:parent:name}}" />
+				</div>
+			</span>
+		{{/type:files}}
+
 		{{#type:array}}
 
 			{{#is_select}}
@@ -79,17 +120,19 @@
 
 			{{/is_select}}
 			{{^is_select}}
-				<span class="integer field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
-					<label for="{{meta:singular}}_{{name}}_number">
-						{{name}}:
-					</label>
-					{{#parent:item}}
-						<input type="number" id="{{meta:singular}}_{{name}}_number" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
-					{{/parent:item}}
-					{{^parent:item}}
-						<input type="number" id="{{meta:singular}}_{{name}}_number" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
-					{{/parent:item}}
-				</span>
+				{{#udt:int}}
+					<span class="integer field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+						<label for="{{meta:singular}}_{{name}}_number">
+							{{name}}:
+						</label>
+						{{#parent:item}}
+							<input type="number" id="{{meta:singular}}_{{name}}_number" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
+						{{/parent:item}}
+						{{^parent:item}}
+							<input type="number" id="{{meta:singular}}_{{name}}_number" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
+						{{/parent:item}}
+					</span>
+				{{/udt:int}}
 			{{/is_select}}
 
 		{{/type:array}}

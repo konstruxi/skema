@@ -10,7 +10,7 @@ begin
   -- and writes to errors object in case of failure
   SELECT
     string_agg('IF NOT validation_' || validation_name || '(new.' || column_name || ') THEN
-        SELECT jsonb_set(errors, ''' || column_name || ''', ''' || validation_name || ''') into errors; 
+        SELECT jsonb_set(errors, ''{' || column_name || '}'', to_jsonb(''' || validation_name || '''::text)) into errors; 
       END IF;', '
 ')
 
@@ -26,7 +26,7 @@ begin
   EXECUTE 'CREATE OR REPLACE FUNCTION
     validate_' || (r->>'singular') || '(new ' || (r->>'table_name') || ') 
     returns jsonb language plpgsql AS $ff$ declare
-      errors jsonb := ''{}'';
+      errors jsonb := ''{}''::jsonb;
     begin
 ' || coalesce(validations, '') || '
   if errors::text = ''{}'' THEN

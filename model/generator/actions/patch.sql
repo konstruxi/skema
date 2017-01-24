@@ -8,21 +8,23 @@ begin
   -- Generate list of columns
   SELECT string_agg(value->>'name', ', ')
     FROM jsonb_array_elements(r->'columns')
+    WHERE value->>'name' != 'version'
     into columns;
   
   -- Generate list of columns prefixed with new.
   SELECT string_agg('new.' || (value->>'name'), ', ')
     FROM jsonb_array_elements(r->'columns')
+    WHERE value->>'name' != 'version'
     into values;
 
   EXECUTE  'CREATE OR REPLACE FUNCTION
             update_' || (r->>'singular') || '() returns trigger language plpgsql AS $$ begin
               INSERT INTO ' || (r->>'table_name') || '(
-                root_id, version, previous_version, next_version, 
+                root_id, previous_version, next_version, 
                 created_at, updated_at,' || columns || ')
               VALUES (
                 old.root_id,                            -- inherit root_id
-                ' || (r->>'singular') || '_head(old.root_id, false) + 1,-- bump version to max + 1
+                NULL,                                   -- let insert trigger deal with version
                 CASE WHEN new.root_id = -1 THEN
                   old.previous_version
                 ELSE

@@ -1,0 +1,221 @@
+.resources {
+  width: 100%;
+}
+
+.resources * {
+  box-sizing: border-box;
+}
+
+.resources {
+  min-height: 3rem;
+}
+.resources ul li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.resources ul  {
+  display: flex;
+  flex-flow: column nowrap;
+  margin: 0;
+  padding: 0;
+}
+
+.resources ul.resources > li  {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: baseline;
+}
+
+.root.resources > li > details > summary   {
+  margin-bottom: 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.resources summary {
+  user-select: none;
+  position: relative;
+}
+
+.resources .content {
+  position: relative;
+}
+
+@media (min-width: 1001px) {
+  .root.resources > li > ul  {
+    flex-flow: row nowrap;
+  }
+  .root.resources > li > ul.resources > li + li {
+    margin-left: 1rem;
+  }
+  .resources .resources > li > ul.resources > li {
+    margin-top: 2px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .resources.first-level > li + li {
+    margin-top: 0.5rem;
+  }
+}
+
+.resources > li + li {
+  margin-top: 2px;
+}
+
+.resources.second-level > li > details > summary {
+  padding: 0.75rem 0.5rem;
+}
+.resources.third-level > li > details > summary {
+  padding: 0.5rem 0.5rem;
+}
+
+.resources.second-level > li {
+  margin-right: 2.75rem;
+}
+.resources.third-level > li {
+  margin-right: 2.75rem;
+}
+
+.resources {
+  position: relative;;
+}
+
+.resources .attributes {
+  padding: 0.5rem;
+  border-top: 0;
+  margin: 0;
+}
+details {
+  align-self: stretch;
+}
+details[open] {
+  outline: 1px solid #ddd;
+}
+details[open].current {
+  outline: 1px solid #999;
+}
+.second-level > li > details[open] {
+  margin-right: -2.5rem;
+}
+.third-level > li > details[open] {
+  margin-right: -2.5rem;
+}
+.resources .attributes:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.resources > .add:only-child:before {
+  content: 'add nested resource';
+  padding: 0.6rem 0rem 0 0.25rem;
+  text-align: right;
+  display: block;
+  align-self: stretch;
+  color: #999;
+}
+
+.resources details > summary::-webkit-details-marker {
+  display: none;
+}
+.resources summary:focus {
+  outline: none;
+}
+.resources details > summary:focus,
+.resources details:focus > summary {
+  background-color: #668cec !important;
+}
+.resources details > summary:focus:after,
+.resources details:focus > summary:after {
+  border-bottom-color: #668cec !important;
+}
+
+.resources details > summary:focus,
+.resources details:focus > summary {
+  background-color: #668cec !important;
+}
+.resources svg {
+  width: 3rem;
+  height: 2rem;
+  vertical-align: middle;
+  margin: auto;
+  display: none;
+}
+
+.resources details.current[open] > .content > svg,
+.resources details.current[open] > summary > svg,
+.resources details.current[open] > .resources > .add > svg {
+  display: block;
+}
+details > .resources {
+  padding: 0.25rem;
+}
+details > .resources > li + li {
+  margin-top: 0.25rem;
+}
+.resources svg {
+  position: absolute;
+  right: 0.5rem;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 2rem;
+  display: none;
+}
+.add.button > svg {
+  right: 0.5rem;
+  top: 0;
+}
+svg {
+  fill: #666;
+}
+.resources details > .content > svg ~ .attributes {
+  padding-right: 3rem;
+}
+
+.attributes dt {
+  float: left;
+  clear: both;
+}
+
+.attributes {
+  font-size: 1.1rem;
+  line-height: 1.5rem;
+}
+
+.attributes dd {
+  float: right;
+  color: #666;
+}
+
+.resources > li  {
+  margin-bottom: 2.5rem;
+  padding: 1rem;
+  list-style: none;
+}
+
+.resources > li > details > summary {
+  font-size: 1.4rem;
+}
+.resources ul.resources summary {
+  font-size: 1.2rem;
+  background: #afafaf;
+  padding: 1rem 0.5rem;
+}
+
+.first-level li{
+  max-width: 20rem;
+  width: auto;
+} 
+
+.resources ul.resources li.inline > details > summary {
+  background: #eaeaea;
+}
+.resources ul.resources li.separated > details > summary {
+  font-weight: normal;
+}
+
+body > svg {
+  display: none;
+}

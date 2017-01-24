@@ -3,7 +3,9 @@ cat conventions/inflections.sql \
     conventions/insertion.sql \
     conventions/associations.sql \
     conventions/undo.sql \
-    discovery/structure.sql \
+    conventions/params.sql \
+    conventions/blobs.sql \
+    discovery/structures.sql \
     discovery/references.sql \
     discovery/children.sql \
     discovery/queries.sql \
@@ -17,4 +19,6 @@ cat conventions/inflections.sql \
     generator/actions/delete.sql \
     generator/actions/patch.sql \
     generator/actions/insert.sql \
+    generator/actions/update.sql \
+    generator/actions/params.sql \
     generator/resource.sql | psql

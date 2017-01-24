@@ -254,6 +254,10 @@ input[hidden][type=checkbox]:checked + label + .subform fieldset.new{
 	display: block;
 }
 
+form .field input[type=file] {
+	padding: 0.5rem;
+	font-size: 1rem;
+}
 
 .subform fieldset ~ fieldset h3 {
 	display: none;
@@ -273,7 +277,7 @@ input[hidden][type=checkbox] + label {
 .subform fieldset {
 	padding-top: 1rem; 
 }
-form .field label {
+form .field label:not(.inline) {
 	font-size: 1.5em;
 	line-height: 1.5em;
 	float: left;
@@ -283,16 +287,45 @@ form .field label {
 	color: #eee;
 }
 
-form .field input, form .field textarea {
+form .field label.inline {
+	display: block;
+}
+
+form .field input, form .field textarea, form .field .compound {
 	margin: 0 0 -2px 0;
 	border-width: 0px 0 2px 0;
-	border-color: #ccc;
+	border-color: #fff;
 	font-size: 1.5em;
 	line-height: 1.5em;
 	font-family: Georgia;
 	padding: 0 0.35em;
 	float: left;
 	border-style: solid;
+}
+
+form .field .compound {
+	padding: 0 0;
+}
+form .field label.inline {
+	padding: 0 0.35em;
+}
+
+form .field .compound input[type=checkbox] {
+	float: none;
+}
+
+form .field em {
+	color: #999;
+	font-size: 1rem;
+}
+
+form .field input:not([type="checkbox"]):not([type="file"]), form .field textarea {
+
+	border-color: #ccc;
+}
+form .field input:not([type="checkbox"]), form .field textarea {
+	max-width: 16rem;
+	width: 100%; 
 }
 
 form .field input:focus, form.field textarea:focus {

@@ -1,3 +1,23 @@
+
+-- list of public columns to select
+-- skip binary stuff and passwords
+CREATE OR REPLACE FUNCTION columns_sql(relname text, structure json, prefix boolean DEFAULT false)
+  RETURNS text AS $ff$
+  SELECT string_agg(
+    (CASE WHEN prefix THEN
+      relname || '.'
+    ELSE
+      ''
+    END) || (value->>'name'), ', ')
+    FROM json_array_elements(structure)
+    WHERE value->>'udt'  NOT LIKE 'bytea%'
+      AND value->>'name' NOT LIKE '%password%'
+$ff$ LANGUAGE sql VOLATILE;
+
+
+
+
+
 -- Returns SQL query that selects from specified table with related rows aggregated as json
 CREATE OR REPLACE FUNCTION full_select_sql(relname text, structure json)
   RETURNS text AS
@@ -45,7 +65,7 @@ BEGIN
     into joins;
 
 
-  RETURN 'SELECT ' || relname || '.* ' || (CASE WHEN names is not null THEN
+  RETURN 'SELECT ' || columns_sql(relname, structure, true) || (CASE WHEN names is not null THEN
       ', ' || names
     ELSE
       ''
@@ -88,11 +108,7 @@ BEGIN
     into names;
 
   SELECT
-    string_agg(CASE WHEN els->>'name' = 'root_id' THEN
-      ':i:id'
-    ELSE
-      'new.' || (els->>'name')
-    END, ', ')
+    string_agg('new.' || (els->>'name'), ', ')
     FROM json_array_elements(structure) els
     WHERE els->>'name' != 'id'
     into values;
@@ -130,5 +146,29 @@ LANGUAGE plpgsql VOLATILE;
 
 
 
+-- Returns SQL query that selects from specified table with related rows aggregated as json
+CREATE OR REPLACE FUNCTION file_sql(relname text, structure json)
+  RETURNS text AS
+$BODY$DECLARE
+  all_files_in_row text;
+BEGIN
+  SELECT string_agg(
+    (CASE WHEN value->>'type' = 'files' THEN
+      'SELECT root_id, value->>''name'' as name, 
+        ' || (value->>'name') || '_blobs[(value->>''blob_index'')::int] as blob
+        from ' || relname || ', json_array_elements(' || (value->>'name') || ')'
+    WHEN value->>'type' = 'file' THEN
+      'SELECT root_id, ' || (value->>'name') || '->>''name'' as name, 
+           ' || (value->>'name') || '_blobs[1] as blob
+           from ' || relname
+    END), '
+UNION
+')
+    FROM json_array_elements(structure)
+    INTO all_files_in_row;
 
+  RETURN 'SELECT blob FROM (' || all_files_in_row || ') q WHERE 1=1 ';
+END;
+$BODY$
+LANGUAGE plpgsql VOLATILE;
 

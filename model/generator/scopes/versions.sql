@@ -26,7 +26,10 @@ EXECUTE  'CREATE OR REPLACE function
               ELSE
                 
                 -- otherwise clone preceeding version without deletion flag and make it current
-                UPDATE ' || (r->>'table_name') || ' SET deleted_at=null, next_version=coalesce(next, old.version), root_id=-1
+                UPDATE ' || (r->>'table_name') || '
+                SET deleted_at=null, 
+                    next_version=coalesce(next, old.version), 
+                    root_id=-1
                 WHERE root_id = old.root_id and version=coalesce(prev, old.version);
               END IF;
               return null;

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Builder</title>
+  <link rel="stylesheet" href="stylesheets/builder.css"
+</head>
+<body>
+
+  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48">
+  <path id="folder-icon" d="M20 8H8c-2.21 0-3.98 1.79-3.98 4L4 36c0 2.21 1.79 4 4 4h32c2.21 0 4-1.79 
+  4-4V16c0-2.21-1.79-4-4-4H24l-4-4z"/>
+  </svg> 
+  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <path id="close-icon" d="M38 12.83L35.17 10 24 21.17 12.83 10 10 12.83 21.17 24 10 35.17 12.83 38 24 26.83 35.17 38 38 35.17 26.83 24z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <path id="add-icon" d="M38 26H26v12h-4V26H10v-4h12V10h4v12h12v4z"/></svg>
+  
+
+<ul class="root resources">
+  <li>
+    <details tabindex="-1">
+      <summary>Content site</summary>
+    </details>
+    <ul class="first-level resources">
+      <li class="document">
+        <details tabindex="-1">
+          <summary>
+            <a href="#">Posts</a>
+            <svg viewBox="0 0 48 48"><use xlink:href="#close-icon" /></svg>
+          </summary>
+
+          <div class="content">
+            <svg viewBox="0 0 48 48"><use xlink:href="#add-icon" /></svg>
+            <dl class="attributes">
+              <dt>title</dt>
+              <dd>line of text</dd>
+              <dt>content</dt>
+              <dd>long form</dd>
+            </dl>
+          </div>
+          <ul class="second-level resources">
+            <li class="inline directory">
+              <details tabindex="-1">
+                <summary>Comments
+                  <svg viewBox="0 0 48 48"><use xlink:href="#close-icon" /></svg>
+                </summary>
+                <div class="content">
+                  <svg viewBox="0 0 48 48"><use xlink:href="#add-icon" /></svg>
+                  <dl class="attributes">
+                    <dt>title</dt>
+                    <dd>line of text</dd>
+                    <dt>content</dt>
+                    <dd>long form</dd>
+                  </dl>
+                </div>
+                <ul class="third-level resources">
+                  <li class="inline directory">
+                    <details tabindex="-1">
+                      <summary>Comments
+                        <svg viewBox="0 0 48 48"><use xlink:href="#close-icon" /></svg>
+                      </summary>
+                      <div class="content">
+                        <svg viewBox="0 0 48 48"><use xlink:href="#add-icon" /></svg>
+                        <dl class="attributes">
+                          <dt>title</dt>
+                          <dd>line of text</dd>
+                          <dt>content</dt>
+                          <dd>long form</dd>
+                        </dl>
+                      </div>
+                      <ul class="third-level resources">
+                        <li class="add button">
+                          <svg viewBox="0 0 48 48"><use xlink:href="#add-icon" /></svg>
+                        </li>
+                      </ul>
+                    </details>
+                  </li>
+                  <li class="add button">
+                    <svg viewBox="0 0 48 48"><use xlink:href="#add-icon" /></svg>
+                  </li>
+                </ul>
+              </details>
+            </li>
+            <li class="inline directory">
+              <details tabindex="-1">
+                <summary>Comments
+                  <svg viewBox="0 0 48 48"><use xlink:href="#close-icon" /></svg>
+                </summary>
+                <div class="content">
+                  <svg viewBox="0 0 48 48"><use xlink:href="#add-icon" /></svg>
+                  <dl class="attributes">
+                    <dt>title</dt>
+                    <dd>line of text</dd>
+                    <dt>content</dt>
+                    <dd>long form</dd>
+                  </dl>
+                </div>
+                <ul class="third-level resources">
+                  <li class="add button">
+                    <svg viewBox="0 0 48 48"><use xlink:href="#add-icon" /></svg>
+                  </li>
+                </ul>
+              </details>
+            </li>
+            <li class="inline directory">
+              <details tabindex="-1">
+                <summary>Categories</summary>
+              </details>
+            </li>
+            <li class="add button">
+              <svg viewBox="0 0 48 48"><use xlink:href="#add-icon" /></svg>
+            </li>
+          </ul>
+        </details>
+      </li>
+
+      <li class="directory">
+        <details tabindex="-1">
+          <summary>Topics</summary>
+
+          <ul class="resources">
+            <li class="document">
+              <details tabindex="-1">
+                <summary>Questions</summary>
+              </details>
+              <ul class="resources">
+                <li class="inline document">
+                  <details tabindex="-1">
+                    <summary>Answers</summary>
+                   </details>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </details>
+      </li>
+
+      <li class="separated document">
+        <details tabindex="-1">
+          <summary>Inquiries</summary>
+        </details>
+      </li>
+
+      <li class="separated document">
+        <details tabindex="-1">
+          <summary>Projects</summary>
+        </details>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <details tabindex="-1">
+      <summary>
+        <strong>
+          Personal database</strong> 
+          <span>for admins</span>
+        </summary>
+
+      
+    </details>
+    <ul class="first-level resources">
+      <li class="document">
+        <details tabindex="-1">
+          <summary>Social activity</summary>
+        </details>
+      </li>
+      <li class="directory">
+        <details tabindex="-1">
+          <summary>Subscriptions</summary>
+          <ul class="second-level resources">
+            <li class="document">
+              <details tabindex="-1">
+                <summary>Articles</summary>
+              </details>
+            </li>
+          </ul>
+        </details>
+      </li>
+      <li class="document">
+        <details tabindex="-1">
+          <summary>Todo list</summary>
+        </details>
+      </li>
+      <li class="document">
+        <details tabindex="-1">
+          <summary>Events</summary>
+        </details>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <details tabindex="-1">
+      <summary>
+        <strong>Community hub</strong> 
+        <span>for members</span>
+      </summary>
+
+    <ul class="first-level resources">
+      <li class="separated document">
+        <details tabindex="-1">
+          <summary>Newsletter</summary>
+        </details>
+      </li>
+      <li class="document">
+        <details tabindex="-1">
+          <summary>Members</summary>
+        </details>
+      </li>
+      <li class="directory">
+        <details tabindex="-1">
+          <summary>Forums</summary>
+
+          <ul class="resources">
+            <li>
+              <details tabindex="-1">
+                <summary>Messages</summary>
+              </details>
+            </li>
+          </ul>
+        </details>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <details tabindex="-1">
+      <summary>Commerce</summary>
+    </details>
+    <ul class="first-level resources">
+      <li class="inline directory">
+        <details tabindex="-1">
+          <summary>Categories</summary>
+
+          <ul class="second-level resources">
+            <li class="document">
+              <details tabindex="-1">
+                <summary>Products</summary>
+              </details>
+              <ul class="resources">
+                <li class="document">
+                  <details tabindex="-1">
+                    <summary>Reviews</summary>
+                  </details>
+                </li>
+                <li class="document">
+                  <details tabindex="-1">
+                    <summary>Variants</summary>
+                  </details>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </details>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<script>
+document.addEventListener('click', function(e) {
+  for (var p = e.target; p; p = p.parentNode) {
+    if (p.tagName == 'DETAILS') {
+      var details = p;
+      break;
+    }
+  }
+  if (!details) return;
+  if (window.currentDetails) {
+
+    for (var p = window.currentDetails; p && p != details; p = p.parentNode)
+      if (p.tagName == "DETAILS")
+        p.removeAttribute('open')
+
+    if (details.getAttribute('open') == null) {
+      for (var p = details.parentNode; p; p = p.parentNode)
+        if (p.tagName == "DETAILS")
+          p.setAttribute('open', '')
+    } else {
+      var nested = window.currentDetails.getElementsByTagName('details');
+      for (var i = 0; i < nested.length; i++) {
+        if (nested[i] != details)
+          nested[i].removeAttribute('open')
+      }
+    }
+    window.currentDetails.classList.remove('current');
+  }
+  details.classList.add('current');
+  window.currentDetails = details;
+})
+</script>
+</body>
+</html>

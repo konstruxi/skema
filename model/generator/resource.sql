@@ -30,7 +30,9 @@ SELECT create_resource($f${
       {"name":"title","type":"varchar(255)", "validations": [
         "required"
       ]},
-      {"name":"content","type":"text"},
+      {"name":"file","type":"file"},
+      {"name":"attachments","type":"files"},
+      {"name":"content","type":"xml"},
       {"name":"category_id","type":"integer"},
       {"name":"version","type":"integer"},
       {"name":"deleted_at","type":"TIMESTAMP WITH TIME ZONE"}
