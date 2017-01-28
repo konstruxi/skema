@@ -29,13 +29,15 @@ begin
                          ' = coalesce(new.' || (value->>'name') ||
                                       ', old.' || (value->>'name') || '); 
                   new.' || (value->>'name') || '_embeds' ||
-                         ' = assign_file_list(new.' || (value->>'name') || '_embeds' ||
-                                      '::jsonb, old.' || (value->>'name') || '_embeds::jsonb)'
+                         ' = assign_file_indecies(
+                              assign_file_list(new.' || (value->>'name') || '_embeds' ||
+                                      '::jsonb, old.' || (value->>'name') || '_embeds::jsonb))'
                 -- metadata + blobs
                 WHEN value->>'type' LIKE 'file%' THEN
                   'new.' || (value->>'name') || 
-                         ' = assign_file_list(new.' || (value->>'name') ||
-                                      '::jsonb, old.' || (value->>'name') || '::jsonb)'
+                         ' =  assign_file_indecies(
+                                assign_file_list(new.' || (value->>'name') ||
+                                      '::jsonb, old.' || (value->>'name') || '::jsonb))'
                 ELSE
                   'new.' || (value->>'name') || 
                          ' = coalesce(new.' || (value->>'name') ||
@@ -56,10 +58,10 @@ begin
 '
     WHEN value->>'type' = 'xml' THEN
       'new.' || (value->>'name') || ',' ||
-      'new.' || (value->>'name') || '_embeds,' ||
+      'assign_file_indecies(new.' || (value->>'name') || '_embeds),' ||
       'new.' || (value->>'name') || '_embeds_blobs'
     WHEN value->>'type' LIKE 'file%' THEN
-      'new.' || (value->>'name') || ',' ||
+      'assign_file_indecies(new.' || (value->>'name') || '),' ||
       'new.' || (value->>'name') || '_blobs'
     ELSE
       'new.' || (value->>'name')

@@ -12,14 +12,14 @@ begin
     string_agg(
       -- File columns come in pair, json meta data and binary blobs
       (CASE WHEN value->>'type' = 'file' THEN
-          (value->>'name') ||       ' json, ' ||
+          (value->>'name') ||       ' jsonb, ' ||
           (value->>'name') || '_blobs bytea[]'
       WHEN value->>'type' = 'files' THEN
-          (value->>'name') ||       ' json, ' ||
+          (value->>'name') ||       ' jsonb, ' ||
           (value->>'name') || '_blobs bytea[]'
       WHEN value->>'type' = 'xml' THEN
           (value->>'name') ||       ' xml, ' ||
-          (value->>'name') || '_embeds json, ' ||
+          (value->>'name') || '_embeds jsonb, ' ||
           (value->>'name') || '_embeds_blobs bytea[]'
       ELSE
           (value->>'name') || ' ' || (value->>'type') ||

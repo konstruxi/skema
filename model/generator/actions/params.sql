@@ -14,14 +14,14 @@ begin
         assign_uploaded_blobs(
           new.' || (value->>'name') || '_blobs, 
           new.' || (value->>'name') || ', 
-          blobs);', 
-    WHEN value->>'type' = 'xml'
-    'new.' || (value->>'name') || '_embeds_blobs = 
-      assign_uploaded_blobs(
-        new.' || (value->>'name') || '_embeds_blobs, 
-        new.' || (value->>'name') || '_embeds, 
-        blobs);', 
-    END'
+          blobs);' 
+    WHEN value->>'type' = 'xml' THEN
+      'new.' || (value->>'name') || '_embeds_blobs = 
+        assign_uploaded_blobs(
+          new.' || (value->>'name') || '_embeds_blobs, 
+          new.' || (value->>'name') || '_embeds, 
+          blobs);'
+    END, '
 ')
 
     FROM jsonb_array_elements(r->'columns')
@@ -49,7 +49,7 @@ begin
 ')
       FROM jsonb_array_elements(r->'columns')
       WHERE value->>'type' = 'file' 
-         or value->>'type' = 'json'
+         or value->>'type' LIKE 'json%'
       into file_columns;
 
     EXECUTE  'CREATE OR REPLACE FUNCTION
