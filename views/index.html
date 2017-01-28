@@ -11,7 +11,7 @@
 {{#items}}
 	<li>
 		<h3>
-			<a href="./{{id}}/">{{meta:singular}} #{{root_id}} {{#version}} v{{version}} {{/version}}</a>
+			<a href="./{{slug}}/">{{meta:singular}} #{{root_id}} {{#version}} v{{version}} {{/version}}</a>
 		</h3>
 		<dl>
 
@@ -22,7 +22,7 @@
 				{{parent:table_name}}
 			</dt>
 			<dd>
-				<a href="/{{parent:table_name}}/{{id}}/">
+				<a href="/{{parent:table_name}}/{{slug}}/">
 				{{#parent:columns}}
 					{{#is_title}}
 						{{parent:by:name}}

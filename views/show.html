@@ -18,10 +18,12 @@
 			{{/parent:by:name}}
 		{{/type:string}}
 		{{#type:text}}
-			{{#parent:by:name}}
-				<dt>{{name}}</dt>
-				<dd>{{parent:by:name}}</dd>
-			{{/parent:by:name}}
+			{{^name:slug}}
+				{{#parent:by:name}}
+					<dt>{{name}}</dt>
+					<dd>{{parent:by:name}}</dd>
+				{{/parent:by:name}}
+			{{/name:slug}}
 		{{/type:text}}
 	{{/meta:columns}}
 {{/item}}

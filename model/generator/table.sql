@@ -41,6 +41,7 @@ begin
   -- Create new table
   EXECUTE 'CREATE TABLE ' || (r->>'table_name') || '(
     id serial PRIMARY KEY,                -- Serial ID,
+    slug text,                            -- Human-friendly id,
     created_at TIMESTAMP WITH TIME ZONE,  -- Initial creation time
     updated_at TIMESTAMP WITH TIME ZONE,  -- Last time of update
     errors jsonb,                         -- Results of validation

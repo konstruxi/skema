@@ -158,6 +158,7 @@
 		{{/type:string}}
 
 		{{#type:text}}
+			{{^name:slug}}
 			<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 				<label for="{{meta:singular}}_{{name}}_text">
 					{{name}}:
@@ -168,8 +169,21 @@
 
 				<textarea id="{{meta:singular}}_{{name}}_text" name="{{meta:singular}}[{{name}}]">{{parent:item:by:name}}</textarea>
 			</span>
-
+			{{/name:slug}}
 		{{/type:text}}
+
+		{{#type:xml}}
+			<div class="xml field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+				<label for="{{meta:singular}}_{{name}}_text">
+					{{name}}:
+				</label>
+				{{#parent:item:errors:by:name}}
+					<span class="error">{{parent:item:errors:by:name}}</span>
+				{{/parent:item:errors:by:name}}
+
+				<article contenteditable class="content" id="{{meta:singular}}_{{name}}_text" name="{{meta:singular}}[{{name}}]">{{parent:item:by:name}}</article>
+			</div>
+		{{/type:xml}}
 
 		{{#meta:references}}
 			{{#parent:relation_name:is:table_name}}

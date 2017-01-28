@@ -3,7 +3,8 @@ create_resource_insert_action(r jsonb) returns jsonb language plpgsql AS $ff$
 DECLARE
   columns text := '';
   file_columns text := '';
-  rebase_version text := '';
+  title_column text := 'id';
+  inhert_values_from_parent_version text := '';
 begin
 
   -- Generate code to inherit values from version specified by root_id value
@@ -46,7 +47,7 @@ begin
               ') || ';
             END IF;'
     FROM jsonb_array_elements(r->'columns')
-    INTO rebase_version;
+    INTO inhert_values_from_parent_version;
   END IF;
 
   -- Generate list of columns prefixed with new.
@@ -69,12 +70,20 @@ begin
     FROM jsonb_array_elements(r->'columns')
     into columns;
 
+  -- Find which column contains value to generate slug against (name or title)
+  SELECT value->>'name' 
+    FROM jsonb_array_elements(r->'columns')
+    WHERE value->>'name' = 'title'
+       or value->>'name' = 'name'
+    INTO title_column LIMIT 1;
+
   -- Inserts new version of a row
   EXECUTE  'CREATE OR REPLACE FUNCTION
             create_' || (r->>'singular') || '() returns trigger language plpgsql AS $$ begin
-            ' || rebase_version || '
+            ' || inhert_values_from_parent_version || '
               return (
                 new.id,
+                coalesce(new.slug, inflections_slugify(new.' || title_column || ')),
                 coalesce(new.created_at, now()),        -- inherit or set creation timestamp
                 coalesce(new.updated_at, now()),        -- inherit or set modification timestamp
                 validate_' || (r->>'singular') || '(new),

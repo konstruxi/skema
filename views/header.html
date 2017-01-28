@@ -1,8 +1,12 @@
 <head>
-	<title>Postgres</title>
+	<title>Konstruxi</title>
 
 	<link rel="stylesheet" href="/clientside/style.css" />
-	<meta charset="utf-8" /> 
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="/tekxt/content.css" charset="utf-8" />
+  <link rel="stylesheet" href="/tekxt/flexbox.css" />
+  <link rel="stylesheet" href="/tekxt/chrome.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
@@ -75,11 +79,9 @@
 		{{/meta:parent_resource}}
 
 		{{#meta:action:show}}
-			<nav class="secondary">
-			{{#meta:references}}
+			<nav class="secondary">{{#meta:references}}
 				<a href="./{{table_name}}/">{{table_name}}</a>
-			{{/meta:references}}
-			</nav>
+			{{/meta:references}}</nav>
 		{{/meta:action:show}}
 {{#vars:flash}}
 	<div class="message">

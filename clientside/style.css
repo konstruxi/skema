@@ -21,7 +21,7 @@ body {
 
 
 
-body > * {
+body > *:not(#formatting):not(:empty) {
 	flex-grow: 0;
 	padding: 1rem 2rem 1rem 1rem;
 	box-sizing: padding-box;
@@ -255,7 +255,7 @@ input[hidden][type=checkbox]:checked + label + .subform fieldset.new{
 }
 
 form .field input[type=file] {
-	padding: 0.5rem;
+	padding: 0.5rem 0;
 	font-size: 1rem;
 }
 
@@ -278,8 +278,8 @@ input[hidden][type=checkbox] + label {
 	padding-top: 1rem; 
 }
 form .field label:not(.inline) {
-	font-size: 1.5em;
-	line-height: 1.5em;
+	font-size: 1.3em;
+	line-height: 1.8em;
 	float: left;
 	margin-right: 2rem;
 	width: 8rem;
@@ -509,3 +509,36 @@ section > ul > li{
 	padding-top: 1.5em;
 	list-style: none;
 }
+
+
+label + article.content {
+	max-width: 900px;
+}
+
+form div.xml.field label {
+	margin-right: 1rem;
+}
+/*
+
+form div.xml.field .content:before {
+	border-left: 1rem solid #222;
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	display: block;
+	z-index: 16666;
+
+}
+form div.xml.field .content:after {
+	border-right: 1rem solid #fff;
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	display: block;
+	z-index: 16666;
+
+}*/
