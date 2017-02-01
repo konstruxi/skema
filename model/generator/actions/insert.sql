@@ -5,7 +5,18 @@ DECLARE
   file_columns text := '';
   title_column text := 'id';
   inhert_values_from_parent_version text := '';
+  reject_malformed_values text := '';
 begin
+  -- Reject malformed values
+  SELECT string_agg(CASE WHEN value->>'type' = 'xml' THEN
+    -- xml has to have tags in it and has to have no text on top level
+    'IF NOT xml_is_well_formed_document(new.' || (value->>'name') || '::text) THEN' ||
+      ' new.' || (value->>'name') || ' = null; END IF;'
+  END, '')
+  FROM jsonb_array_elements(r->'columns')
+  into reject_malformed_values;
+
+
 
   -- Generate code to inherit values from version specified by root_id value
   -- inherit data form last valid version unless previous_version is set
@@ -80,6 +91,7 @@ begin
   -- Inserts new version of a row
   EXECUTE  'CREATE OR REPLACE FUNCTION
             create_' || (r->>'singular') || '() returns trigger language plpgsql AS $$ begin
+            ' || reject_malformed_values || '
             ' || inhert_values_from_parent_version || '
               return (
                 new.id,

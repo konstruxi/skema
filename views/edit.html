@@ -21,8 +21,7 @@
 			{{#is_select}}
 				<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 					<label for="{{meta:singular}}_{{name}}_select">
-						{{name}}:
-					</label>
+						{{name}}</label>
 					<select id="{{meta:singular}}_{{name}}_select" name="{{meta:singular}}[{{name}}]">
 						{{#meta:options:by:name}}
 								<option value="{{id}}" 
@@ -36,7 +35,7 @@
 										selected
 										{{/id:is:meta:parent_resource_id}}
 									{{/meta:parent_resource_key:is:parent:name}}
-								{{/parent::item:by:name}}> {{email}} </option>
+								{{/parent::item:by:name}}> {{title}}{{name}} </option>
 
 						{{/meta:options:by:name}}
 					 </select>
@@ -46,8 +45,7 @@
 			{{^is_select}}
 				<span class="integer field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 					<label for="{{meta:singular}}_{{name}}_number">
-						{{name}}:
-					</label>
+						{{name}}</label>
 					{{#parent:item}}
 						<input type="number" id="{{meta:singular}}_{{name}}_number" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
 					{{/parent:item}}
@@ -62,16 +60,14 @@
 		{{#type:file}}
 			<span class="file field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 				<label for="{{meta:singular}}_{{name}}_file">
-					{{name}}:
-				</label>
+					{{name}}</label>
 				<div class="compound">
 					{{#parent:item:by:name}}
 						<label class="inline">
 							<input checked type="checkbox" name="{{meta:singular}}[{{parent:name}}]" value="{{name}}" />
-							{{name}} <em>{{size}}</em>
-						</label>
+							{{name}} <em>{{size}}</em></label>
 					{{/parent:item:by:name}}
-					<input type="file" id="{{meta:singular}}_{{parent:name}}_file" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
+					<input type="file" id="{{meta:singular}}_{{name}}_file" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
 				</div>
 			</span>
 		{{/type:file}}
@@ -79,16 +75,14 @@
 		{{#type:files}}
 			<span class="file field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 				<label for="{{meta:singular}}_{{name}}_file">
-					{{name}}:
-				</label>
+					{{name}}</label>
 				<div class="compound">
 					{{#parent:item:by:name}}
 						<label class="inline">
 							<input checked type="checkbox" name="{{meta:singular}}[{{parent:name}}][]" value="{{name}}" />
-							{{name}} <em>{{size}}</em>
-						</label>	
+							{{name}} <em>{{size}}</em></label>	
 					{{/parent:item:by:name}}
-					<input type="file" multiple id="{{meta:singular}}_{{parent:name}}_file" name="{{meta:singular}}[{{name}}][]" value="{{by:parent:name}}" />
+					<input type="file" multiple id="{{meta:singular}}_{{name}}_file" name="{{meta:singular}}[{{name}}][]" value="{{by:parent:name}}" />
 				</div>
 			</span>
 		{{/type:files}}
@@ -98,8 +92,7 @@
 			{{#is_select}}
 				<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 					<label for="{{meta:singular}}_{{name}}_select">
-						{{name}}:
-					</label>
+						{{name}}</label>
 					<select multiple id="{{meta:singular}}_{{name}}_select" name="{{meta:singular}}[{{name}}][]">
 						{{#meta:options:by:name}}
 								<option value="{{id}}"
@@ -112,7 +105,7 @@
 										selected
 										{{/parent::item:order_id:is:meta:parent_resource_id}}
 									{{/meta:parent_resource_key:is:parent:name}}
-								{{/parent::item:by:name}}> {{email}}{{comment}} </option>
+								{{/parent::item:by:name}}> {{name}}{{title}} </option>
 
 						{{/meta:options:by:name}}
 					 </select>
@@ -123,8 +116,7 @@
 				{{#udt:int}}
 					<span class="integer field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 						<label for="{{meta:singular}}_{{name}}_number">
-							{{name}}:
-						</label>
+							{{name}}</label>
 						{{#parent:item}}
 							<input type="number" id="{{meta:singular}}_{{name}}_number" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
 						{{/parent:item}}
@@ -140,8 +132,7 @@
 		{{#type:string}}
 			<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 				<label for="{{meta:singular}}_{{name}}_text">
-					{{name}}:
-				</label>
+					{{name}}</label>
 				{{#parent:item:errors:by:name}}
 					<span class="error">{{parent:item:errors:by:name}}</span>
 				{{/parent:item:errors:by:name}}
@@ -161,8 +152,7 @@
 			{{^name:slug}}
 			<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 				<label for="{{meta:singular}}_{{name}}_text">
-					{{name}}:
-				</label>
+					{{name}}</label>
 				{{#parent:item:errors:by:name}}
 					<span class="error">{{parent:item:errors:by:name}}</span>
 				{{/parent:item:errors:by:name}}
@@ -174,14 +164,14 @@
 
 		{{#type:xml}}
 			<div class="xml field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
-				<label for="{{meta:singular}}_{{name}}_text">
-					{{name}}:
-				</label>
+				<label for="{{meta:singular}}_{{name}}_xml">
+					{{name}}</label>
 				{{#parent:item:errors:by:name}}
 					<span class="error">{{parent:item:errors:by:name}}</span>
 				{{/parent:item:errors:by:name}}
 
-				<article contenteditable class="content" id="{{meta:singular}}_{{name}}_text" name="{{meta:singular}}[{{name}}]">{{parent:item:by:name}}</article>
+				<article contenteditable="contenteditable" data-cke-editable="true" class="content" id="{{meta:singular}}_{{name}}_xml" name="{{meta:singular}}[{{name}}]">{{parent:item:by:name:HTML}}</article>
+				<textarea class="rich" name="{{meta:singular}}[{{name}}]" value="{{parent:item:by:name}}"></textarea>
 			</div>
 		{{/type:xml}}
 
@@ -191,8 +181,7 @@
 				<input type="checkbox" hidden id="new_{{table_name}}" onclick="new_{{table_name}}_fieldset.disabled = !this.checked" />
 				<label for="new_{{table_name}}">
 					or <span>create new
-					{{table_name}}</span>
-				</label>
+					{{table_name}}</span></label>
 				<div class="subform">
 				{{#parent::item:by:table_name}}
 					<fieldset>
@@ -201,8 +190,7 @@
 						{{#type:string}}
 							<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 								<label for="{{meta:singular}}_{{name}}_text">
-									{{name}}:
-								</label>
+									{{name}}</label>
 								{{#parent:errors:by:name}}
 									<span class="error">{{parent:errors:by:name}}</span>
 								{{/parent:errors:by:name}}
@@ -212,8 +200,7 @@
 						{{#type:text}}
 							<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 								<label for="{{meta:singular}}_{{name}}_text">
-									{{name}}:
-								</label>
+									{{name}}</label>
 								{{#parent:errors:by:name}}
 									<span class="error">{{parent:errors:by:name}}</span>
 								{{/parent:errors:by:name}}
@@ -230,8 +217,7 @@
 					{{#type:string}}
 						<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 							<label for="{{meta:singular}}_{{name}}_text">
-								{{name}}:
-							</label>
+								{{name}}</label>
 							{{#parent:item:errors:by:name}}
 								<span class="error">{{parent:item:errors:by:name}}</span>
 							{{/parent:item:errors:by:name}}
@@ -241,8 +227,7 @@
 					{{#type:text}}
 						<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 							<label for="{{meta:singular}}_{{name}}_text">
-								{{name}}:
-							</label>
+								{{name}}</label>
 							{{#parent:item:errors:by:name}}
 								<span class="error">{{parent:item:errors:by:name}}</span>
 							{{/parent:item:errors:by:name}}

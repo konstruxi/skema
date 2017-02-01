@@ -27,13 +27,13 @@ $$;
 SELECT create_resource($f${
     "table_name": "articles",
     "columns": [
+      {"name":"category_id","type":"integer"},
+      {"name":"thumbnail","type":"file"},
       {"name":"title","type":"varchar(255)", "validations": [
         "required"
       ]},
-      {"name":"file","type":"file"},
-      {"name":"attachments","type":"files"},
+      {"name":"summary","type":"text"},
       {"name":"content","type":"xml"},
-      {"name":"category_id","type":"integer"},
       {"name":"version","type":"integer"},
       {"name":"deleted_at","type":"TIMESTAMP WITH TIME ZONE"}
     ]
@@ -42,6 +42,20 @@ SELECT create_resource($f${
 
 SELECT create_resource($f${
     "table_name": "categories",
+    "columns": [
+      {"name":"name","type":"varchar(255)", "validations": [
+        "required"
+      ]},
+      {"name":"summary","type":"text"},
+      {"name":"content","type":"xml"},
+      {"name":"articles_content","type":"xml"},
+      {"name":"version","type":"integer"},
+      {"name":"deleted_at","type":"TIMESTAMP WITH TIME ZONE"}
+    ]
+}$f$::jsonb);
+
+SELECT create_resource($f${
+    "table_name": "things",
     "columns": [
       {"name":"name","type":"varchar(255)", "validations": [
         "required"

@@ -31,7 +31,7 @@ BEGIN
     value->>'name' as name,
     replace(value->>'name', '_id', '') as prefix,
     inflection_pluralize(replace(value->>'name', '_id', '')) as plural,
-    value->>'name' || '_alias' as alias,
+    inflection_pluralize(replace(value->>'name', '_id', '')) || '_parent' as alias,
     value
   from json_array_elements(structure)
   WHERE position('_ids' in value->>'name') = 0)
@@ -47,7 +47,7 @@ BEGIN
     value->>'name' as name,
     replace(value->>'name', '_id', '') as prefix,
     inflection_pluralize(replace(value->>'name', '_id', '')) as plural,
-    value->>'name' || '_alias' as alias,
+    inflection_pluralize(replace(value->>'name', '_id', '')) || '_parent' as alias,
     value
   from json_array_elements(structure)
   WHERE position('_ids' in value->>'name') = 0)

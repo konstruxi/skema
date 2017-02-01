@@ -166,6 +166,6 @@ END $$;
 
 CREATE OR REPLACE FUNCTION inflections_slugify(str text) RETURNS text AS $$
 BEGIN
-  RETURN trim(regexp_replace(str, '[^a-z0-9_-]+', '_', 'gi'), '_');
+  RETURN lower(trim(regexp_replace(str, '[^a-z0-9_-]+', '_', 'gi'), '_'));
 END
 $$ LANGUAGE plpgsql;

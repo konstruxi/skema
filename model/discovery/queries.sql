@@ -3,11 +3,13 @@ DROP MATERIALIZED VIEW structures_and_queries;
 
 CREATE MATERIALIZED VIEW structures_and_queries AS
   SELECT *, 
-  CASE WHEN structures.parent_name != '' THEN
-    replace(full_select_sql(table_name, structures.columns), 'WHERE 1=1', 'WHERE ' || inflection_singularize(parent_name) || '_id = $parent_id')
-  ELSE
-    full_select_sql(table_name, structures.columns) 
-  END as select_sql,
+ -- CASE WHEN structures.parent_name != '' THEN
+ --   replace(full_select_sql(table_name, structures.columns), 'WHERE 1=1', 'WHERE ' || parent_name || '.slug = :parent_id')
+ -- ELSE
+    full_select_sql(table_name, structures.columns)
+ -- END 
+ as select_sql,
+  compose_sql(table_name, structures.columns, structures.references) as compose_sql,
 
   CASE WHEN EXISTS(SELECT 1 from json_array_elements(structures.columns) WHERE value->>'name' = 'version') THEN
     patch_sql(table_name, structures.columns)  

@@ -5,6 +5,7 @@ cat conventions/inflections.sql \
     conventions/undo.sql \
     conventions/params.sql \
     conventions/blobs.sql \
+    composition/collection.sql \
     discovery/structures.sql \
     discovery/references.sql \
     discovery/children.sql \

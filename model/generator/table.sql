@@ -18,7 +18,7 @@ begin
           (value->>'name') ||       ' jsonb, ' ||
           (value->>'name') || '_blobs bytea[]'
       WHEN value->>'type' = 'xml' THEN
-          (value->>'name') ||       ' xml, ' ||
+          (value->>'name') ||       ' xml , ' ||
           (value->>'name') || '_embeds jsonb, ' ||
           (value->>'name') || '_embeds_blobs bytea[]'
       ELSE

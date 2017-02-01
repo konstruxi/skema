@@ -30,6 +30,17 @@
 	</dl>
 </section>
 
+{{#item}}
+	{{#meta:columns}}
+		{{#type:xml}}
+			{{^name:slug}}
+				{{#parent:by:name}}
+					<article class="content">{{parent:by:name:HTML}}</article></dd>
+				{{/parent:by:name}}
+			{{/name:slug}}
+		{{/type:xml}}
+	{{/meta:columns}}
+{{/item}}
 
 
 <section id="meta" class="optional summary details">
