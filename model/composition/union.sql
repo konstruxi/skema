@@ -1,4 +1,3 @@
--- Returns SQL query that selects from specified table with related rows aggregated as jsonb
 CREATE OR REPLACE FUNCTION compose_sql(relname text, structure jsonb, relations jsonb)
   RETURNS text AS
 $BODY$DECLARE
@@ -35,7 +34,7 @@ BEGIN
       END) || 
 
       CASE WHEN relation.value->>'compose_sql' is not NULL THEN
-        replace(relation.value->>'compose_sql','root.*,', '')
+        relation.value->>'compose_sql'
       ELSE
         -- List children documents
         'SELECT 
@@ -63,7 +62,7 @@ BEGIN
             END
       END || '
       ORDER BY index DESC
-    ) collection
+    )
   )))', ', ')
     FROM jsonb_array_elements(relations) relation
     INTO list_content;
@@ -77,34 +76,10 @@ BEGIN
       xmlarray(xpath(''//section'', root.content))
     ),
       ' || coalesce(list_content, '''''') || '
-    ) as xml,
-    0 as index
+    ) as xml
     FROM ' || relname || '_current root
     WHERE 1=1
   ';
 END;
 $BODY$
 LANGUAGE plpgsql VOLATILE;
-
-
-
-CREATE OR REPLACE FUNCTION xmlarray(input xml[])
-returns xml AS $BODY$
-BEGIN
-  return array_to_string(input, '')::xml;
-END
-$BODY$
-LANGUAGE plpgsql VOLATILE;
-
-
--- Take 
-CREATE OR REPLACE FUNCTION xmlsection(section xml, attributes xml)
-returns xml AS $BODY$
-BEGIN
-  return xmlelement(
-    name section,
-    xmlarray(xpath('/*', section))
-  );
-END
-$BODY$
-LANGUAGE plpgsql VOLATILE;                        

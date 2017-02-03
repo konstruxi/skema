@@ -20,7 +20,9 @@ env CFLAGS="-Wno-error" ./configure \
 	--http-log-path=../logs/access.log \
 	--error-log-path=../logs/error.log \
 	--with-debug \
+	--add-module=../headers-more-nginx-module \
 	--add-module=../ngx_devel_kit \
+	--add-module=../ngx_cache_purge \
 	--add-module=../set-misc-nginx-module \
 	--add-module=../form-input-nginx-module \
 	--add-module=../ngx_postgres \

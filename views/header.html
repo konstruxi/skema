@@ -9,6 +9,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
+{{#vars:flash}}
+<!-- Purge cache in parent resources -->
+	<img src="../purge" style="position: absolute; visibility: hidden; height: 0; width: 0;" />
+	{{#vars:parent_resource}}
+		{{#meta:parent_resource}}
+			<img src="../../purge" style="position: absolute; visibility: hidden; height: 0; width: 0;" />
+			<img src="../../../purge" style="position: absolute; visibility: hidden; height: 0; width: 0;" />
+		{{/meta:parent_resource}}
+	{{/vars:parent_resource}} 
+{{/vars:flash}}
+
 <body>
 	<header>
 		<h1>Our site is great </h1>
@@ -22,7 +33,7 @@
 					<a href="/" class="home">Home</a>
 
 					{{#meta:grandparent_resource}}
-						<a href="{{meta:back}}../../../..">{{meta:grandparent_resource_name}}</a> 
+						<a href="{{meta:back}}../../../..">{{vars:grandparent_resource}}</a> 
 						/
 						{{#meta:grandparent_structure}}
 							{{#is_title}}
@@ -35,7 +46,7 @@
 
 					{{#meta:parent_resource}}
 
-								<a href="{{meta:back}}../..">{{meta:parent_resource_name}}</a> 
+								<a href="{{meta:back}}../..">{{vars:parent_resource}}</a> 
 								/
 								{{#meta:parent_structure}}
 									{{#is_title}}
@@ -47,7 +58,7 @@
 					
 					{{#meta:back}}
 						/
-						<a href="{{meta:back}}">{{meta:resource_name}}</a>
+						<a href="{{meta:back}}">{{vars:resource}}</a>
 					{{/meta:back}}
 				</h2>
 			</div>
@@ -60,8 +71,8 @@
 				<div class="breadcrumbs">
 					<h2>
 						<a href="/" class="home">Home</a>
-						<a href="{{meta:back}}">{{meta:resource_name}}</a>
-						{{#meta:id}}
+						<a href="{{meta:back}}">{{vars:resource}}</a>
+						{{#vars:id}}
 							{{^meta:action:show}}
 								/
 								{{#meta:columns}}
@@ -72,7 +83,7 @@
 									{{/is_title}}
 								{{/meta:columns}}
 							{{/meta:action:show}}
-						{{/meta:id}}
+						{{/vars:id}}
 					</h2>
 				</div>
 			{{/meta:back}}
@@ -107,5 +118,3 @@
 	</div>
 	{{/parent:flash}}
 {{/vars:flash}}
-
-{{vars:query}}

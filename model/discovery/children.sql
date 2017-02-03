@@ -1,6 +1,6 @@
 
 
--- compute json array of related tables for each table 
+-- compute jsonb array of related tables for each table 
 CREATE OR REPLACE VIEW structures_and_children AS
 SELECT 
     q.*, 
@@ -13,13 +13,13 @@ LEFT JOIN (
 
     structs.table_name, 
     inflection_pluralize(replace(value->>'name', '_id', '')) as relation,
-    row_to_json(x) as relations
+    row_to_json(x)::jsonb as relations
     
-    from structures structs, json_array_elements(structs.columns) as rls
+    from structures structs, jsonb_array_elements(structs.columns) as rls
     
 
   LEFT JOIN (
-    SELECT z.table_name, json_agg(z.columns) as columns
+    SELECT z.table_name, jsonb_agg(z.columns) as columns
     FROM (
       SELECT * FROM structures 
     ) z

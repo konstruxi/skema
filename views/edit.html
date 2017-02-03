@@ -18,31 +18,27 @@
 	{{#is_editable}}
 		{{#type:integer}}
 
-			{{#is_select}}
+			{{#relation_name}}
 				<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 					<label for="{{meta:singular}}_{{name}}_select">
 						{{name}}</label>
 					<select id="{{meta:singular}}_{{name}}_select" name="{{meta:singular}}[{{name}}]">
 						{{#meta:options:by:name}}
-								<option value="{{id}}" 
-
-								{{#parent::item:by:name}}
-									{{#parent::item:by:name:is:id}}selected{{/parent::item:by:name:is:id}}
-								{{/parent::item:by:name}}
-								{{^parent::item:by:name}}
-									{{#meta:parent_resource_key:is:parent:name}}
-										{{#id:is:meta:parent_resource_id}}
-										selected
-										{{/id:is:meta:parent_resource_id}}
-									{{/meta:parent_resource_key:is:parent:name}}
-								{{/parent::item:by:name}}> {{title}}{{name}} </option>
-
+								<option value="{{#root_id}}{{root_id}}{{/root_id}}{{^root_id}}{{id}}{{/root_id}}"
+								{{#parent::item:by:parent:relation_name}}
+									{{#id:is:parent:id}}selected{{/id:is:parent:id}}
+								{{/parent::item:by:parent:relation_name}}
+								{{^parent::item:by:table_name}}
+									{{#meta:parent_resource}}
+										{{#id:is:parent:id}}selected{{/id:is:parent:id}}
+									{{/meta:parent_resource}}
+								{{/parent::item:by:table_name}}> {{name}} {{title}} </option>
 						{{/meta:options:by:name}}
 					 </select>
 				 </span>
 
-			{{/is_select}}
-			{{^is_select}}
+			{{/relation_name}}
+			{{^relation_name}}
 				<span class="integer field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 					<label for="{{meta:singular}}_{{name}}_number">
 						{{name}}</label>
@@ -53,7 +49,7 @@
 						<input type="number" id="{{meta:singular}}_{{name}}_number" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
 					{{/parent:item}}
 				</span>
-			{{/is_select}}
+			{{/relation_name}}
 
 		{{/type:integer}}
 
@@ -89,30 +85,30 @@
 
 		{{#type:array}}
 
-			{{#is_select}}
+			{{#relation_name}}
 				<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 					<label for="{{meta:singular}}_{{name}}_select">
 						{{name}}</label>
 					<select multiple id="{{meta:singular}}_{{name}}_select" name="{{meta:singular}}[{{name}}][]">
 						{{#meta:options:by:name}}
-								<option value="{{id}}"
-								{{#parent::item:by:parent:name}}
-									{{#this:is:parent:id}}selected{{/this:is:parent:id}}
-								{{/parent::item:by:parent:name}}
-								{{^parent::item:by:name}}
+								<option value="{{#root_id}}{{root_id}}{{/root_id}}{{^root_id}}{{id}}{{/root_id}}"
+								{{#parent::item:by:table_name}}
+									{{#id:is:parent:id}}selected{{/id:is:parent:id}}
+								{{/parent::item:by:table_name}}
+								{{^parent::item:by:table_name}}
 									{{#meta:parent_resource_key:is:parent:name}}
-										{{#parent::item:order_id:is:meta:parent_resource_id}}
+										{{#slug:is:meta:parent_resource_id}}
 										selected
-										{{/parent::item:order_id:is:meta:parent_resource_id}}
+										{{/slug:is:meta:parent_resource_id}}
 									{{/meta:parent_resource_key:is:parent:name}}
-								{{/parent::item:by:name}}> {{name}}{{title}} </option>
+								{{/parent::item:by:table_name}}> {{name}} {{title}} </option>
 
 						{{/meta:options:by:name}}
 					 </select>
 				 </span>
 
-			{{/is_select}}
-			{{^is_select}}
+			{{/relation_name}}
+			{{^relation_name}}
 				{{#udt:int}}
 					<span class="integer field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 						<label for="{{meta:singular}}_{{name}}_number">
@@ -125,7 +121,7 @@
 						{{/parent:item}}
 					</span>
 				{{/udt:int}}
-			{{/is_select}}
+			{{/relation_name}}
 
 		{{/type:array}}
 

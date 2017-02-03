@@ -1,4 +1,4 @@
--- compute json array of tables that reference other table 
+-- compute jsonb array of tables that reference other table 
 -- TODO: Store FK to avoid querying for it elsewhere
 CREATE OR REPLACE VIEW structures_and_references AS
 SELECT 
@@ -7,12 +7,11 @@ SELECT
 FROM structures q
 
 LEFT JOIN(
-  SELECT structures.table_name, json_agg(y) as refs
+  SELECT structures.table_name, jsonb_agg(y) as refs
   FROM structures
   INNER JOIN structures y
-  ON (EXISTS(SELECT value FROM json_array_elements(y.columns) WHERE 
-      value->>'name' =(inflection_singularize(structures.table_name) || '_id') OR
-      value->>'name' = structures.table_name || '_ids'))
+  ON (EXISTS(SELECT value FROM jsonb_array_elements(y.columns) 
+             WHERE value->>'relation_name' = structures.table_name))
   GROUP BY structures.table_name
 ) x ON (x.table_name = q.table_name);
 

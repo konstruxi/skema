@@ -1,7 +1,7 @@
 
 -- list of public columns to select
 -- skip binary stuff and passwords
-CREATE OR REPLACE FUNCTION columns_sql(relname text, structure json, prefix boolean DEFAULT false)
+CREATE OR REPLACE FUNCTION columns_sql(relname text, structure jsonb, prefix boolean DEFAULT false)
   RETURNS text AS $ff$
   SELECT string_agg(
     (CASE WHEN prefix THEN
@@ -9,7 +9,7 @@ CREATE OR REPLACE FUNCTION columns_sql(relname text, structure json, prefix bool
     ELSE
       ''
     END) || (value->>'name'), ', ')
-    FROM json_array_elements(structure)
+    FROM jsonb_array_elements(structure)
     WHERE value->>'udt'  NOT LIKE 'bytea%'
       AND value->>'name' NOT LIKE '%password%'
 $ff$ LANGUAGE sql VOLATILE;
@@ -18,11 +18,11 @@ $ff$ LANGUAGE sql VOLATILE;
 
 
 
--- Returns SQL query that selects from specified table with related rows aggregated as json
-CREATE OR REPLACE FUNCTION full_select_sql(relname text, structure json)
+-- Returns SQL query that selects from specified table with related rows aggregated as jsonb
+CREATE OR REPLACE FUNCTION full_select_sql(relname text, structure jsonb)
   RETURNS text AS
 $BODY$DECLARE
- ret json;
+ ret jsonb;
  names text;
  joins text;
 BEGIN
@@ -33,11 +33,11 @@ BEGIN
     inflection_pluralize(replace(value->>'name', '_id', '')) as plural,
     inflection_pluralize(replace(value->>'name', '_id', '')) || '_parent' as alias,
     value
-  from json_array_elements(structure)
+  from jsonb_array_elements(structure)
   WHERE position('_ids' in value->>'name') = 0)
 
   SELECT
-    string_agg(alias || '.json_agg as ' || plural, ',')
+    string_agg(alias || '.jsonb_agg as ' || plural, ',')
     FROM cols
     WHERE cols.name != 'root_id' and prefix != name
     into names;
@@ -49,17 +49,17 @@ BEGIN
     inflection_pluralize(replace(value->>'name', '_id', '')) as plural,
     inflection_pluralize(replace(value->>'name', '_id', '')) || '_parent' as alias,
     value
-  from json_array_elements(structure)
+  from jsonb_array_elements(structure)
   WHERE position('_ids' in value->>'name') = 0)
 
   SELECT
     string_agg(
-      'LEFT JOIN (SELECT ' || relname || '.id, json_agg(' || plural || ')
+      'LEFT JOIN (SELECT ' || relname || '.id, jsonb_agg(' || plural || '_current)
        from ' || relname || ' 
-       LEFT JOIN ' || plural || ' 
-       ON (' || relname || '.' || name || ' = ' || plural || '.id) 
+       LEFT JOIN ' || plural || '_current
+       ON (' || relname || '.' || name || ' = ' || plural || '_current.root_id) 
        GROUP BY ' || relname || '.id) ' || alias || ' 
-       ON ' || alias || '.id = ' || relname || '.' || name, ',')
+       ON ' || alias || '.id = ' || relname || '.id', ',')
     FROM cols
     WHERE cols.name != 'root_id' and prefix != name
     into joins;
@@ -75,8 +75,11 @@ $BODY$
 LANGUAGE plpgsql VOLATILE;
 
 
+
+
+
 -- select possible parents
-CREATE OR REPLACE FUNCTION update_sql(relname text, structure json)
+CREATE OR REPLACE FUNCTION update_sql(relname text, structure jsonb)
   RETURNS text AS
 $BODY$DECLARE
  names text;
@@ -84,7 +87,7 @@ BEGIN
 
   SELECT
     string_agg((els->>'name') || ' = coalesce(new.' || (els->>'name') || ', ' || relname || '.' || (els->>'name') || ')', ', ')
-    FROM json_array_elements(structure) els
+    FROM jsonb_array_elements(structure) els
     into names;
 
 
@@ -94,7 +97,7 @@ $BODY$
 LANGUAGE plpgsql VOLATILE;
 
 -- UPDATE as INSERT
-CREATE OR REPLACE FUNCTION patch_sql(relname text, structure json)
+CREATE OR REPLACE FUNCTION patch_sql(relname text, structure jsonb)
   RETURNS text AS
 $BODY$DECLARE
  names text;
@@ -103,13 +106,13 @@ BEGIN
 
   SELECT
     string_agg(els->>'name', ', ')
-    FROM json_array_elements(structure) els
+    FROM jsonb_array_elements(structure) els
     WHERE els->>'name' != 'id'
     into names;
 
   SELECT
     string_agg('new.' || (els->>'name'), ', ')
-    FROM json_array_elements(structure) els
+    FROM jsonb_array_elements(structure) els
     WHERE els->>'name' != 'id'
     into values;
 
@@ -120,7 +123,7 @@ LANGUAGE plpgsql VOLATILE;
 
 
 -- INSERT
-CREATE OR REPLACE FUNCTION insert_sql(relname text, structure json)
+CREATE OR REPLACE FUNCTION insert_sql(relname text, structure jsonb)
   RETURNS text AS
 $BODY$DECLARE
  names text;
@@ -129,13 +132,13 @@ BEGIN
 
   SELECT
     string_agg(els->>'name', ', ')
-    FROM json_array_elements(structure) els
+    FROM jsonb_array_elements(structure) els
     WHERE els->>'name' != 'id'
     into names;
 
   SELECT
     string_agg('new.' || (els->>'name'), ', ')
-    FROM json_array_elements(structure) els
+    FROM jsonb_array_elements(structure) els
     WHERE els->>'name' != 'id'
     into values;
 
@@ -146,8 +149,8 @@ LANGUAGE plpgsql VOLATILE;
 
 
 
--- Returns SQL query that selects from specified table with related rows aggregated as json
-CREATE OR REPLACE FUNCTION file_sql(relname text, structure json)
+-- Returns SQL query that selects from specified table with related rows aggregated as jsonb
+CREATE OR REPLACE FUNCTION file_sql(relname text, structure jsonb)
   RETURNS text AS
 $BODY$DECLARE
   all_files_in_row text;
@@ -156,7 +159,7 @@ BEGIN
     (CASE WHEN value->>'type' = 'files' THEN
       'SELECT root_id, value->>''name'' as name, 
         ' || (value->>'name') || '_blobs[(value->>''index'')::int] as blob
-        from ' || relname || ', jsonb_array_elements(' || (value->>'name') || ')
+        from ' || relname || ', jsonbb_array_elements(' || (value->>'name') || ')
         WHERE value->>''index'' is not null'
     WHEN value->>'type' = 'file' THEN
       'SELECT root_id, ' || (value->>'name') || '->>''name'' as name, 
@@ -165,11 +168,12 @@ BEGIN
     END), '
 UNION
 ')
-    FROM json_array_elements(structure)
+    FROM jsonb_array_elements(structure)
     INTO all_files_in_row;
 
   RETURN 'SELECT blob FROM (' || all_files_in_row || ') q WHERE 1=1 ';
 END;
 $BODY$
 LANGUAGE plpgsql VOLATILE;
+
 

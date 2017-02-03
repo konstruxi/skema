@@ -10,6 +10,8 @@ cat conventions/inflections.sql \
     discovery/references.sql \
     discovery/children.sql \
     discovery/queries.sql \
+    discovery/services.sql \
+    discovery/callback.sql \
     generator/table.sql \
     generator/validations.sql \
     generator/scopes.sql \

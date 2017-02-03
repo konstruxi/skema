@@ -24,46 +24,63 @@ $$;
 
 
 
-SELECT create_resource($f${
-    "table_name": "articles",
-    "columns": [
-      {"name":"category_id","type":"integer"},
-      {"name":"thumbnail","type":"file"},
-      {"name":"title","type":"varchar(255)", "validations": [
-        "required"
-      ]},
-      {"name":"summary","type":"text"},
-      {"name":"content","type":"xml"},
-      {"name":"version","type":"integer"},
-      {"name":"deleted_at","type":"TIMESTAMP WITH TIME ZONE"}
-    ]
-}$f$::jsonb);
+--SELECT create_resource($f${
+--    "table_name": "articles",
+--    "columns": [
+--      {"name":"category_id","type":"integer"},
+--      {"name":"thumbnail","type":"file"},
+--      {"name":"title","type":"varchar(255)", "validations": [
+--        "required"
+--      ]},
+--      {"name":"summary","type":"text"},
+--      {"name":"content","type":"xml"},
+--      {"name":"version","type":"integer"},
+--      {"name":"deleted_at","type":"TIMESTAMP WITH TIME ZONE"}
+--    ]
+--}$f$::jsonb);
 
 
-SELECT create_resource($f${
-    "table_name": "categories",
-    "columns": [
-      {"name":"name","type":"varchar(255)", "validations": [
-        "required"
-      ]},
-      {"name":"summary","type":"text"},
-      {"name":"content","type":"xml"},
-      {"name":"articles_content","type":"xml"},
-      {"name":"version","type":"integer"},
-      {"name":"deleted_at","type":"TIMESTAMP WITH TIME ZONE"}
-    ]
-}$f$::jsonb);
+-- SELECT create_resource($f${
+--     "table_name": "categories",
+--     "columns": [
+--       {"name":"name","type":"varchar(255)", "validations": [
+--         "required"
+--       ]},
+--       {"name":"summary","type":"text"},
+--       {"name":"content","type":"xml"},
+--       {"name":"articles_content","type":"xml"},
+--       {"name":"version","type":"integer"},
+--       {"name":"deleted_at","type":"TIMESTAMP WITH TIME ZONE"}
+--     ]
+-- }$f$::jsonb);
+-- 
+-- SELECT create_resource($f${
+--     "table_name": "things",
+--     "columns": [
+--       {"name":"name","type":"varchar(255)", "validations": [
+--         "required"
+--       ]},
+--       {"name":"content","type":"text"},
+--       {"name":"version","type":"integer"},
+--       {"name":"deleted_at","type":"TIMESTAMP WITH TIME ZONE"}
+--     ]
+-- }$f$::jsonb);
+-- 
+-- SELECT create_resource($f${
+--     "table_name": "services",
+--     "columns": [
+--       {"name":"name","type":"varchar(255)", "validations": [
+--         "required"
+--       ]},
+--       {"name":"version","type":"integer"},
+--       {"name":"uuid","type":"uuid"},
+--       {"name":"type","type":"text"},
+--       {"name":"url", "type":"text"},
+--       {"name":"summary","type":"text"},
+--       {"name":"content","type":"xml"},
+--       {"name":"categories_content","type":"xml"},
+--       {"name":"things_content","type":"xml"}
+--     ]
+-- }$f$::jsonb);
 
-SELECT create_resource($f${
-    "table_name": "things",
-    "columns": [
-      {"name":"name","type":"varchar(255)", "validations": [
-        "required"
-      ]},
-      {"name":"content","type":"text"},
-      {"name":"version","type":"integer"},
-      {"name":"deleted_at","type":"TIMESTAMP WITH TIME ZONE"}
-    ]
-}$f$::jsonb);
-
-REFRESH MATERIALIZED VIEW structures_and_queries;
+select kx_discover();
