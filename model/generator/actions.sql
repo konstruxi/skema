@@ -1,6 +1,6 @@
 -- Set up triggers for versioning, validations and soft-deletion
 CREATE OR REPLACE FUNCTION
-create_resource_actions(r jsonb) returns json language plpgsql AS $$ BEGIN
+create_resource_actions(r jsonb) returns jsonb language plpgsql AS $$ BEGIN
 
   -- Soft deletion
   IF EXISTS(SELECT 1 from jsonb_array_elements(r->'columns') WHERE value->>'name' = 'deleted_at') THEN

@@ -8,13 +8,13 @@ DECLARE
   reject_malformed_values text := '';
 begin
   -- Reject malformed values
-  SELECT string_agg(CASE WHEN value->>'type' = 'xml' THEN
-    -- xml has to have tags in it and has to have no text on top level
-    'IF NOT xml_is_well_formed_document(new.' || (value->>'name') || '::text) THEN' ||
-      ' new.' || (value->>'name') || ' = null; END IF;'
-  END, '')
-  FROM jsonb_array_elements(r->'columns')
-  into reject_malformed_values;
+  -- SELECT string_agg(CASE WHEN value->>'type' = 'xml' THEN
+  --   -- xml has to have tags in it and has to have no text on top level
+  --   'IF NOT xml_is_well_formed_document(new.' || (value->>'name') || '::text) THEN' ||
+  --     ' new.' || (value->>'name') || ' = null; END IF;'
+  -- END, '')
+  -- FROM jsonb_array_elements(r->'columns')
+  -- into reject_malformed_values;
 
 
 
@@ -33,53 +33,34 @@ begin
               new.version = ' || (r->>'singular') || '_head(new.root_id, false) + 1;
 
               new.next_version = old.root_id;
+              new.outdated     = coalesce(new.outdated, old.outdated);
               new.previous_version = old.version;
               ' || string_agg(
                 -- xml + metadata + blobs
                 CASE WHEN value->>'type' = 'xml' THEN
                   'new.' || (value->>'name') || 
                          ' = coalesce(new.' || (value->>'name') ||
-                                      ', old.' || (value->>'name') || '); 
-                  new.' || (value->>'name') || '_embeds' ||
-                         ' = assign_file_indecies(
-                              assign_file_list(new.' || (value->>'name') || '_embeds' ||
-                                      '::jsonb, old.' || (value->>'name') || '_embeds::jsonb))'
-                -- metadata + blobs
+                                      ', old.' || (value->>'name') || ');'
+                -- inherit blobs
                 WHEN value->>'type' LIKE 'file%' THEN
                   'new.' || (value->>'name') || 
                          ' =  assign_file_indecies(
                                 assign_file_list(new.' || (value->>'name') ||
-                                      '::jsonb, old.' || (value->>'name') || '::jsonb))'
+                                      '::jsonb, old.' || (value->>'name') || '::jsonb));'
+                
+                -- do NOT inherit blobs, only metadata
+                WHEN value->>'type' LIKE 'bytea[]' THEN
+                  '' 
                 ELSE
                   'new.' || (value->>'name') || 
                          ' = coalesce(new.' || (value->>'name') ||
-                                      ', old.' || (value->>'name') || ')' 
-                END, ';
-              ') || ';
+                                      ', old.' || (value->>'name') || ');' 
+                END, '
+              ') || '
             END IF;'
     FROM jsonb_array_elements(r->'columns')
     INTO inhert_values_from_parent_version;
   END IF;
-
-  -- Generate list of columns prefixed with new.
-  SELECT string_agg(CASE WHEN value->>'name' = 'version' THEN
-     'coalesce(new.version, 1),               -- start with version 1 unless given
-      coalesce(new.root_id, new.id),          -- inherit root_id or set to self
-      new.previous_version,                   -- point to previous version
-      new.next_version                        -- point to next version
-'
-    WHEN value->>'type' = 'xml' THEN
-      'new.' || (value->>'name') || ',' ||
-      'assign_file_indecies(new.' || (value->>'name') || '_embeds),' ||
-      'new.' || (value->>'name') || '_embeds_blobs'
-    WHEN value->>'type' LIKE 'file%' THEN
-      'assign_file_indecies(new.' || (value->>'name') || '),' ||
-      'new.' || (value->>'name') || '_blobs'
-    ELSE
-      'new.' || (value->>'name')
-    END, ', ')
-    FROM jsonb_array_elements(r->'columns')
-    into columns;
 
   -- Find which column contains value to generate slug against (name or title)
   SELECT value->>'name' 
@@ -88,24 +69,54 @@ begin
        or value->>'name' = 'name'
     INTO title_column LIMIT 1;
 
+
+  -- Generate list of columns prefixed with new.
+  SELECT string_agg(CASE
+    WHEN value->>'name' = 'id' THEN
+      'new.id'
+     
+    WHEN value->>'name' = 'slug' THEN
+      'coalesce(new.slug, inflections_slugify(new.' || title_column || '))'
+     
+    WHEN value->>'name' = 'created_at' THEN
+      'coalesce(new.created_at, now())'        -- inherit or set creation timestamp
+                
+    WHEN value->>'name' = 'updated_at' THEN
+      'coalesce(new.updated_at, now())'        -- inherit or set modification timestamp
+    
+    WHEN value->>'name' = 'errors' THEN
+      'validate_' || (r->>'singular') || '(new)'
+       
+    WHEN value->>'name' = 'id' THEN
+      'coalesce(new.version, 1)'              -- start with version 1 unless given
+     
+    WHEN value->>'name' = 'version' THEN
+      'coalesce(new.version, 1)'              -- start with version 1 unless given
+     
+    WHEN value->>'name' = 'root_id' THEN
+      'coalesce(new.root_id, new.id)'          -- inherit root_id or set to self
+
+    WHEN value->>'type' = 'xml' THEN
+      'xmlarticle(new.' || (value->>'name') || ')'
+
+    WHEN value->>'type' LIKE 'file%' THEN
+      'assign_file_indecies(new.' || (value->>'name') || ')'
+    ELSE
+      'new.' || (value->>'name')
+    END, ', ')
+    FROM jsonb_array_elements(r->'columns')
+    into columns;
+
+
   -- Inserts new version of a row
   EXECUTE  'CREATE OR REPLACE FUNCTION
             create_' || (r->>'singular') || '() returns trigger language plpgsql AS $$ begin
             ' || reject_malformed_values || '
             ' || inhert_values_from_parent_version || '
-              return (
-                new.id,
-                coalesce(new.slug, inflections_slugify(new.' || title_column || ')),
-                coalesce(new.created_at, now()),        -- inherit or set creation timestamp
-                coalesce(new.updated_at, now()),        -- inherit or set modification timestamp
-                validate_' || (r->>'singular') || '(new),
-            ' || columns || '); 
+              return (' || columns || '); 
             end $$';
 
-  -- Apply trigger
-  EXECUTE  'CREATE TRIGGER create_' || (r->>'singular') || '
-            BEFORE INSERT ON ' || (r->>'table_name') || '
-            FOR EACH ROW EXECUTE PROCEDURE create_' || (r->>'singular') || '()';
+  EXECUTE kx_create_trigger(r, 'create_' || (r->>'singular'), 'BEFORE INSERT');
 
   RETURN r;
 END $ff$;

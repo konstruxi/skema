@@ -37,9 +37,7 @@ EXECUTE  'CREATE OR REPLACE function
           $$';
 
 -- Wire in the trigger
-EXECUTE  'CREATE TRIGGER delete_' || (r->>'singular') || '_version
-          INSTEAD OF DELETE ON ' || (r->>'table_name') || '_versions
-          FOR EACH ROW EXECUTE PROCEDURE delete_' || (r->>'singular') || '_version()';
+EXECUTE kx_create_trigger(r, 'delete_' || (r->>'singular') || '_version', 'INSTEAD OF DELETE', 'versions');
 
 return r;
 

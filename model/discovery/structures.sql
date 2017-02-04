@@ -1,8 +1,8 @@
 
 
 -- enumerate user defined tables
-DROP MATERIALIZED VIEW structures CASCADE;
-CREATE MATERIALIZED VIEW structures AS
+DROP MATERIALIZED VIEW kx_resources CASCADE;
+CREATE MATERIALIZED VIEW kx_resources AS
 
 SELECT  
     columns.table_name,
@@ -60,6 +60,7 @@ and tables.is_insertable_into != 'NO'
 AND position('sql_' in tables.table_name) != 1 
 and tables.table_type != 'VIEW'
 
+ORDER BY cols.ordinal_position ASC
 ) columns
 
 GROUP BY columns.table_name;

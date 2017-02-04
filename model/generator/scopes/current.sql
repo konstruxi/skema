@@ -19,11 +19,8 @@ create_resource_current_scope(r jsonb) returns json language plpgsql AS $ff$ BEG
     end;
   $$';
 
-  -- Wire up the trigger
-  EXECUTE 'CREATE TRIGGER delete_current_' || (r->>'singular') || '
-      INSTEAD OF DELETE ON ' || (r->>'table_name') || '_current
-      FOR EACH ROW EXECUTE PROCEDURE delete_current_' || (r->>'singular') || '();';
-
+  EXECUTE kx_create_trigger(r, 'delete_current_' || (r->>'singular'), 'INSTEAD OF DELETE', 'current');
+ 
   return r;
 END $ff$;
 

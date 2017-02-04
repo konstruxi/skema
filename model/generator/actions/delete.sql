@@ -12,9 +12,7 @@ create_resource_delete_action(r jsonb) returns jsonb language plpgsql AS $ff$ BE
               end;
             $$';
 
-  EXECUTE  'CREATE TRIGGER delete_' || (r->>'singular') ||'
-            BEFORE DELETE ON ' || (r->>'table_name') ||'
-            FOR EACH ROW EXECUTE PROCEDURE delete_' || (r->>'singular') ||'()';
+  EXECUTE kx_create_trigger(r, 'delete_' || (r->>'singular'), 'BEFORE DELETE');
 
   return r;
 

@@ -24,9 +24,7 @@ create_resource_heads_scope(r jsonb) returns json language plpgsql AS $ff$ BEGIN
             end; $$';
 
   -- Wire up deletion trigger
-  EXECUTE  'CREATE TRIGGER delete_' || (r->>'singular') || '_head
-            INSTEAD OF DELETE ON ' || (r->>'table_name') || '_heads
-            FOR EACH ROW EXECUTE PROCEDURE delete_' || (r->>'singular') || '_head()';
+  EXECUTE kx_create_trigger(r, 'delete_' || (r->>'singular') || '_head', 'INSTEAD OF DELETE', 'heads');
 
 
   -- UPDATE {resources}_heads      
@@ -40,9 +38,7 @@ create_resource_heads_scope(r jsonb) returns json language plpgsql AS $ff$ BEGIN
             end; $$';
 
   -- Wire up update trigger
-  EXECUTE  'CREATE TRIGGER update_' || (r->>'singular') || '_head
-            INSTEAD OF UPDATE ON ' || (r->>'table_name') || '_heads
-            FOR EACH ROW EXECUTE PROCEDURE update_' || (r->>'singular') || '_head()';
+  EXECUTE kx_create_trigger(r, 'update_' || (r->>'singular') || '_head', 'INSTEAD OF UPDATE', 'heads');
 
   return r;
 END $ff$;

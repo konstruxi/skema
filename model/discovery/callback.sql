@@ -4,13 +4,13 @@ returns text language plpgsql AS $ff$ declare
   q text := '';
 begin
   -- heavy step, scan all tables in PG (N rows)
-  REFRESH MATERIALIZED VIEW structures;
+  REFRESH MATERIALIZED VIEW kx_resources;
 
   -- a bunch of lighter steps enriching resource data (N rows + nest permutations)
-  REFRESH MATERIALIZED VIEW structures_and_services;
+  REFRESH MATERIALIZED VIEW kx_resources_and_services;
 
-
-
+  -- Generate heavy query to scan all tables in search of slugs matching to arguments 
+  -- and union the results. It's used by router to dispatch requests to proper resource.  
   SELECT string_agg('
     SELECT ' || table_name || '.updated_at, ''' || table_name || ''', ' || table_name || '.slug, row_to_json(' || table_name || ')::jsonb as jsonb
       FROM ' || table_name || '
@@ -19,7 +19,7 @@ begin
          or ' || table_name || '.slug=nullif(third,  ''''))
   ', ' UNION ALL ')
 
-    FROM structures_and_services s
+    FROM kx_resources_and_services s
     WHERE parent_name = '' 
       --AND table_name != 'services'
   INTO q;
@@ -89,7 +89,7 @@ WITH matches as (
                    nullif(first.resource, '')) as path, 
                * FROM matches third, matches second, matches first) f
 
-    RIGHT JOIN structures_and_services q
+    RIGHT JOIN kx_resources_and_services q
 
     ON (1=1)
 

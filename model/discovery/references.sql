@@ -1,17 +1,17 @@
 -- compute jsonb array of tables that reference other table 
 -- TODO: Store FK to avoid querying for it elsewhere
-CREATE OR REPLACE VIEW structures_and_references AS
+CREATE OR REPLACE VIEW kx_resources_and_references AS
 SELECT 
     q.*, 
     x.refs as references
-FROM structures q
+FROM kx_resources q
 
 LEFT JOIN(
-  SELECT structures.table_name, jsonb_agg(y) as refs
-  FROM structures
-  INNER JOIN structures y
+  SELECT kx_resources.table_name, jsonb_agg(y) as refs
+  FROM kx_resources
+  INNER JOIN kx_resources y
   ON (EXISTS(SELECT value FROM jsonb_array_elements(y.columns) 
-             WHERE value->>'relation_name' = structures.table_name))
-  GROUP BY structures.table_name
+             WHERE value->>'relation_name' = kx_resources.table_name))
+  GROUP BY kx_resources.table_name
 ) x ON (x.table_name = q.table_name);
 

@@ -9,9 +9,7 @@ BEGIN
              return new;
            end $$';
 
-  EXECUTE 'CREATE TRIGGER update_' || (r->>'singular') || '
-           BEFORE UPDATE ON ' || (r->>'table_name') || '
-           FOR EACH ROW EXECUTE PROCEDURE update_' || (r->>'singular') || '()';
+  EXECUTE kx_create_trigger(r, 'update_' || (r->>'singular'), 'BEFORE UPDATE');
 
   return r;
 END $ff$;

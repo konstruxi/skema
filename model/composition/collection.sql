@@ -107,4 +107,39 @@ BEGIN
   );
 END
 $BODY$
+LANGUAGE plpgsql VOLATILE;        
+
+-- Convert xml content into valid xml root with article on top
+CREATE OR REPLACE FUNCTION xmlarticle(input xml)
+returns xml AS $BODY$
+BEGIN
+  return xmlelement(
+    name article,
+    case when input is document and (xpath('/article', input))[1] is not null then
+      xmlarray(xpath('//section', input))
+    ELSE
+      xmlarray(xpath('//section', xmlelement(name article, input)))
+    end
+  );
+END
+$BODY$
+LANGUAGE plpgsql VOLATILE;                        
+
+
+
+
+-- Convert xml content into valid xml root with article on top
+CREATE OR REPLACE FUNCTION xmlarticle(input text)
+returns xml AS $BODY$
+BEGIN
+  return xmlelement(
+    name article,
+    case when input is document and (xpath('/article', input))[1] is not null then
+      xmlarray(xpath('//section', input))
+    ELSE
+      xmlarray(xpath('//section', xmlelement(name article, input)))
+    end
+  );
+END
+$BODY$
 LANGUAGE plpgsql VOLATILE;                        

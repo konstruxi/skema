@@ -1,7 +1,5 @@
 
-DROP materialized VIEW structures_and_services;
-
-CREATE materialized VIEW structures_and_services AS
+CREATE materialized VIEW kx_resources_and_services AS
   SELECT 
     table_name,
     columns,
@@ -16,11 +14,11 @@ CREATE materialized VIEW structures_and_services AS
       -- to join all portals into one, only select specific shared columns
         
       compose_sql('services', columns, (SELECT jsonb_agg(s)
-                                        FROM structures_and_queries s
+                                        FROM kx_resources_and_queries s
                                         WHERE parent_name = '' 
                                           AND table_name != 'services'
                                           AND NOT EXISTS( SELECT 1 
-                                                          from structures_and_queries q 
+                                                          from kx_resources_and_queries q 
                                                           WHERE q.table_name = s.table_name
                                                             AND q.parent_name != '')))
     ELSE
@@ -32,4 +30,4 @@ CREATE materialized VIEW structures_and_services AS
     columns_sql,
     initialized
 
-  FROM structures_and_queries;
+  FROM kx_resources_and_queries;
