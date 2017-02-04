@@ -58,10 +58,11 @@ begin
   EXECUTE 'ALTER TABLE ' || (r->>'table_name') || ' ' ||
           'ADD ' || (col->>'name') || ' ' || (col->>'type');
 
-  -- Restore archived values for the column
+  -- Restore archived values for the column from "outdated" object
   
   EXECUTE 'UPDATE ' || (r->>'table_name') ||
-          ' SET ' || (col->>'name') || ' = outdated->>''' || (col->>'name') || ''''
+          ' SET outdated = outdated - '''  || (col->>'name') || ''', '  
+          || (col->>'name') || ' = outdated->>''' || (col->>'name') || ''''
           ' where outdated->>''' || (col->>'name') || ''' is not NULL' ||
           ' and ' || (col->>'name') || ' is NULL';
 
