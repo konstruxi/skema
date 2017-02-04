@@ -47,7 +47,7 @@ FROM (
   (column_name != 'id' and column_name != 'root_id' and 
    position('version' in column_name) = 0) or NULL as is_editable,
   (SELECT c.column_name FROM INFORMATION_SCHEMA.COLUMNS c
-    WHERE c.table_name = tables.table_name
+    WHERE c.table_name = tables.table_name and c.column_name != 'slug'
     AND (position('character' in c.data_type) > 0 or c.data_type = 'text') LIMIT 1) = column_name or NULL  as is_title
 
 FROM INFORMATION_SCHEMA.COLUMNS cols

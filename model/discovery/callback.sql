@@ -12,21 +12,21 @@ begin
 
 
   SELECT string_agg('
-    SELECT ' || table_name || '.updated_at, ''' || table_name || ''', ' || table_name || '.slug
+    SELECT ' || table_name || '.updated_at, ''' || table_name || ''', ' || table_name || '.slug, row_to_json(' || table_name || ')::jsonb as jsonb
       FROM ' || table_name || '
-      WHERE ' || table_name || '.slug=nullif(first,  '''') 
+      WHERE ' || table_name || '.slug is not NULL AND (' || table_name || '.slug=nullif(first,  '''') 
          or ' || table_name || '.slug=nullif(second, '''')
-         or ' || table_name || '.slug=nullif(third,  '''')
+         or ' || table_name || '.slug=nullif(third,  ''''))
   ', ' UNION ALL ')
 
     FROM structures_and_services s
     WHERE parent_name = '' 
-      AND table_name != 'services'
+      --AND table_name != 'services'
   INTO q;
 
 
   EXECUTE ('CREATE OR REPLACE FUNCTION
-    kx_lookup(first text, second text default '''', third text default '''') returns TABLE (updated_at timestamp with time zone, resource text, slug text) language plpgsql as $$ begin
+    kx_lookup(first text, second text default '''', third text default '''') returns TABLE (updated_at timestamp with time zone, resource text, slug text, jsonb jsonb) language plpgsql as $$ begin
       RETURN QUERY
       ' || q || '
       ORDER BY updated_at desc;
@@ -36,48 +36,79 @@ begin
 end $ff$;
 
 
-EXPLAIN WITH matches as (
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+WITH matches as (
     -- Find records with matching slugs
 
-    SELECT * FROM kx_lookup('hello_world', '', '')
+    SELECT * FROM kx_lookup('', '', '4')
     UNION ALL
-    SELECT null, '', ''
+    SELECT null, '', '', null
   )
 
   -- generate all possible slug/resource combinations
-  SELECT *,
-    table_name                             as resource_name,
-    singularize(table_name)                as singular,
-    '..' as back,
+  SELECT 
+    coalesce(first_updated_at, second_updated_at, third_updated_at) as last_modified,
+    coalesce(path, 'lol') as path
 
-    coalesce(third_updated_at, second_updated_at, first_updated_at) as last_modified
- 
 
-    from  (SELECT first.resource    as first_resource,
-                  first.slug        as first_slug,
-                  first.updated_at  as first_updated_at,
+
+    from  (SELECT third.resource    as third_resource,
+                  third.slug        as third_slug,
+                  third.updated_at  as third_updated_at,
                   second.resource   as second_resource,
                   second.slug       as second_slug,
                   second.updated_at as second_updated_at,
-                  third.resource    as third_resource,
-                  third.slug        as third_slug,
-                  third.updated_at  as third_updated_at,
+                  first.resource    as first_resource,
+                  first.slug        as first_slug,
+                  first.updated_at  as first_updated_at,
+
+                  kx_clean_jsonb(third.jsonb) as third,
+                  kx_clean_jsonb(second.jsonb) as second,
+                  kx_clean_jsonb(first.jsonb) as first,
  
-    concat_ws('/', nullif(first.resource, ''), 
+    concat_ws('/', nullif(third.resource, ''), 
                    nullif(second.resource, ''), 
-                 nullif(third.resource, '')) as path, 
-               * FROM matches first, matches second, matches third) f
+                   nullif(first.resource, '')) as path, 
+               * FROM matches third, matches second, matches first) f
 
-    INNER JOIN structures_and_services q
+    RIGHT JOIN structures_and_services q
 
-    -- match urls against resource structure
-    ON (concat_ws('/', nullif(q.grandparent_name, ''), nullif(q.parent_name, ''), q.table_name) = path)
+    ON (1=1)
 
-    where first_slug = 'hello_world'
-      and second_slug = ''
+    where (
+      table_name != ''
       and third_slug = ''
-      and (first_resource != second_resource or first_resource = '')
-      and (second_resource != third_resource or second_resource = '')
-      and (third_resource != second_resource or third_resource = '')
+      and second_slug = ''
+      and first_slug = '4'
+      --and
+--
+      --(CASE WHEN '' != '' THEN
+      --        concat_ws('/', nullif(q.grandparent_name, ''), nullif(q.parent_name, ''), q.table_name) 
+      --      = concat_ws('/', nullif('', ''), nullif('', ''), '')
+      --      WHEN concat_ws('/', nullif(q.grandparent_name, ''), nullif(q.parent_name, ''), q.table_name) = path THEN
+      --        (third_resource != second_resource or third_resource = '')
+      --        and (second_resource != first_resource)
+      --        and (first_resource != second_resource)
+      --      END)
+            )
+  ORDER BY length(path) DESC, last_modified DESC
+  LIMIT 1;
 
-  ORDER BY last_modified DESC;

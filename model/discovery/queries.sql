@@ -6,9 +6,9 @@ CREATE VIEW structures_and_queries AS
         CASE WHEN EXISTS(SELECT 1 FROM jsonb_array_elements(structures.columns) 
                          WHERE value->>'name' = parent_name || '_ids') THEN
 
-          'WHERE ' || parent_name || '_ids = :parent_id'
+          'WHERE ' || parent_name || '_ids = :slug2'
         ELSE
-          'WHERE ' || inflection_singularize(parent_name) || '_id = (SELECT root_id FROM ' || parent_name || '_current WHERE slug = :parent_id)'
+          'WHERE ' || inflection_singularize(parent_name) || '_id = (SELECT root_id FROM ' || parent_name || '_current WHERE slug = :slug2)'
 
         END
       )

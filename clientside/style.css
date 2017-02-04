@@ -1,8 +1,6 @@
 body,html {
 	padding: 0;
 	margin: 0;
-	display: flex;
-	flex-direction: column;
 	min-height: 100%;
 }
 
@@ -20,57 +18,76 @@ body {
 }
 
 
+body > *:empty {
+	display: none;
+}
 
-body > :not(:empty):not(div) {
-	flex-grow: 0;
+body > *:not(div) {
 	padding: 1rem 2rem 1rem 1rem;
 	box-sizing: padding-box;
 }
-body > footer, body > header, body > .summary, body > .flash, body > .breadcrumbs, body > nav {
-	padding: 1rem 1rem;
+body > header {
+	padding: 1rem 1rem 0;
 }
 
-body > nav {
+html > body > nav:not(:empty) {
 	background: rgba(0,0,0,0.1);
 	font-size: 1.4rem;
-	display: inline;
 	padding: 0;
 }
-body > nav > *{
+body > nav *{
 	padding: 1rem 1rem;
 	display: inline-block;
 }
 
 body > .summary, body > form {
-	margin-top: 3rem;
+	margin-top: 2rem;
 	border-top: 0;
 }
 
-
-
-.breadcrumbs {
-	background: linear-gradient(90deg, #eee, #fff);
+ul a.folder {
+	font-weight: bold;
 }
-.breadcrumbs h2{
+
+
+
+body ul.breadcrumbs {
+	background: linear-gradient(90deg, #eee, #fff);
+	padding: 0;
 	color: #ccc;
 	font-weight: normal;
+	margin: 0 0 1rem 0;
 }
 
-.breadcrumbs .home {
+nav.secondary, .message {
+	margin: -1rem 0 1rem 0;
+}
+
+body ul.breadcrumbs > li {
+	padding: 1rem 0rem 1rem 0rem;
+	display: inline-block;
+	list-style: none;
+	font-size: 1.5em;
+}
+
+.breadcrumbs li.home {
+	vertical-align: top;
+	padding-left: 1rem;
+}
+.breadcrumbs a.home {
 	font: 0/0 '0';
 	vertical-align: top;
 	display: inline-block;
-
 }
 
-.breadcrumbs .home:hover:before {
+.breadcrumbs a.home:hover:before {
 	background-color: green;
 	color: #fff;
 }
-.breadcrumbs .home:hover:after {
+.breadcrumbs a.home:hover:after {
 	border-left-color: green;
 }
-.breadcrumbs .home:before {
+.breadcrumbs a.home:before {
 	font: 3rem/0.45 Helvetica;
 	content: '\2302';
 	margin: -1rem 0 -1rem -1rem;
@@ -84,7 +101,7 @@ body > .summary, body > form {
 	color: #ccc;
 	vertical-align: top;
 }
-.breadcrumbs .home:after {
+.breadcrumbs a.home:after {
 	display: inline-block;
 	content: '';
 	width: 0; 
@@ -97,16 +114,11 @@ body > .summary, body > form {
 	display: inline-block;
 }
 
-body > footer, body > header {
-	padding: 1rem 1rem 1.5rem;
+.breadcrumbs a:not(:hover) {
+	text-decoration: none;
 }
 
 
-
-
-body > section:last-of-type, body > form:last-of-type {
-	flex-grow: 1;
-}
 a {
 	color: #999;
 }
@@ -117,9 +129,9 @@ body {
 header {
 	border-bottom: 1px solid #ddd;
 }
-section, form {
+body > section, body > form, .breadcrumbs, body > nav {
 	padding-top: 1rem;
-	border-top: 1px solid #eaeaea;
+	border-bottom: 1px solid #ccc;
 }
 form > span.field, form > fieldset, form > span.controls {
 	float: left;
@@ -381,9 +393,11 @@ menu[type="context"] {
 	padding: 0;
 }
 
-.summary {
+section.summary {
 	position: relative;
+	padding-bottom: 2rem;
 }
+
 .summary menu {
 	position: absolute;
 	top: 0;
@@ -414,12 +428,12 @@ aside.above {
 
 
 
-aside.aside {
+body aside.aside {
+	position: absolute;
 	margin-left: -9.5rem;
-	margin-bottom: -4.1rem;
 	width: 6.5rem;
 	text-align: right;
-	padding: 1.5rem 2rem;
+	padding: 1.4rem 2rem;
 }
 
 
@@ -485,9 +499,6 @@ section.optional .more {
 	border-bottom: 1px dashed #999;
 }
 
-.summary {
-	padding-bottom: 0;
-}
 .summary + .details {
 	padding-top: 0;
 }

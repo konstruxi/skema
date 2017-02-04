@@ -48,7 +48,7 @@ $BODY$DECLARE
  inputstring text;
 BEGIN
 
-  EXECUTE 'SELECT jsonb_agg(r) FROM ( SELECT * FROM '|| quote_ident(relname || '_current') || ') r'
+  EXECUTE 'SELECT jsonb_agg(kx_clean_jsonb(row_to_json(r)::jsonb)) FROM ( SELECT * FROM '|| quote_ident(relname || '_current') || ') r'
   INTO ret;
   RETURN ret  ;
 END;

@@ -1,3 +1,4 @@
+<html>
 <head>
 	<title>Konstruxi</title>
 
@@ -8,92 +9,95 @@
   <link rel="stylesheet" href="/tekxt/chrome.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
+<body>
 
 {{#vars:flash}}
 <!-- Purge cache in parent resources -->
 	<img src="../purge" style="position: absolute; visibility: hidden; height: 0; width: 0;" />
-	{{#vars:parent_resource}}
-		{{#meta:parent_resource}}
+	{{#vars:second}}
+		{{#meta:second}}
 			<img src="../../purge" style="position: absolute; visibility: hidden; height: 0; width: 0;" />
 			<img src="../../../purge" style="position: absolute; visibility: hidden; height: 0; width: 0;" />
-		{{/meta:parent_resource}}
-	{{/vars:parent_resource}} 
+		{{/meta:second}}
+	{{/vars:second}} 
 {{/vars:flash}}
 
-<body>
-	<header>
-		<h1>Our site is great </h1>
-	</header>
-		{{#meta:parent_resource}}
-			<aside class="aside">
-				<a href="..">Go back</a>
-			</aside>
-			<div class="breadcrumbs">
-				<h2>
-					<a href="/" class="home">Home</a>
+<header>
+	<h1>Our site is great </h1>
+</header>
 
-					{{#meta:grandparent_resource}}
-						<a href="{{meta:back}}../../../..">{{vars:grandparent_resource}}</a> 
-						/
-						{{#meta:grandparent_structure}}
-							{{#is_title}}
-								<a href="{{meta:back}}../../..">{{meta:grandparent_resource:by:name}}</a> 
-							{{/is_title}}
-						{{/meta:grandparent_structure}}
-						/
-					{{/meta:grandparent_resource}}
+<aside class="aside">
+	<a href="{{meta:back}}">Go back</a>
+</aside>
+<ul class="breadcrumbs">
+	<li class="home">
+		<a href="/" class="home">Home</a>
+	</li>
+
+	{{#meta:third_resource}}
+		<li>	
+			{{#vars:resource}}
+				<a href="{{meta:base}}../../../.." class="folder">{{meta:first_resource}}</a> 
+				/
+				{{#meta:grandparent_structure}}
+					{{#is_title}}
+						<a href="{{meta:base}}../../..">{{parent:by:name}}</a> 
+					{{/is_title}}
+				{{/meta:grandparent_structure}}
+				/
+
+			{{/vars:resource}}
+			{{^vars:resource}}
+				{{#meta:grandparent_structure}}
+					{{#is_title}}
+						<a href="{{meta:base}}../{{meta:first:slug}}">{{meta:first:by:name}}</a> 
+					{{/is_title}}
+				{{/meta:grandparent_structure}}
+			{{/vars:resource}}
+		</li>
+	{{/meta:third_resource}}
 
 
-					{{#meta:parent_resource}}
+	{{#meta:second_resource}}
+		<li>	
+			{{#vars:resource}}
+				<a href="{{meta:base}}../.." class="folder">{{meta:second_resource}}</a> 
+				/
+				{{#meta:parent_structure}}
+					{{#is_title}}
+						<a href="{{meta:base}}..">{{meta:second:by:name}}</a> 
+					{{/is_title}}
+				{{/meta:parent_structure}}
+				/
+			{{/vars:resource}}
+			{{^vars:resource}}
+				{{#meta:parent_structure}}
+					{{#is_title}}
+						<a href="{{meta:base}}{{meta:second:slug}}">{{meta:second:by:name}}</a> 
+					{{/is_title}}
+				{{/meta:parent_structure}}
 
-								<a href="{{meta:back}}../..">{{vars:parent_resource}}</a> 
-								/
-								{{#meta:parent_structure}}
-									{{#is_title}}
-										<a href="{{meta:back}}..">{{meta:parent_resource:by:name}}</a> 
-									{{/is_title}}
-								{{/meta:parent_structure}}
-
-					{{/meta:parent_resource}}
-					
-					{{#meta:back}}
-						/
-						<a href="{{meta:back}}">{{vars:resource}}</a>
-					{{/meta:back}}
-				</h2>
-			</div>
-		{{/meta:parent_resource}}
-		{{^meta:parent_resource}}
+			{{/vars:resource}}
+		</li>
+	{{/meta:second_resource}}
+		
+	{{#vars:slug}}
+		{{#vars:resource}}
+			<li>
 			{{#meta:back}}
-				<aside class="aside">
-					<a href="{{meta:back}}">Go back</a>
-				</aside>
-				<div class="breadcrumbs">
-					<h2>
-						<a href="/" class="home">Home</a>
-						<a href="{{meta:back}}">{{vars:resource}}</a>
-						{{#vars:id}}
-							{{^meta:action:show}}
-								/
-								{{#meta:columns}}
-									{{#is_title}}
-										{{#parent::item:by:name}}
-											<a href=".">{{parent::item:by:name}}</a> 
-										{{/parent::item:by:name}}
-									{{/is_title}}
-								{{/meta:columns}}
-							{{/meta:action:show}}
-						{{/vars:id}}
-					</h2>
-				</div>
+				<a href="{{meta:base}}" class="folder">{{vars:resource}}</a>
 			{{/meta:back}}
-		{{/meta:parent_resource}}
+			</li>
+		{{/vars:resource}}
+	{{/vars:slug}}
+</ul>
 
-		{{#meta:action:show}}
-			<nav class="secondary">{{#meta:references}}
-				<a href="./{{table_name}}/">{{table_name}}</a>
-			{{/meta:references}}</nav>
-		{{/meta:action:show}}
+{{#meta:action:show}}
+	<nav class="secondary">{{#meta:references}}
+		<a href="./{{table_name}}/">{{table_name}}</a>
+	{{/meta:references}}</nav>
+{{/meta:action:show}}
+
 {{#vars:flash}}
 	<div class="message">
 		<span class="own flash">

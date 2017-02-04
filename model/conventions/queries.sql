@@ -159,7 +159,7 @@ BEGIN
     (CASE WHEN value->>'type' = 'files' THEN
       'SELECT root_id, value->>''name'' as name, 
         ' || (value->>'name') || '_blobs[(value->>''index'')::int] as blob
-        from ' || relname || ', jsonbb_array_elements(' || (value->>'name') || ')
+        from ' || relname || ', jsonb_array_elements(' || (value->>'name') || ')
         WHERE value->>''index'' is not null'
     WHEN value->>'type' = 'file' THEN
       'SELECT root_id, ' || (value->>'name') || '->>''name'' as name, 
