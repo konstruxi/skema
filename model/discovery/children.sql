@@ -39,8 +39,8 @@ ON (q.table_name = s.table_name);
 CREATE OR REPLACE VIEW kx_resources_hierarchy AS
 SELECT 
 kx_resources.*,
-inflection_pluralize(replace(parent.column_name, '_id', ''))  as parent_name,
-inflection_pluralize(replace(grandparent.column_name, '_id', ''))             as grandparent_name,
+inflection_pluralize(replace(parent.column_name, '_id', ''))  as second_resource,
+inflection_pluralize(replace(grandparent.column_name, '_id', ''))             as third_resource,
 
 (SELECT columns 
   from kx_resources q 

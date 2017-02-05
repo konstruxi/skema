@@ -20,7 +20,7 @@ begin
   ', ' UNION ALL ')
 
     FROM kx_resources_and_services s
-    WHERE parent_name = '' 
+    WHERE second_resource = '' 
       --AND table_name != 'services'
   INTO q;
 
@@ -101,9 +101,9 @@ WITH matches as (
       --and
 --
       --(CASE WHEN '' != '' THEN
-      --        concat_ws('/', nullif(q.grandparent_name, ''), nullif(q.parent_name, ''), q.table_name) 
+      --        concat_ws('/', nullif(q.third_resource, ''), nullif(q.second_resource, ''), q.table_name) 
       --      = concat_ws('/', nullif('', ''), nullif('', ''), '')
-      --      WHEN concat_ws('/', nullif(q.grandparent_name, ''), nullif(q.parent_name, ''), q.table_name) = path THEN
+      --      WHEN concat_ws('/', nullif(q.third_resource, ''), nullif(q.second_resource, ''), q.table_name) = path THEN
       --        (third_resource != second_resource or third_resource = '')
       --        and (second_resource != first_resource)
       --        and (first_resource != second_resource)

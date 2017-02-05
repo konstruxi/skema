@@ -5,8 +5,8 @@ CREATE materialized VIEW kx_resources_and_services AS
     columns,
     "references",
     relations,
-    parent_name,
-    grandparent_name,
+    second_resource,
+    third_resource,
     parent_structure,
     grandparent_structure,
     select_sql,
@@ -15,12 +15,12 @@ CREATE materialized VIEW kx_resources_and_services AS
         
       compose_sql('services', columns, (SELECT jsonb_agg(s)
                                         FROM kx_resources_and_queries s
-                                        WHERE parent_name = '' 
+                                        WHERE second_resource = '' 
                                           AND table_name != 'services'
                                           AND NOT EXISTS( SELECT 1 
                                                           from kx_resources_and_queries q 
                                                           WHERE q.table_name = s.table_name
-                                                            AND q.parent_name != '')))
+                                                            AND q.second_resource != '')))
     ELSE
       compose_sql
     END as compose_sql,

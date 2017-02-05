@@ -1,14 +1,14 @@
 
 CREATE VIEW kx_resources_and_queries AS
   SELECT *, 
-    CASE WHEN parent_name != '' THEN
+    CASE WHEN second_resource != '' THEN
       replace(full_select_sql(table_name, kx_resources.columns), 'WHERE 1=1', 
         CASE WHEN EXISTS(SELECT 1 FROM jsonb_array_elements(kx_resources.columns) 
-                         WHERE value->>'name' = parent_name || '_ids') THEN
+                         WHERE value->>'name' = second_resource || '_ids') THEN
 
-          'WHERE ' || parent_name || '_ids = :slug2'
+          'WHERE ' || second_resource || '_ids = :slug2'
         ELSE
-          'WHERE ' || inflection_singularize(parent_name) || '_id = (SELECT root_id FROM ' || parent_name || '_current WHERE slug = :slug2)'
+          'WHERE ' || inflection_singularize(second_resource) || '_id = (SELECT root_id FROM ' || second_resource || '_current WHERE slug = :slug2)'
 
         END
       )

@@ -1,7 +1,7 @@
 CREATE OR REPLACE FUNCTION
 create_resource_insert_action(r jsonb) returns jsonb language plpgsql AS $ff$ 
 DECLARE
-  columns text := '';
+  assign_formatted_values text := '';
   inhert_values_from_parent_version text := '';
 begin
   -- Generate code to inherit values from version specified by root_id value
@@ -30,23 +30,18 @@ begin
 
   -- Generate list of values prepared for insertion
   -- in their ordinal order
-  SELECT string_agg(case when value->>'insert' is not null then 
-      value->>'insert'
-    else
-      'new.' || (value->>'name')
-    end, ',
+  SELECT string_agg('new.' || (value->>'name') || ' = ' || (value->>'insert') || ';', '
 ')
     FROM jsonb_array_elements(r->'columns')
-    GROUP BY value->'pos'
-    ORDER BY value->'pos' ASC
-    into columns;
+    into assign_formatted_values;
 
 
   -- Inserts new version of a row
   EXECUTE  'CREATE OR REPLACE FUNCTION
             create_' || (r->>'singular') || '() returns trigger language plpgsql AS $$ begin
               ' || inhert_values_from_parent_version || '
-              return (' || columns || '); 
+              ' || assign_formatted_values || '
+              return new; 
             end $$';
 
   EXECUTE kx_create_trigger(r, 'create_' || (r->>'singular'), 'BEFORE INSERT');

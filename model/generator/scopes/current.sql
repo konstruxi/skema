@@ -4,8 +4,8 @@ CREATE OR REPLACE FUNCTION
 create_resource_current_scope(r jsonb, columns text DEFAULT '*') returns json language plpgsql AS $ff$ BEGIN
   
   -- Create {resource}_current view that filters out deleted rows
-  EXECUTE 'CREATE OR REPLACE 
-  VIEW ' || (r->>'table_name') || '_current AS 
+  EXECUTE 'DROP VIEW ' || (r->>'table_name') || '_current cascade';
+  EXECUTE 'CREATE VIEW ' || (r->>'table_name') || '_current AS 
   SELECT ' || columns || ' FROM ' || (r->>'table_name') || '_heads  WHERE deleted_at is null';
 
   -- Set up a deletion trigger which redirects delete to main table 

@@ -115,12 +115,21 @@ returns xml AS $BODY$
 BEGIN
   return xmlelement(
     name article,
-    case when input is document and (xpath('/article', input))[1] is not null then
-      xmlarray(xpath('//section', input))
-    ELSE
-      xmlarray(xpath('//section', xmlelement(name article, input)))
-    end
+    xmlarray(
+      xpath('//section', 
+        xmlelement(name article, 
+          input
+        )))
   );
+END
+$BODY$
+LANGUAGE plpgsql VOLATILE;                        
+
+
+CREATE OR REPLACE FUNCTION xmlarticletext(input xml)
+returns xml AS $BODY$
+BEGIN
+  return array_to_string(xpath('//section', input), '');
 END
 $BODY$
 LANGUAGE plpgsql VOLATILE;                        

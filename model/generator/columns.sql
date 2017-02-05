@@ -5,19 +5,19 @@ kx_process_columns_parameters(r jsonb) returns jsonb language plpgsql AS $$ decl
 BEGIN
   SELECT ('[' || 
     -- mandatory columns that every resource gets
-    json_build_object(
+    jsonb_build_object(
       'name', 'id',          
       'type', 'serial PRIMARY KEY',
       'patch', FALSE)::text || ',' ||
 
     -- slug string used in url built from title 
-    json_build_object(
+    jsonb_build_object(
       'name', 'slug',        
       'type', 'varchar',
       'insert', 'coalesce(new.slug, inflections_slugify(new.' || (r->>'title_column') || '))')::text || ',' ||
 
     -- timestamp of creation
-    json_build_object(
+    jsonb_build_object(
       'name', 'created_at',  
       'type', 'TIMESTAMP WITH TIME ZONE',
       'insert', 'coalesce(new.created_at, now())',
@@ -25,21 +25,21 @@ BEGIN
       'patch',  'old.created_at')::text || ',' ||
 
     -- last modified date
-    json_build_object(
+    jsonb_build_object(
       'name', 'updated_at',  
       'type', 'TIMESTAMP WITH TIME ZONE',
       'insert', 'coalesce(new.updated_at, now())',
       'patch', 'now()')::text || ',' ||
 
     -- validation errors
-    json_build_object(
+    jsonb_build_object(
       'name', 'errors',      
       'type', 'jsonb',
       'insert', 'validate_' || (r->>'singular') || '(new)',
       'patch', FALSE)::text || ',' ||
 
     -- data archived from removed columns
-    json_build_object(
+    jsonb_build_object(
       'name', 'outdated',    
       'type', 'jsonb',
       'patch', FALSE)::text || ','
@@ -50,82 +50,87 @@ BEGIN
     -- For file fields add a json column with meta data
    (CASE WHEN col->>'type' = 'file' or col->>'type' = 'files' THEN
       -- Initialize flat list of uploaded files
-      json_build_object(
+      kx_process_column(col, jsonb_build_object(
         'name', col->>'name', 
         'type', 'jsonb',
         'insert', 'assign_file_indecies(new.' || (value->>'name') || ')',
         'inherit', 'new.' || (value->>'name') || 
                     ' = assign_file_indecies(' || 
                           'assign_file_list(new.' || (value->>'name') || '::jsonb, ' ||
-                            'old.' || (value->>'name') || '::jsonb))')::text || ',' ||
+                            'old.' || (value->>'name') || '::jsonb))'))::text || ',' ||
 
       -- do not inherit blobs
-      json_build_object(
+      kx_process_column(col, jsonb_build_object(
         'name', (col->>'name') || '_blobs', 
         'type', 'bytea[]',
-        'inherit', 'null')::text
+        'inherit', 'null',
+        'view', FALSE))::text
 
 
      -- For each WYSIWYG field add file attachments columns
     WHEN col->>'type' = 'xml' THEN
 
       -- Process XML into wellformed roots
-      json_build_object(
+      kx_process_column(col, jsonb_build_object(
         'name', col->>'name', 
         'type', 'xml',
-        'insert', 'xmlarticle(new.' || (col->>'name') || ')')::text || ',' ||
+        'insert', 'xmlarticle(new.' || (col->>'name') || ')',
+        'view', 'xmlarticletext(' || (col->>'name') || ') as ' || (col->>'name')))::text || ',' ||
 
       -- Initialize flat list of uploaded files
-      json_build_object(
+      kx_process_column(col, jsonb_build_object(
         'name', col->>'name' || '_embeds', 
         'type', 'jsonb',
         'insert', 'assign_file_indecies(new.' || (value->>'name') || '_embeds)',
         'inherit', 'new.' || (value->>'name') || '_embeds' ||
                     ' = assign_file_indecies(' || 
                           'assign_file_list(new.' || (value->>'name') || '_embeds::jsonb, ' ||
-                            'old.' || (value->>'name') || '_embeds::jsonb))')::text || ',' ||
+                            'old.' || (value->>'name') || '_embeds::jsonb))'))::text || ',' ||
 
       -- do not inherit blobs
-      json_build_object(
+      kx_process_column(col, jsonb_build_object(
         'name', (col->>'name') || '_embeds_blobs', 
         'type', 'bytea[]',
-        'inherit', 'new.' || (col->>'name') || '_embeds_blobs')::text
+        'inherit', 'new.' || (col->>'name') || '_embeds_blobs',
+        'view', FALSE))::text
 
 
     -- Add pointers to next, previous version number and first version id
     WHEN col->>'name' = 'version' THEN
       -- start with version 1 unless provided
-      json_build_object(
+      kx_process_column(col, jsonb_build_object(
         'name', col->>'name',
         'type', 'integer',
         'insert', 'coalesce(new.version, 1)',
         'inherit', (r->>'singular') || '_head(new.root_id, false) + 1',
-        'patch', FALSE)::text || ',' ||
+        'patch', FALSE))::text || ',' ||
 
       -- inherit root_id or set to self
-      json_build_object(
+      kx_process_column(col, jsonb_build_object(
         'name', 'root_id',
         'type', 'integer',
         'insert',  'coalesce(new.root_id, new.id)',
         'inherit', 'coalesce(old.root_id, new.root_id)',
-        'patch',   'old.root_id')::text || ',' ||
+        'patch',   'old.root_id'))::text || ',' ||
 
-      json_build_object(
+      kx_process_column(col, jsonb_build_object(
         'name', 'previous_version', 
         'type', 'integer',
         'inherit', 'old.version',
         'patch',   'CASE WHEN new.root_id = -1 ' || 
-                   'THEN old.previous_version ELSE old.version END')::text || ',' ||
+                   'THEN old.previous_version ELSE old.version END'))::text || ',' ||
 
-      json_build_object(
+      kx_process_column(col, jsonb_build_object(
         'name', 'next_version',
         'type', 'integer',
         'inherit', 'old.next_version',
         'patch',   'CASE WHEN new.next_version = old.next_version and new.root_id != -1 ' || 
-                   ' THEN null ELSE new.next_version END')::text
+                   ' THEN null ELSE new.next_version END'))::text
 
     ELSE
-      json_build_object('name', col->>'name', 'type', col->>'type')::text
+      kx_process_column(col, jsonb_build_object('name', col->>'name', 'type', col->>'type'),
+                            -- make title/name required
+                             r->'title_column' = col->'name')::text
     END
 
     ), ',') || ']')::jsonb
@@ -140,7 +145,29 @@ BEGIN
   end
 $$;
 
+-- track renamed columns
+CREATE OR REPLACE FUNCTION
+kx_process_column(col jsonb, def jsonb, required boolean default false) returns jsonb language plpgsql AS $$ 
+BEGIN
+  -- inject required validation
+  IF (required) THEN
+    SELECT jsonb_set(def, '{validations}',
+      CASE WHEN def->>'validations' is not null THEN
+        def->'validations' || '["required"]'::jsonb
+      ELSE
+        '["required"]'::jsonb
+      END)
+    INTO def;
+  END IF;
 
+  -- keep old name of a column when renaming
+  IF (col->>'previously' is not NULL) THEN
+    return jsonb_set(def, '{previously}', col->'previously');
+  END IF;
+
+  return def;
+END
+$$;
 
 -- whitelist column names:
 -- filter out all known composite names and mandatory columns
@@ -183,10 +210,14 @@ begin
   IF new is NULL THEN
     return remove_column(r, old);
   END IF;
-  
+
   IF old is NULL THEN
     SELECT add_column(r, new)
     INTO new;
+  END IF;
+
+  IF new->>'name' != old->>'name' THEN
+    EXECUTE 'ALTER TABLE ' || (r->>'table_name') || ' RENAME COLUMN ' || (old->>'name') || ' TO ' || (new->>'name');
   END IF;
   
   EXECUTE 'COMMENT ON column ' || (r->>'table_name') || '.' || (new->>'name') || 

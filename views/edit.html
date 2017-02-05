@@ -28,11 +28,11 @@
 								{{#parent::item:by:parent:relation_name}}
 									{{#id:is:parent:id}}selected{{/id:is:parent:id}}
 								{{/parent::item:by:parent:relation_name}}
-								{{^parent::item:by:table_name}}
-									{{#meta:parent_resource}}
-										{{#id:is:parent:id}}selected{{/id:is:parent:id}}
-									{{/meta:parent_resource}}
-								{{/parent::item:by:table_name}}> {{name}} {{title}} </option>
+								{{^parent::item:by:parent:relation_name}}
+									{{#meta:second_resource:is:parent:relation_name}}
+										{{#meta:second:slug:is:slug}}selected{{/meta:second:slug:is:slug}}
+									{{/meta:second_resource:is:parent:relation_name}}
+								{{/parent::item:by:parent:relation_name}}> {{name}} {{title}} </option>
 						{{/meta:options:by:name}}
 					 </select>
 				 </span>
@@ -126,6 +126,7 @@
 		{{/type:array}}
 
 		{{#type:string}}
+			{{^name:slug}}
 			<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 				<label for="{{meta:singular}}_{{name}}_text">
 					{{name}}</label>
@@ -141,7 +142,7 @@
 					<input type="text" id="{{meta:singular}}_{{name}}_text" name="{{meta:singular}}[{{name}}]" />
 				{{/parent:item:by:name}}
 			</span>
-
+			{{/name:slug}}
 		{{/type:string}}
 
 		{{#type:text}}
@@ -166,7 +167,7 @@
 					<span class="error">{{parent:item:errors:by:name}}</span>
 				{{/parent:item:errors:by:name}}
 
-				<article contenteditable="contenteditable" data-cke-editable="true" class="content" id="{{meta:singular}}_{{name}}_xml" name="{{meta:singular}}[{{name}}]">{{parent:item:by:name:HTML}}</article>
+				<article contenteditable="contenteditable" data-cke-editable="true" class="content" id="{{meta:singular}}_{{name}}_xml" name="{{meta:singular}}[{{name}}]">{{parent:item:by:name:XML}}</article>
 				<textarea class="rich" name="{{meta:singular}}[{{name}}]" value="{{parent:item:by:name}}"></textarea>
 			</div>
 		{{/type:xml}}

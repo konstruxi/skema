@@ -20,7 +20,7 @@ BEGIN
         jsonb_from(inflection_pluralize(replace(cols.name, '_id', '')))
       end)
       FROM cols 
-      WHERE cols.name != 'root_id'
+      WHERE cols.name != 'root_id' and cols.name LIKE '%_id'
       INTO options;
 
     return options;

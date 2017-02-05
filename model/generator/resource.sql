@@ -6,6 +6,9 @@ kx_process_resource_parameters(r jsonb) returns jsonb language plpgsql AS $$ BEG
     INTO r;
 
   -- Find which column contains value to generate slug against (name or title)
+  -- falls back to id otherwise
+  SELECT jsonb_set(r, '{title_column}', to_jsonb('id'::text))
+    INTO r;
   SELECT jsonb_set(r, '{title_column}', value->'name')
     FROM jsonb_array_elements(r->'columns')
     WHERE value->>'name' = 'title'
@@ -94,9 +97,8 @@ SELECT update_resource($f${
     "columns": [
       {"name":"category_id","type":"integer"},
       {"name":"thumbnail","type":"file"},
-      {"name":"title","type":"varchar(255)", "validations": [
-        "required"
-      ]},
+      {"name":"title","type":"varchar(255)"},
+      {"name":"gorzella","type":"text", "previously": "gorgella"},
       {"name":"version","type":"integer"},
       {"name":"content","type":"xml"},
       {"name":"deleted_at","type":"timestamptz"}
@@ -107,34 +109,34 @@ select kx_discover();
 
 SELECT * from articles LIMIT 0;
 SELECT * from articles_current LIMIT 0;
---
----- 
----- SELECT * from articles;
----- 
----- 
----- UPDATE articles set title = 'lolello', content = '<section>123</section>' where title ='a';
----- SELECT * from articles;
----- 
---
---SELECT update_resource($f${
---    "table_name": "articles",
---    "columns": [
---      {"name":"category_id","type":"integer"},
---      {"name":"thumbnail","type":"file"},
---      {"name":"title","type":"varchar(255)", "validations": [
---        "required"
---      ]},
---      {"name":"gorgella","type":"text"},
---      {"name":"memoire","type":"xml"},
---      {"name":"version","type":"integer"},
---      {"name":"context","type":"xml", "previously": "content"},
---      {"name":"deleted_at","type":"timestamptz"}
---    ]
---}$f$::jsonb);
----- 
---select kx_discover();
---SELECT * from articles LIMIT 0;
---SELECT * from articles_current LIMIT 0;
+
+-- 
+-- SELECT * from articles;
+-- 
+-- 
+-- UPDATE articles set title = 'lolello', content = '<section>123</section>' where title ='a';
+-- SELECT * from articles;
+-- 
+
+-- SELECT update_resource($f${
+--     "table_name": "articles",
+--     "columns": [
+--       {"name":"category_id","type":"integer"},
+--       {"name":"thumbnail","type":"file"},
+--       {"name":"title","type":"varchar(255)", "validations": [
+--         "required"
+--       ]},
+--       {"name":"gorgella","type":"text"},
+--       {"name":"memoire","type":"xml"},
+--       {"name":"version","type":"integer"},
+--       {"name":"context","type":"xml"},
+--       {"name":"deleted_at","type":"timestamptz"}
+--     ]
+-- }$f$::jsonb);
+-- ---- 
+-- select kx_discover();
+-- SELECT * from articles LIMIT 0;
+-- SELECT * from articles_current LIMIT 0;
 
 -- SELECT create_resource($f${
 --     "table_name": "categories",

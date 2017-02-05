@@ -23,7 +23,7 @@ begin
         FROM jsonb_array_elements(r->'columns')
       ) n
       FULL OUTER JOIN jsonb_array_elements(old->'columns') o
-      on (n.value->'name' = o.value->'name')
+      on (coalesce(n.value->'previously', n.value->'name') = o.value->'name')
   ) q
   into old;
 
