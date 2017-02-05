@@ -16,6 +16,7 @@ cat conventions/inflections.sql \
     generator/validations.sql \
     generator/scopes.sql \
     generator/actions.sql \
+    generator/columns.sql \
     generator/scopes/current.sql \
     generator/scopes/versions.sql \
     generator/scopes/heads.sql \

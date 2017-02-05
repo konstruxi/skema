@@ -1,12 +1,12 @@
 -- Scope VERSIONS: history of changes 
 -- Deleting from the view will create a version with deletion flag set
 CREATE OR REPLACE FUNCTION
-create_resource_versions_scope(r jsonb) returns json language plpgsql AS $ff$ BEGIN
+create_resource_versions_scope(r jsonb, columns text DEFAULT '*') returns json language plpgsql AS $ff$ BEGIN
 
 -- Create view containing all versions of all documents in reverse order
 EXECUTE  'CREATE OR REPLACE 
           VIEW ' || (r->>'table_name') || '_versions AS 
-          SELECT * from ' || (r->>'table_name') || '
+          SELECT ' || columns || ' from ' || (r->>'table_name') || '
           WHERE errors is null 
           ORDER BY root_id, version DESC';
 

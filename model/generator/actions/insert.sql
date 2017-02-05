@@ -29,10 +29,12 @@ begin
   END IF;
 
   -- Generate list of values prepared for insertion
-  SELECT string_agg(coalesce(
-      value->>'insert', 
+  SELECT string_agg(case when value->>'insert' is not null then 
+      value->>'insert'
+    else
       'new.' || (value->>'name')
-    ), ', ')
+    end, ',
+')
     FROM jsonb_array_elements(r->'columns')
     into columns;
 
@@ -40,7 +42,7 @@ begin
   -- Inserts new version of a row
   EXECUTE  'CREATE OR REPLACE FUNCTION
             create_' || (r->>'singular') || '() returns trigger language plpgsql AS $$ begin
-            ' || inhert_values_from_parent_version || '
+              ' || inhert_values_from_parent_version || '
               return (' || columns || '); 
             end $$';
 

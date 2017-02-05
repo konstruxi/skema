@@ -12,7 +12,7 @@ begin
   -- Generate heavy query to scan all tables in search of slugs matching to arguments 
   -- and union the results. It's used by router to dispatch requests to proper resource.  
   SELECT string_agg('
-    SELECT ' || table_name || '.updated_at, ''' || table_name || ''', ' || table_name || '.slug, row_to_json(' || table_name || ')::jsonb as jsonb
+    SELECT ' || table_name || '.updated_at, ''' || table_name || ''', ' || table_name || '.slug::varchar, row_to_json(' || table_name || ')::jsonb as jsonb
       FROM ' || table_name || '
       WHERE ' || table_name || '.slug is not NULL AND (' || table_name || '.slug=nullif(first,  '''') 
          or ' || table_name || '.slug=nullif(second, '''')
@@ -26,13 +26,13 @@ begin
 
 
   EXECUTE ('CREATE OR REPLACE FUNCTION
-    kx_lookup(first text, second text default '''', third text default '''') returns TABLE (updated_at timestamp with time zone, resource text, slug text, jsonb jsonb) language plpgsql as $$ begin
+    kx_lookup(first varchar, second varchar default '''', third varchar default '''') returns TABLE (updated_at timestamptz, resource text, slug varchar, jsonb jsonb) language plpgsql as $$ begin
       RETURN QUERY
       ' || q || '
       ORDER BY updated_at desc;
     end $$');
 
-  return q;
+  return '<Discovered>';
 end $ff$;
 
 

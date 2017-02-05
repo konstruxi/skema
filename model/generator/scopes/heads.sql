@@ -1,10 +1,10 @@
 -- Scope: last versions (including deleted)
 CREATE OR REPLACE FUNCTION
-create_resource_heads_scope(r jsonb) returns json language plpgsql AS $ff$ BEGIN
+create_resource_heads_scope(r jsonb, columns text DEFAULT '*') returns json language plpgsql AS $ff$ BEGIN
 
   EXECUTE  'CREATE OR REPLACE 
             VIEW ' || (r->>'table_name') || '_heads AS 
-            SELECT DISTINCT ON (root_id) * from ' || (r->>'table_name') || '_versions';
+            SELECT DISTINCT ON (root_id) ' || columns || ' from ' || (r->>'table_name') || '_versions';
 
   -- Find last version of an row, optionally may return invalid version too
   EXECUTE  'CREATE OR REPLACE FUNCTION ' || (r->>'singular') || '_head(integer, boolean DEFAULT true, integer DEFAULT 2147483646) RETURNS integer

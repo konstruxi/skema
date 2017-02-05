@@ -13,7 +13,7 @@ BEGIN
       name article, 
       xmlattributes(
         ''content'' as class,
-        ''' || inflection_singularize(relname) || ''' as itemtype,
+        ''' || inflection_singularize(relname::varchar) || ''' as itemtype,
         ''' || relname || ''' as itemprop,
         root.root_id as itemid
       ),

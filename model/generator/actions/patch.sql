@@ -12,12 +12,15 @@ begin
     into columns;
   
   -- Generate list of columns prefixed with new.
-  SELECT string_agg(CASE WHEN value->>'patch' is not null THEN
-           value->>'patch'
-         ELSE
-          'coalesce(new.' || (value->>'name') ||
-                 ', old.' || (value->>'name') || ')' 
-         END, ',
+  SELECT string_agg(
+          CASE WHEN value->>'patch' is null THEN
+            'coalesce(new.' || (value->>'name') ||
+                   ', old.' || (value->>'name') || ')' 
+          WHEN value->>'patch' = 'false' THEN
+            null
+          ELSE 
+            value->>'patch'
+          END, ',
 ')
     FROM jsonb_array_elements(r->'columns')
     WHERE value->>'patch' is null or value->>'patch' != 'false'

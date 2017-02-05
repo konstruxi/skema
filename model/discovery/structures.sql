@@ -7,15 +7,20 @@ CREATE MATERIALIZED VIEW kx_resources AS
 SELECT  
     columns.table_name,
     jsonb_agg(jsonb_strip_nulls(
-      row_to_json(columns)::jsonb - 'table_name' - 'parent_name' - 'grandparent_name'
+      row_to_json(columns)::jsonb - 'table_name'
     )) as columns
 
 FROM (
   SELECT 
   tables.table_name                                as table_name,
-  ''                                               as parent_name,
-  ''                                               as grandparent_name,
+  kx_best_effort_jsonb(
+    col_description(class.oid, cols.ordinal_position)
+  )                                                as comment,
+  kx_best_effort_jsonb(
+    col_description(class.oid, cols.ordinal_position)
+  )->>'index'                                      as index,
   column_name                                      as name,
+  cols.ordinal_position                            as pos,
   CASE WHEN position('_ids' in column_name) > 0 THEN 
     replace(column_name, '_ids', '')
   WHEN position('_id' in column_name) > 0 AND column_name != 'root_id' THEN 
@@ -52,6 +57,9 @@ FROM (
 
 FROM INFORMATION_SCHEMA.COLUMNS cols
 
+LEFT JOIN pg_catalog.pg_class class
+ON (class.relname = cols.table_name)
+
 LEFT JOIN INFORMATION_SCHEMA.TABLES tables
 on tables.table_name = cols.table_name
 
@@ -60,7 +68,7 @@ and tables.is_insertable_into != 'NO'
 AND position('sql_' in tables.table_name) != 1 
 and tables.table_type != 'VIEW'
 
-ORDER BY cols.ordinal_position ASC
+ORDER BY index, cols.ordinal_position ASC
 ) columns
 
 GROUP BY columns.table_name;
