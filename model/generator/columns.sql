@@ -169,6 +169,7 @@ kx_is_allowed_type(type text) returns boolean language plpgsql AS $$ begin
          type = 'file' or
          type = 'files' or
          type = 'timestamp' or
+         type = 'timestamptz' or
          type = 'xml';
 END $$;
 
@@ -176,23 +177,20 @@ END $$;
 
 
 CREATE OR REPLACE FUNCTION
-kx_update_column(r jsonb, new jsonb, old jsonb, pos bigint) returns jsonb language plpgsql AS $$ declare
+kx_update_column(r jsonb, new jsonb, old jsonb) returns jsonb language plpgsql AS $$ declare
   columns text;
 begin
   IF new is NULL THEN
     return remove_column(r, old);
   END IF;
-
-  SELECT jsonb_set(new, '{index}', to_jsonb(pos)) 
-  INTO new;
-
+  
   IF old is NULL THEN
     SELECT add_column(r, new)
     INTO new;
   END IF;
   
   EXECUTE 'COMMENT ON column ' || (r->>'table_name') || '.' || (new->>'name') || 
-        ' is ' || '''{"index": ' || pos || '}''';
+        ' is ' || '''{"index": ' || (new->>'index')::int || '}''';
 
 
   return new;

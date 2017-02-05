@@ -13,12 +13,9 @@ SELECT
 FROM (
   SELECT 
   tables.table_name                                as table_name,
-  kx_best_effort_jsonb(
+  (kx_best_effort_jsonb(
     col_description(class.oid, cols.ordinal_position)
-  )                                                as comment,
-  kx_best_effort_jsonb(
-    col_description(class.oid, cols.ordinal_position)
-  )->>'index'                                      as index,
+  )->>'index')::int                               as index,
   column_name                                      as name,
   cols.ordinal_position                            as pos,
   CASE WHEN position('_ids' in column_name) > 0 THEN 

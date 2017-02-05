@@ -29,6 +29,7 @@ begin
   END IF;
 
   -- Generate list of values prepared for insertion
+  -- in their ordinal order
   SELECT string_agg(case when value->>'insert' is not null then 
       value->>'insert'
     else
@@ -36,6 +37,8 @@ begin
     end, ',
 ')
     FROM jsonb_array_elements(r->'columns')
+    GROUP BY value->'pos'
+    ORDER BY value->'pos' ASC
     into columns;
 
 

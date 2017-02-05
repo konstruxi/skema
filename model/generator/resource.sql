@@ -87,7 +87,6 @@ INSERT INTO articles(title, content, gorgella) VALUES('a', 'b', 'c');
 INSERT INTO articles(title, content, gorgella) VALUES('d', 'e', 'f');
 INSERT INTO articles(title, content, gorgella) VALUES('g', 'h', null);
 --
-SELECT version, root_id, title, content, gorgella, outdated from articles;
 --
 
 SELECT update_resource($f${
@@ -98,39 +97,44 @@ SELECT update_resource($f${
       {"name":"title","type":"varchar(255)", "validations": [
         "required"
       ]},
+      {"name":"version","type":"integer"},
       {"name":"content","type":"xml"},
-      {"name":"version","type":"integer"},
       {"name":"deleted_at","type":"timestamptz"}
     ]
 }$f$::jsonb);
 select kx_discover();
 
-SELECT * from articles;
 
-
-UPDATE articles set title = 'lolello', content = '<section>123</section>' where title ='a';
-SELECT * from articles;
-
-select kx_discover();
-
-SELECT update_resource($f${
-    "table_name": "articles",
-    "columns": [
-      {"name":"category_id","type":"integer"},
-      {"name":"thumbnail","type":"file"},
-      {"name":"title","type":"varchar(255)", "validations": [
-        "required"
-      ]},
-      {"name":"gorgella","type":"text"},
-      {"name":"context","type":"xml"},
-      {"name":"version","type":"integer"},
-      {"name":"deleted_at","type":"timestamptz"}
-    ]
-}$f$::jsonb);
-SELECT * from articles_current;
-
-
-
+SELECT * from articles LIMIT 0;
+SELECT * from articles_current LIMIT 0;
+--
+---- 
+---- SELECT * from articles;
+---- 
+---- 
+---- UPDATE articles set title = 'lolello', content = '<section>123</section>' where title ='a';
+---- SELECT * from articles;
+---- 
+--
+--SELECT update_resource($f${
+--    "table_name": "articles",
+--    "columns": [
+--      {"name":"category_id","type":"integer"},
+--      {"name":"thumbnail","type":"file"},
+--      {"name":"title","type":"varchar(255)", "validations": [
+--        "required"
+--      ]},
+--      {"name":"gorgella","type":"text"},
+--      {"name":"memoire","type":"xml"},
+--      {"name":"version","type":"integer"},
+--      {"name":"context","type":"xml", "previously": "content"},
+--      {"name":"deleted_at","type":"timestamptz"}
+--    ]
+--}$f$::jsonb);
+---- 
+--select kx_discover();
+--SELECT * from articles LIMIT 0;
+--SELECT * from articles_current LIMIT 0;
 
 -- SELECT create_resource($f${
 --     "table_name": "categories",
