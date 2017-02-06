@@ -36,6 +36,7 @@
 .resources summary {
   user-select: none;
   position: relative;
+  z-index: 5; 
 }
 .resources details {
   overflow: hidden;
@@ -110,17 +111,20 @@ details[open].current {
   content: '';
   display: block;
   clear: both;
-}
+}/*
 .resources > .add:only-child:before {
   content: 'add nested resource';
   padding: 0.6rem 0rem 0 0.25rem;
   text-align: right;
-  display: block;
   font-size: 1rem;
   align-self: stretch;
   color: #999;
+}*/
+.resources button {
+  padding: 0;
+  border: 0;
+  background: none;
 }
-
 .resources details > summary::-webkit-details-marker {
   display: none;
 }
@@ -145,12 +149,11 @@ details[open].current {
   height: 2rem;
   vertical-align: middle;
   margin: auto;
-  display: none;
 }
 
-.resources details.current[open] > .contents > svg,
-.resources details.current[open] > summary > svg,
-.resources details.current[open] > .resources > .add > svg {
+.resources details.current[open] > .contents > .button,
+.resources details.current[open] > summary > .button,
+.resources details.current[open] > .resources > .button {
   display: block;
 }
 details > .resources {
@@ -159,23 +162,24 @@ details > .resources {
 details > .resources > li + li {
   margin-top: 0.25rem;
 }
-.resources svg {
+.resources .add.button {
   position: absolute;
   right: 0.5rem;
   top: 0;
   bottom: 0;
   margin: auto;
   width: 2rem;
-  display: none;
+  display: none;  
 }
-.add.button > svg {
-  right: 0.5rem;
-  top: 0;
+.resources .add.button {
+  right: 0rem;
+  top: 0.5rem;
+  width: auto;
 }
 svg {
   fill: #666;
 }
-.resources details > .contents > svg ~ .attributes {
+.resources details > .contents > .button ~ .attributes {
   padding-right: 3rem;
 }
 
