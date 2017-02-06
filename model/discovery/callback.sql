@@ -1,3 +1,4 @@
+
 CREATE OR REPLACE FUNCTION
 kx_discover()
 returns text language plpgsql AS $ff$ declare

@@ -1,5 +1,4 @@
 -- compute jsonb array of tables that reference other table 
--- TODO: Store FK to avoid querying for it elsewhere
 CREATE OR REPLACE VIEW kx_resources_and_references AS
 SELECT 
     q.*, 

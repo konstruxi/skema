@@ -38,15 +38,16 @@
   position: relative;
 }
 
-.resources .content {
+.resources .contents {
   position: relative;
 }
 
 @media (min-width: 1001px) {
-  .root.resources > li > ul  {
+  .root.resources > li > ul, .root.resources > ul  {
     flex-flow: row nowrap;
   }
-  .root.resources > li > ul.resources > li + li {
+  .root.resources > li > ul.resources > li + li,
+  .root.resources > ul.resources > li + li {
     margin-left: 1rem;
   }
   .resources .resources > li > ul.resources > li {
@@ -60,7 +61,7 @@
   }
 }
 
-.resources > li + li {
+.root > ul .resources > li + li {
   margin-top: 2px;
 }
 
@@ -112,6 +113,7 @@ details[open].current {
   padding: 0.6rem 0rem 0 0.25rem;
   text-align: right;
   display: block;
+  font-size: 1rem;
   align-self: stretch;
   color: #999;
 }
@@ -143,7 +145,7 @@ details[open].current {
   display: none;
 }
 
-.resources details.current[open] > .content > svg,
+.resources details.current[open] > .contents > svg,
 .resources details.current[open] > summary > svg,
 .resources details.current[open] > .resources > .add > svg {
   display: block;
@@ -170,12 +172,13 @@ details > .resources > li + li {
 svg {
   fill: #666;
 }
-.resources details > .content > svg ~ .attributes {
+.resources details > .contents > svg ~ .attributes {
   padding-right: 3rem;
 }
 
 .attributes dt {
   float: left;
+  margin-right: 1rem;
   clear: both;
 }
 
@@ -187,6 +190,10 @@ svg {
 .attributes dd {
   float: right;
   color: #666;
+}
+
+ul.resources > li details[open] {
+  background: #fff;
 }
 
 .resources > li  {
@@ -202,6 +209,7 @@ svg {
   font-size: 1.2rem;
   background: #afafaf;
   padding: 1rem 0.5rem;
+  width: 100%;
 }
 
 .first-level li{
@@ -218,4 +226,21 @@ svg {
 
 body > svg {
   display: none;
+}
+
+
+
+
+
+
+
+
+
+nav details {
+  outline-offset: -1px;
+}
+nav details summary a{
+  padding: 1rem 0.5rem;
+  margin: -1rem -0.5rem;
+  pointer-events: none;
 }

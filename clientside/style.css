@@ -36,8 +36,10 @@ html > body > nav:not(:empty) {
 	padding: 0;
 }
 body > nav *{
-	padding: 1rem 1rem;
 	display: inline-block;
+}
+body > nav a {
+	padding: 1rem 1rem;
 }
 
 body > .summary, body > form {
@@ -61,6 +63,10 @@ body ul.breadcrumbs {
 
 nav.secondary, .message {
 	margin: -1rem 0 1rem 0;
+}
+
+html > body > nav.secondary {
+	background: rgba(0,0,0,0.03);
 }
 
 body ul.breadcrumbs > li {
@@ -447,19 +453,19 @@ h1,h2,h3, dl, dt, dd {
 	margin: 0;
 }
 
-dl {
+section dl {
 	margin-left: -10.5rem;
 }
-dl dt {
+section dl dt {
 	color: #eee;
 }
 
 
-dl {
+section dl {
 	padding: 1em 0;
 	line-height: 1.35rem;
 }
-dl dt {
+section dl dt {
 	float: left;
 	clear: both;
 	width: 8.5rem;
@@ -469,14 +475,14 @@ dl dt {
 }
 
 
-dl dd {
+section dl dd {
 	float: left;
 	margin-left: 2em;
 	margin-bottom: 0.5em;
 	font-family: Georgia;
 }
 
-dl:after {
+section dl:after {
 	content: '';
 	display: block;
 	clear: both;

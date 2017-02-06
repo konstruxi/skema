@@ -17,14 +17,14 @@ BEGIN
         ''' || relname || ''' as itemprop,
         root.root_id as itemid
       ),
-    xmlarray(Array(SELECT section FROM (' ||
+    xmlarray(Array(SELECT xml FROM (' ||
       -- Pickup content from from `articles_content` XML column of a `category`
       (CASE WHEN EXISTS(SELECT 1 
                            FROM jsonb_array_elements(structure) c 
                            WHERE c->>'name' = (relation.value->>'table_name') ||  '_content') THEN
         '
         SELECT
-          unnest(xpath) as section,
+          unnest(xpath) as xml,
           (xpath(''//section/@order'', unnest(xpath)))[1]::varchar::int as index
           FROM xpath(''//section'', root.' || (value->>'table_name') || '_content)
 
@@ -48,7 +48,7 @@ BEGIN
               root.root_id as itemid
             ),
             xmlarray(xpath(''/*/*'', xpath[1])) 
-          ) as section, 
+          ) as xml, 
           row_number() OVER (ORDER BY id DESC) as index
           
           FROM ' || (value->>'table_name') || '_current, ' 
@@ -110,7 +110,7 @@ $BODY$
 LANGUAGE plpgsql VOLATILE;        
 
 -- Convert xml content into valid xml root with article on top
-CREATE OR REPLACE FUNCTION xmlarticle(input xml)
+CREATE OR REPLACE FUNCTION xmlarticleroot(input xml)
 returns xml AS $BODY$
 BEGIN
   return xmlelement(
@@ -151,4 +151,5 @@ BEGIN
   );
 END
 $BODY$
-LANGUAGE plpgsql VOLATILE;                        
+LANGUAGE plpgsql VOLATILE;
+

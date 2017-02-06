@@ -3,6 +3,7 @@
 	<title>Konstruxi</title>
 
 	<link rel="stylesheet" href="/clientside/style.css" />
+	<link rel="stylesheet" href="/clientside/builder.css" />
   <meta charset="utf-8" />
   <link rel="stylesheet" href="/tekxt/content.css" charset="utf-8" />
   <link rel="stylesheet" href="/tekxt/flexbox.css" />
@@ -10,6 +11,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
+
 
 {{#vars:flash}}
 <!-- Purge cache in parent resources -->
@@ -25,6 +27,81 @@
 <header>
 	<h1>Our site is great </h1>
 </header>
+{{#vars:simple_menu}}
+	<nav class="main">
+		<ul>{{#meta:map}}<li>
+			<a href="/{{table_name}}/">{{table_name}}</a>
+			<ul>{{#children}}<li>
+				<a href="/{{table_name}}/">{{table_name}}</a>
+				<ul>{{#children}}<li>
+					<a href="/{{table_name}}/">{{table_name}}</a>
+				</li>{{/children}}</ul>
+			</li>{{/children}}</ul>
+		</li>{{/meta:map}}</ul>
+	</nav>
+{{/vars:simple_menu}}
+{{^vars:simple_menu}}
+
+
+<nav class="root resources">
+	<ul class="first-level resources">
+{{#meta:map}}
+	  <li>
+	    <details tabindex="-1">
+	      <summary><a href="#">{{table_name}}</a></summary>
+	      <div class="contents">
+	        <dl class="attributes">{{#columns}}
+			      <dt>{{name}}</dt>
+		        <dd>{{type}}</dd>    {{/columns}}
+		      </dl>
+	      </div>
+
+				<ul class="second-level resources">
+					{{#children}}
+				  <li class="inline directory">
+				    <details tabindex="-1">
+				      <summary>{{table_name}}</summary>
+				      <div class="contents">
+				        <dl class="attributes">{{#columns}}
+						      <dt>{{name}}</dt>
+					        <dd>{{type}}</dd>    {{/columns}}
+					      </dl>
+				      </div>
+				      <ul class="third-level resources">
+				      	{{#children}}
+				        <li class="inline directory">
+				          <details tabindex="-1">
+				            <summary>{{table_name}}</summary>
+				            <div class="contents">
+							        <dl class="attributes">{{#columns}}
+									      <dt>{{name}}</dt>
+								        <dd>{{type}}</dd>    {{/columns}}
+								      </dl>
+				            </div>
+				          </details>
+				        </li>
+				      	{{/children}}
+				      </ul>
+				    </details>
+				  </li>
+					{{/children}}
+				</ul>
+			</details>
+		</li>
+{{/meta:map}}
+	</ul>
+</nav>
+{{/vars:simple_menu}}
+
+
+
+
+
+
+
+
+
+
 
 <aside class="aside">
 	<a href="{{meta:back}}">Go back</a>
@@ -37,11 +114,11 @@
 	{{#meta:third_resource}}
 		<li>	
 			{{#vars:resource}}
-				<a href="{{meta:base}}../../../.." class="folder">{{meta:first_resource}}</a> 
+				<a href="{{meta:base}}../../../.." class="folder">{{meta:third_resource}}</a> 
 				/
 				{{#meta:grandparent_structure}}
 					{{#is_title}}
-						<a href="{{meta:base}}../../..">{{parent:by:name}}</a> 
+						<a href="{{meta:base}}../../..">{{meta:third:by:name}}</a> 
 					{{/is_title}}
 				{{/meta:grandparent_structure}}
 				/

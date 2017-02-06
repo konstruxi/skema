@@ -5,7 +5,9 @@ cat conventions/inflections.sql \
     conventions/undo.sql \
     conventions/params.sql \
     conventions/blobs.sql \
+    conventions/coersion.sql \
     composition/collection.sql \
+    discovery/map.sql \
     discovery/structures.sql \
     discovery/references.sql \
     discovery/children.sql \
@@ -25,4 +27,5 @@ cat conventions/inflections.sql \
     generator/actions/insert.sql \
     generator/actions/update.sql \
     generator/actions/params.sql \
-    generator/resource.sql | psql
+    generator/resource.sql \
+    generator/spec.sql | psql

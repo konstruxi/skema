@@ -19,7 +19,7 @@ BEGIN
     -- timestamp of creation
     jsonb_build_object(
       'name', 'created_at',  
-      'type', 'TIMESTAMP WITH TIME ZONE',
+      'type', 'timestamptz',
       'insert', 'coalesce(new.created_at, now())',
       'inherit', 'old.created_at',
       'patch',  'old.created_at')::text || ',' ||
@@ -27,7 +27,7 @@ BEGIN
     -- last modified date
     jsonb_build_object(
       'name', 'updated_at',  
-      'type', 'TIMESTAMP WITH TIME ZONE',
+      'type', 'timestamptz',
       'insert', 'coalesce(new.updated_at, now())',
       'patch', 'now()')::text || ',' ||
 
@@ -54,10 +54,9 @@ BEGIN
         'name', col->>'name', 
         'type', 'jsonb',
         'insert', 'assign_file_indecies(new.' || (value->>'name') || ')',
-        'inherit', 'new.' || (value->>'name') || 
-                    ' = assign_file_indecies(' || 
-                          'assign_file_list(new.' || (value->>'name') || '::jsonb, ' ||
-                            'old.' || (value->>'name') || '::jsonb))'))::text || ',' ||
+        'inherit', 'assign_file_indecies(' || 
+                      'assign_file_list(new.' || (value->>'name') || '::jsonb, ' ||
+                          'old.' || (value->>'name') || '::jsonb))'))::text || ',' ||
 
       -- do not inherit blobs
       kx_process_column(col, jsonb_build_object(
@@ -74,18 +73,16 @@ BEGIN
       kx_process_column(col, jsonb_build_object(
         'name', col->>'name', 
         'type', 'xml',
-        'insert', 'xmlarticle(new.' || (col->>'name') || ')',
-        'view', 'xmlarticletext(' || (col->>'name') || ') as ' || (col->>'name')))::text || ',' ||
+        'insert', 'xmlarticleroot(new.' || (col->>'name') || ')'))::text || ',' ||
 
       -- Initialize flat list of uploaded files
       kx_process_column(col, jsonb_build_object(
         'name', col->>'name' || '_embeds', 
         'type', 'jsonb',
         'insert', 'assign_file_indecies(new.' || (value->>'name') || '_embeds)',
-        'inherit', 'new.' || (value->>'name') || '_embeds' ||
-                    ' = assign_file_indecies(' || 
-                          'assign_file_list(new.' || (value->>'name') || '_embeds::jsonb, ' ||
-                            'old.' || (value->>'name') || '_embeds::jsonb))'))::text || ',' ||
+        'inherit', 'assign_file_indecies(' || 
+                      'assign_file_list(new.' || (value->>'name') || '_embeds::jsonb, ' ||
+                         'old.' || (value->>'name') || '_embeds::jsonb))'))::text || ',' ||
 
       -- do not inherit blobs
       kx_process_column(col, jsonb_build_object(
@@ -239,8 +236,11 @@ begin
   
   EXECUTE 'UPDATE ' || (r->>'table_name') ||
           ' SET outdated = outdated - '''  || (col->>'name') || ''', '  
-          || (col->>'name') || ' = (outdated->>''' || (col->>'name') || ''''
-          ')::' || (col->>'type') || ' where outdated->>''' || (col->>'name') || ''' is not NULL' ||
+          || (col->>'name') || ' = kx_best_effort_' || regexp_replace(
+                                                        regexp_replace((col->>'type'), '\[.*\]', '_array')
+                                                        , '\(.*\)', '')
+          || '(outdated->>''' || (col->>'name') || ''''
+          ') where outdated->>''' || (col->>'name') || ''' is not NULL' ||
           ' and ' || (col->>'name') || ' is NULL';
 
   return jsonb_set(col, '{new}', to_jsonb(1));

@@ -25,6 +25,12 @@ FROM (
   END                                              as relation_name,
   CASE WHEN position('character' in data_type) > 0 THEN 
     'string'
+  WHEN data_type = 'timestamp with time zone' THEN 
+    'timestamptz'
+  WHEN data_type = 'timestamp' THEN 
+    'timestamp'
+  WHEN udt_name = 'bytea' THEN 
+    'bytea'
   ELSE 
     -- check if column represents binary file
     coalesce((SELECT CASE 
@@ -41,7 +47,6 @@ FROM (
     , lower(data_type))
 
   END                                              as type, -- wrapping data type (e.g. array)
-  trim(both '_' from udt_name)                     as udt,  -- underlying data type (e.g. bytea)
   character_maximum_length                         as maxlength,
   --(CASE WHEN position('_id' in column_name) > 0 and position('root_id' in column_name) = 0 THEN
   --   jsonb_from(replace(column_name, '_id', ''), v.value::text::int)->'jsonb_agg'

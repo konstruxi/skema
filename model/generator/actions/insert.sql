@@ -22,7 +22,8 @@ begin
                          ' = coalesce(new.' || (value->>'name') ||
                                       ', old.' || (value->>'name') || ')' 
                 END
-              , '; ') || 
+              , ';
+') || 
             '; END IF;'
     FROM jsonb_array_elements(r->'columns')
     INTO inhert_values_from_parent_version;

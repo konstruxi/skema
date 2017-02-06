@@ -1,9 +1,19 @@
-
 CREATE materialized VIEW kx_resources_and_services AS
   SELECT 
     table_name,
     columns,
-    "references",
+    CASE WHEN table_name = 'services' THEN
+      (SELECT jsonb_agg(s)
+        FROM kx_resources_hierarchy s
+        WHERE second_resource = '' 
+          AND table_name != 'services'
+          AND NOT EXISTS( SELECT 1 
+                          from kx_resources_hierarchy q 
+                          WHERE q.table_name = s.table_name
+                            AND q.second_resource != ''))
+    ELSE
+      "references"
+    END,
     relations,
     second_resource,
     third_resource,
@@ -18,7 +28,7 @@ CREATE materialized VIEW kx_resources_and_services AS
                                         WHERE second_resource = '' 
                                           AND table_name != 'services'
                                           AND NOT EXISTS( SELECT 1 
-                                                          from kx_resources_and_queries q 
+                                                          from kx_resources_hierarchy q 
                                                           WHERE q.table_name = s.table_name
                                                             AND q.second_resource != '')))
     ELSE
@@ -28,6 +38,7 @@ CREATE materialized VIEW kx_resources_and_services AS
     insert_sql,
     file_sql,
     columns_sql,
-    initialized
+    initialized,
+    kx_discover_map() as map
 
   FROM kx_resources_and_queries;

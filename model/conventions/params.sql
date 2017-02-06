@@ -15,18 +15,6 @@ returns jsonb language plpgsql AS $ff$ begin
   return params->(inflection_singularize(table_name));
 end $ff$;
 
-
-CREATE OR REPLACE FUNCTION
-kx_best_effort_jsonb(p_json text) returns jsonb as $$
-begin
-  return p_json::jsonb;
-exception 
-  when others then
-     return null;
-end;
-$$ language plpgsql immutable;
-
-
 -- Keep only essential columns (e.g. to generate options for <select>)
 CREATE OR REPLACE FUNCTION
 kx_clean_jsonb(input jsonb)

@@ -13,6 +13,10 @@ begin
     limit 1
     INTO old;
 
+  IF old is null THEN
+    return create_table(r);
+  END IF;
+
   SELECT jsonb_set(r, '{columns}', jsonb_agg(v) FILTER (WHERE n is not NULL))
   FROM (
 

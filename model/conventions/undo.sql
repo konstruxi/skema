@@ -1,14 +1,15 @@
 
-CREATE OR REPLACE FUNCTION delete_and_return_new(relname text, id integer)
+CREATE OR REPLACE FUNCTION delete_and_return_new(relname text, slug text)
   RETURNS json AS
 $BODY$DECLARE
   ret RECORD;
   root_id integer;
+  id integer;
 BEGIN
   
-  EXECUTE 'SELECT root_id FROM ' || quote_ident(relname) || '_versions WHERE id=$1'
-    INTO root_id USING id;
-  
+  EXECUTE 'SELECT id, root_id FROM ' || quote_ident(relname) || '_versions WHERE slug=$1 limit 1'
+    INTO id, root_id USING slug;
+
   EXECUTE 'DELETE FROM ' || quote_ident(relname) || '_versions  WHERE id=$1 RETURNING *'
     INTO ret USING id;
   

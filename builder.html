@@ -2,19 +2,9 @@
 <html>
 <head>
   <title>Builder</title>
-  <link rel="stylesheet" href="stylesheets/builder.css"
+  <link rel="stylesheet" href="clientside/builder.css"
 </head>
 <body>
-
-  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48">
-  <path id="folder-icon" d="M20 8H8c-2.21 0-3.98 1.79-3.98 4L4 36c0 2.21 1.79 4 4 4h32c2.21 0 4-1.79 
-  4-4V16c0-2.21-1.79-4-4-4H24l-4-4z"/>
-  </svg> 
-  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
-  <path id="close-icon" d="M38 12.83L35.17 10 24 21.17 12.83 10 10 12.83 21.17 24 10 35.17 12.83 38 24 26.83 35.17 38 38 35.17 26.83 24z"/></svg>
-  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
-  <path id="add-icon" d="M38 26H26v12h-4V26H10v-4h12V10h4v12h12v4z"/></svg>
-  
 
 <ul class="root resources">
   <li>
@@ -264,6 +254,7 @@ document.addEventListener('click', function(e) {
     }
   }
   if (!details) return;
+
   if (window.currentDetails) {
 
     for (var p = window.currentDetails; p && p != details; p = p.parentNode)

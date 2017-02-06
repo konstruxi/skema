@@ -10,7 +10,7 @@ CREATE OR REPLACE FUNCTION columns_sql(relname text, structure jsonb, prefix boo
       ''
     END) || (value->>'name'), ', ')
     FROM jsonb_array_elements(structure)
-    WHERE value->>'udt'  NOT LIKE 'bytea%'
+    WHERE value->>'type' NOT LIKE 'bytea'
       AND value->>'name' NOT LIKE '%password%'
 $ff$ LANGUAGE sql VOLATILE;
 
