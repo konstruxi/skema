@@ -37,6 +37,9 @@
   user-select: none;
   position: relative;
 }
+.resources details {
+  overflow: hidden;
+}
 
 .resources .contents {
   position: relative;

@@ -4,6 +4,11 @@ body,html {
 	min-height: 100%;
 }
 
+div.icons svg{
+	height: 1px;
+	width: 1px;
+	display: none;	
+}
 html {
 	background: #333;
 	background: linear-gradient(to right, #333, #222);
