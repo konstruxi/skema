@@ -14,7 +14,8 @@ BEGIN
     jsonb_build_object(
       'name', 'slug',        
       'type', 'varchar',
-      'insert', 'coalesce(new.slug, inflections_slugify(new.' || (r->>'title_column') || '))')::text || ',' ||
+      'insert', 'coalesce(new.slug, inflections_slugify(new.' || (r->>'title_column') || '))',
+      'inherit', FALSE)::text || ',' ||
 
     -- timestamp of creation
     jsonb_build_object(
@@ -73,7 +74,7 @@ BEGIN
       kx_process_column(col, jsonb_build_object(
         'name', col->>'name', 
         'type', 'xml',
-        'insert', 'xmlarticleroot(new.' || (col->>'name') || ')'))::text || ',' ||
+        'insert', 'xmlarticleroot(new.' || (col->>'name') || ', ''' || (r->>'table_name') || ''', new.slug, ''' || (col->>'name') || ''')'))::text || ',' ||
 
       -- Initialize flat list of uploaded files
       kx_process_column(col, jsonb_build_object(

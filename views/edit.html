@@ -1,10 +1,16 @@
 
-{{#action}}
-	<form action="{{action}}?{{vars:args}}" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
-{{/action}}
-{{^action}}
-	<form action="./?{{vars:args}}" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
-{{/action}}
+{{#url}}
+	<form action="{{url}}?{{vars:args}}" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
+{{/url}}
+{{^url}}
+	{{#vars:resource}}
+		<form action="./" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
+	{{/vars:resource}}
+	{{^vars:resource}}
+		<form action="../{{vars:slug}}" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
+	{{/vars:resource}}
+	
+{{/url}}
 
 <h2>{{title}}</h2>
 {{#item}}
@@ -19,7 +25,7 @@
 		{{#type:integer}}
 
 			{{#relation_name}}
-				<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+				<div class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 					<label for="{{meta:singular}}_{{name}}_select">
 						{{name}}</label>
 					<select id="{{meta:singular}}_{{name}}_select" name="{{meta:singular}}[{{name}}]">
@@ -35,11 +41,11 @@
 								{{/parent::item:by:parent:relation_name}}> {{name}} {{title}} </option>
 						{{/meta:options:by:name}}
 					 </select>
-				 </span>
+				 </div>
 
 			{{/relation_name}}
 			{{^relation_name}}
-				<span class="integer field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+				<div class="integer field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 					<label for="{{meta:singular}}_{{name}}_number">
 						{{name}}</label>
 					{{#parent:item}}
@@ -48,13 +54,13 @@
 					{{^parent:item}}
 						<input type="number" id="{{meta:singular}}_{{name}}_number" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
 					{{/parent:item}}
-				</span>
+				</div>
 			{{/relation_name}}
 
 		{{/type:integer}}
 
 		{{#type:file}}
-			<span class="file field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+			<div class="file field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 				<label for="{{meta:singular}}_{{name}}_file">
 					{{name}}</label>
 				<div class="compound">
@@ -65,11 +71,11 @@
 					{{/parent:item:by:name}}
 					<input type="file" id="{{meta:singular}}_{{name}}_file" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
 				</div>
-			</span>
+			</div>
 		{{/type:file}}
 
 		{{#type:files}}
-			<span class="file field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+			<div class="file field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 				<label for="{{meta:singular}}_{{name}}_file">
 					{{name}}</label>
 				<div class="compound">
@@ -78,18 +84,18 @@
 							<input checked type="checkbox" name="{{meta:singular}}[{{parent:name}}][]" value="{{name}}" />
 							{{name}} <em>{{size}}</em></label>	
 					{{/parent:item:by:name}}
-					<input type="file" multiple id="{{meta:singular}}_{{name}}_file" name="{{meta:singular}}[{{name}}][]" value="{{by:parent:name}}" />
+					<input type="file" multiple="multiple" id="{{meta:singular}}_{{name}}_file" name="{{meta:singular}}[{{name}}][]" value="{{by:parent:name}}" />
 				</div>
-			</span>
+			</div>
 		{{/type:files}}
 
 		{{#type:array}}
 
 			{{#relation_name}}
-				<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+				<div class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 					<label for="{{meta:singular}}_{{name}}_select">
 						{{name}}</label>
-					<select multiple id="{{meta:singular}}_{{name}}_select" name="{{meta:singular}}[{{name}}][]">
+					<select multiple="multiple" id="{{meta:singular}}_{{name}}_select" name="{{meta:singular}}[{{name}}][]">
 						{{#meta:options:by:name}}
 								<option value="{{#root_id}}{{root_id}}{{/root_id}}{{^root_id}}{{id}}{{/root_id}}"
 								{{#parent::item:by:table_name}}
@@ -105,12 +111,12 @@
 
 						{{/meta:options:by:name}}
 					 </select>
-				 </span>
+				 </div>
 
 			{{/relation_name}}
 			{{^relation_name}}
 				{{#udt:int}}
-					<span class="integer field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+					<div class="integer field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 						<label for="{{meta:singular}}_{{name}}_number">
 							{{name}}</label>
 						{{#parent:item}}
@@ -119,7 +125,7 @@
 						{{^parent:item}}
 							<input type="number" id="{{meta:singular}}_{{name}}_number" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
 						{{/parent:item}}
-					</span>
+					</div>
 				{{/udt:int}}
 			{{/relation_name}}
 
@@ -127,7 +133,7 @@
 
 		{{#type:string}}
 			{{^name:slug}}
-			<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+			<div class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 				<label for="{{meta:singular}}_{{name}}_text">
 					{{name}}</label>
 				{{#parent:item:errors:by:name}}
@@ -141,13 +147,13 @@
 				{{^parent:item:by:name}}
 					<input type="text" id="{{meta:singular}}_{{name}}_text" name="{{meta:singular}}[{{name}}]" />
 				{{/parent:item:by:name}}
-			</span>
+			</div>
 			{{/name:slug}}
 		{{/type:string}}
 
 		{{#type:text}}
 			{{^name:slug}}
-			<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+			<div class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 				<label for="{{meta:singular}}_{{name}}_text">
 					{{name}}</label>
 				{{#parent:item:errors:by:name}}
@@ -155,7 +161,7 @@
 				{{/parent:item:errors:by:name}}
 
 				<textarea id="{{meta:singular}}_{{name}}_text" name="{{meta:singular}}[{{name}}]">{{parent:item:by:name}}</textarea>
-			</span>
+			</div>
 			{{/name:slug}}
 		{{/type:text}}
 
@@ -185,24 +191,24 @@
 					<h3>New {{parent:table_name}}</h3>
 					{{#parent:columns}}
 						{{#type:string}}
-							<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+							<div class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 								<label for="{{meta:singular}}_{{name}}_text">
 									{{name}}</label>
 								{{#parent:errors:by:name}}
 									<span class="error">{{parent:errors:by:name}}</span>
 								{{/parent:errors:by:name}}
 								<input type="text" name="{{meta:singular}}[{{parent::table_name}}][{{parent:id}}][{{name}}]" value="{{parent:by:name}}" />
-							</span>
+							</div>
 						{{/type:string}}
 						{{#type:text}}
-							<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+							<div class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 								<label for="{{meta:singular}}_{{name}}_text">
 									{{name}}</label>
 								{{#parent:errors:by:name}}
 									<span class="error">{{parent:errors:by:name}}</span>
 								{{/parent:errors:by:name}}
 								<textarea type="text" name="{{meta:singular}}[{{parent::table_name}}][{{parent:id}}][{{name}}]">{{parent:by:name}}</textarea>
-							</span>
+							</div>
 						{{/type:text}}
 					{{/parent:columns}}
 					</fieldset>
@@ -212,17 +218,17 @@
 					<h3>New {{table_name}}</h3>
 				{{#columns}}
 					{{#type:string}}
-						<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+						<div class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 							<label for="{{meta:singular}}_{{name}}_text">
 								{{name}}</label>
 							{{#parent:item:errors:by:name}}
 								<span class="error">{{parent:item:errors:by:name}}</span>
 							{{/parent:item:errors:by:name}}
 							<input type="text" name="{{meta:singular}}[{{parent:table_name}}][0][{{name}}]" />
-						</span>
+						</div>
 					{{/type:string}}
 					{{#type:text}}
-						<span class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+						<div class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
 							<label for="{{meta:singular}}_{{name}}_text">
 								{{name}}</label>
 							{{#parent:item:errors:by:name}}
@@ -230,7 +236,7 @@
 							{{/parent:item:errors:by:name}}
 
 							<textarea id="{{meta:singular}}_{{name}}_text" name="{{meta:singular}}[{{parent:table_name}}][0][{{name}}]">{{parent:item:by:name}}</textarea>
-						</span>
+						</div>
 					{{/type:text}}
 				{{/columns}}
 				</fieldset>
@@ -243,10 +249,10 @@
 
 {{/meta:columns}}
 
-	<span class="controls after">
+	<div class="controls after">
 		<input type="submit" value="{{#label}}{{label}}{{/label}}{{^label}}Submit{{/label}}"/>
 		<span class="alternative">
 			<em>or</em> <a href="./">Cancel</a>
 		</span>
-	</span>
+	</div>
 </form>

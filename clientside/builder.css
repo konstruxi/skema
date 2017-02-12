@@ -2,12 +2,20 @@
   width: 100%;
 }
 
+.sitemap.editing .edit {
+  display: none;
+  opacity: 0;
+}
+
 .resources * {
   box-sizing: border-box;
 }
 
+.resources button {
+  margin: 0;
+}
 .resources {
-  min-height: 3rem;
+  min-height: 3.3rem;
 }
 .resources ul li {
   list-style: none;
@@ -15,9 +23,14 @@
   padding: 0;
 }
 
+.resources li.current summary a {
+  font-weight: bold;
+} 
+
 .resources ul  {
   display: flex;
   flex-flow: column nowrap;
+  -webkit-flex-flow: column nowrap;
   margin: 0;
   padding: 0;
 }
@@ -26,6 +39,11 @@
   display: flex;
   flex-flow: column nowrap;
   align-items: baseline;
+}
+
+.resources > li.removed {
+  display: none !important;
+  opacity: 0;
 }
 
 .root.resources > li > details > summary   {
@@ -47,12 +65,18 @@
 }
 
 @media (min-width: 1001px) {
-  .root.resources > li > ul, .root.resources > ul  {
-    flex-flow: row nowrap;
+
+  nav.resources {
+    height: 3.35rem;
   }
-  .root.resources > li > ul.resources > li + li,
-  .root.resources > ul.resources > li + li {
-    margin-left: 1rem;
+  .root.resources > li > ul, .root.resources > ul  {
+    flex-flow: row;
+    justify-content: center;
+  }
+  .root.resources > li > ul.resources > li,
+  .root.resources > ul.resources > li {
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
   }
   .resources .resources > li > ul.resources > li {
     margin-top: 2px;
@@ -95,16 +119,21 @@
 details {
   align-self: stretch;
 }
-details[open] {
+/*details[open], */
+details.open {
   outline: 1px solid #ddd;
+  outline-offset: -1px;
 }
-details[open].current {
+/*details[open].current, */
+details.open.current {
   outline: 1px solid #999;
 }
-.second-level > li > details[open] {
+/*.second-level > li > details[open],*/
+.second-level > li > details.open {
   margin-right: -2.5rem;
 }
-.third-level > li > details[open] {
+/*.third-level > li > details[open],*/
+.third-level > li > details.open {
   margin-right: -2.5rem;
 }
 .resources .attributes:after {
@@ -131,8 +160,11 @@ details[open].current {
 .resources summary:focus {
   outline: none;
 }
-.resources details > summary:focus,
-.resources details:focus > summary {
+
+
+
+.resources details > summary.has-focus,
+.resources details.focus > summary {
   background-color: #668cec !important;
 }
 .resources details > summary:focus:after,
@@ -144,36 +176,67 @@ details[open].current {
 .resources details:focus > summary {
   background-color: #668cec !important;
 }
+
+
+.resources details > input.deletion:checked + summary {
+  background-color: #ec666f !important;
+  outline-color: #ec666f;
+}
+.resources details:not(.open) > input.deletion:checked + summary {
+  padding-right: 2.5rem;
+}
+.resources details:not(.open) > input.deletion:checked + summary label{
+  pointer-events: none;
+}
+.resources details > input.deletion:checked + summary label {
+  display: block;
+  opacity: 1;
+}
+.resources details > input.deletion:checked + summary label svg{
+  pointer-events: none;
+}
+/*.resources details > input.deletion:checked +  summary:focus:after,
+.resources details:focus > input.deletion:checked +  summary:after */
+
+
+
+
+
 .resources svg {
   width: 3rem;
   height: 2rem;
   vertical-align: middle;
   margin: auto;
 }
-
+/*
 .resources details.current[open] > .contents > .button,
 .resources details.current[open] > summary > .button,
 .resources details.current[open] > .resources > .button {
   display: block;
-}
+}*/
 details > .resources {
   padding: 0.25rem;
 }
 details > .resources > li + li {
   margin-top: 0.25rem;
 }
-.resources .add.button {
+ul.resources li .add.button {
   position: absolute;
-  right: 0.5rem;
-  top: 0;
-  bottom: 0;
+  right: 1rem;
+  top: 0.75rem;
   margin: auto;
   width: 2rem;
-  display: none;  
+  display: none;
+  opacity: 0;  
 }
 .resources .add.button {
   right: 0rem;
-  top: 0.5rem;
+  top: 0rem;
+  width: auto;
+}
+.resources summary > .add.button {
+  right: 0rem;
+  top: 0rem;
   width: auto;
 }
 svg {
@@ -199,8 +262,17 @@ svg {
   color: #666;
 }
 
-ul.resources > li details[open] {
-  background: #fff;
+/*ul.resources > li details[open],*/
+.resources details.open {
+  background: rgb(255,255,255);
+}
+.resources details.open details{
+  background: rgba(0,0,0,0.1);
+}
+
+.resources details summary,
+.resources details {
+  transition: background 0.3s;
 }
 
 .resources > li  {
@@ -214,19 +286,13 @@ ul.resources > li details[open] {
 }
 .resources ul.resources summary {
   font-size: 1.2rem;
-  background: #afafaf;
   padding: 1rem 0.5rem;
-  width: 100%;
 }
 
-.first-level li{
-  max-width: 20rem;
-  width: auto;
+.first-level > li{
+  flex: 0 1 auto;
 } 
 
-.resources ul.resources li.inline > details > summary {
-  background: #eaeaea;
-}
 .resources ul.resources li.separated > details > summary {
   font-weight: normal;
 }
@@ -236,18 +302,154 @@ body > svg {
 }
 
 
+details:not(.open) > :not(summary){
+  display: none;
+  opacity: 0;
+}
+
+form.sitemap {
+  margin: 0;
+  padding: 0;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+  position: relative;
+}
 
 
-
-
-
-
-
-nav details {
-  outline-offset: -1px;
+nav details.open {
+  width: 17rem;
+}
+nav details.open details{
+  width: 13.75rem;
+}
+nav details.open details.open{
+  width: 16.5rem;
+}
+nav details.open details.open details{
+  width: 13.25rem;
+}
+nav details.open details.open details.open{
+  width: 16rem;
 }
 nav details summary a{
   padding: 1rem 0.5rem;
   margin: -1rem -0.5rem;
   pointer-events: none;
+}
+
+nav summary a,
+nav summary {
+  color: #454545;
+  text-decoration: none;
+}
+
+nav dt select {
+  color: #999;
+  line-height: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  font-size: 0.8em;
+  background: transparent;
+}
+nav dd select {
+  color: #999;
+  font-size: 0.8em;
+  line-height: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  background: transparent;
+}
+.resources details > summary input,
+.resources details > summary select{
+  font-size: inherit;
+  line-height: inherit;
+  font-family: inherit;
+  flex: 0 1 auto;
+  min-width: 3rem;
+  width: calc(100% - 2.5rem);
+  pointer-events: none;
+}
+.resources details > summary input {
+  z-index: 1;
+  padding-left: 0.5rem;
+  margin-bottom: 0.5rem;
+  border: 0;
+  height: 1.75rem;
+}
+.resources details > summary select {
+  z-index: 2;
+}
+
+.resources details input[type=checkbox] {
+  display: none;
+}
+
+
+/* animation stuff*/
+
+.resources details.current.open > .contents > .button,
+.resources details.current.open > summary > .button,
+.resources details.current.open > .resources > .button {
+  display: block;
+  opacity: 1;
+}
+
+.resources details .contents {
+  display: none;
+  opacity: 0;
+}
+.resources details.current.open.current > .contents {
+  display: block;
+  opacity: 1;
+}
+.resources details.current.open > summary a{
+  position: absolute;
+  opacity: 0;
+} 
+.resources details.current.open > summary input,
+.resources details.current.open > summary select{
+  display: block;
+  font-size: inherit;
+  line-height: inherit;
+  font-family: inherit;
+  flex: 0 1 auto;
+  -webkit-flex: 0 1 auto;
+  min-width: 3rem;
+  opacity: 1;
+  position: static;
+  pointer-events: inherit;
+}
+nav summary select {
+  display: none;
+  opacity: 0;
+}
+nav summary input {
+  opacity: 0;
+  position: absolute;
+  left: 0.7rem;
+}
+
+summary a {
+  white-space: nowrap;
+}
+summary button {
+  pointer-events: none;
+}
+ul.resources .second-level > li.add,
+ul.resources .third-level > li.add {
+  top: 0;
+  right: 1.5rem;
+} 
+ul > li.add,
+ul > li.save,
+ul > li.edit  {
+  align-self: flex-start;;
+  padding: 0.75rem 0 0.5rem 0.5rem;
+}
+
+.root.resources ul > li.edit {
+  margin-left: -4rem;
 }

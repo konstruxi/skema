@@ -15,9 +15,9 @@ begin
               INTO old;
               ' || string_agg(
                 -- xml + metadata + blobs
-                CASE WHEN value->>'inherit' is not null THEN
+                CASE WHEN value->>'inherit' is not null AND value->>'inherit' != 'false'THEN
                   'new.' || (value->>'name') || ' = ' || (value->>'inherit')
-                ELSE
+                WHEN value->>'inherit' != 'false' THEN
                   'new.' || (value->>'name') || 
                          ' = coalesce(new.' || (value->>'name') ||
                                       ', old.' || (value->>'name') || ')' 

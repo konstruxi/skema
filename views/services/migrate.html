@@ -1,0 +1,50 @@
+<h1>{{title}}</h1>
+
+<nav class="root resources">
+  <ul class="first-level resources">
+{{#item}}{{#children}}
+    <li>
+      <details tabindex="-1">
+        <summary><a href="#">{{alias}}</a></summary>
+        <div class="contents">
+          <dl class="attributes">{{#columns}}
+            <dt>{{name}}</dt>
+            <dd>{{type}}</dd>    {{/columns}}
+          </dl>
+        </div>
+
+        <ul class="second-level resources">
+          {{#children}}
+          <li class="inline directory">
+            <details tabindex="-1">
+              <summary>{{alias}}</summary>
+              <div class="contents">
+                <dl class="attributes">{{#columns}}
+                  <dt>{{name}}</dt>
+                  <dd>{{type}}</dd>    {{/columns}}
+                </dl>
+              </div>
+              <ul class="third-level resources">
+                {{#children}}
+                <li class="inline directory">
+                  <details tabindex="-1">
+                    <summary>{{alias}}</summary>
+                    <div class="contents">
+                      <dl class="attributes">{{#columns}}
+                        <dt>{{name}}</dt>
+                        <dd>{{type}}</dd>    {{/columns}}
+                      </dl>
+                    </div>
+                  </details>
+                </li>
+                {{/children}}
+              </ul>
+            </details>
+          </li>
+          {{/children}}
+        </ul>
+      </details>
+    </li>
+{{/children}}{{/item}}
+</ul>
+</nav>

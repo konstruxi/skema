@@ -6,16 +6,23 @@ CREATE MATERIALIZED VIEW kx_resources AS
 
 SELECT  
     columns.table_name,
+    inflection_singularize(columns.table_name) as singular,
+    (kx_best_effort_jsonb( -- read alias & index from json in table comments
+      obj_description(class.oid)
+    )->>'index') as index,
+    coalesce((kx_best_effort_jsonb(
+      obj_description(class.oid)
+    )->>'alias'), columns.table_name) as alias,
     jsonb_agg(jsonb_strip_nulls(
       row_to_json(columns)::jsonb - 'table_name'
-    )) as columns
+    ) ORDER BY index ASC, pos ASC) as columns
 
 FROM (
   SELECT 
   tables.table_name                                as table_name,
   (kx_best_effort_jsonb(
     col_description(class.oid, cols.ordinal_position)
-  )->>'index')::int                               as index,
+  )->>'index')::int                                as index,
   column_name                                      as name,
   cols.ordinal_position                            as pos,
   CASE WHEN position('_ids' in column_name) > 0 THEN 
@@ -70,7 +77,12 @@ and tables.is_insertable_into != 'NO'
 AND position('sql_' in tables.table_name) != 1 
 and tables.table_type != 'VIEW'
 
-ORDER BY index, cols.ordinal_position ASC
 ) columns
 
-GROUP BY columns.table_name;
+
+LEFT JOIN pg_catalog.pg_class class
+ON (class.relname = columns.table_name)
+
+GROUP BY columns.table_name, class.oid
+ORDER BY index ASC;
+

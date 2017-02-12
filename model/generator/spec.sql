@@ -42,6 +42,21 @@ select kx_discover();
 
 SELECT update_resource($f${
     "table_name": "articles",
+    "alias": "Manuscripts",
+    "columns": [
+      {"name":"category_id","type":"integer"},
+      {"name":"thumbnail","type":"file"},
+      {"name":"title","type":"varchar(255)"},
+      {"name":"content","type":"xml"},
+      {"name":"summary","type":"text"},
+      {"name":"version","type":"integer"},
+      {"name":"deleted_at","type":"timestamptz"}
+    ]
+}$f$::jsonb);
+
+SELECT update_resource($f${
+    "table_name": "photos",
+    "alias": "Visions",
     "columns": [
       {"name":"category_id","type":"integer"},
       {"name":"thumbnail","type":"file"},
@@ -65,6 +80,7 @@ SELECT update_resource($f${
 
 SELECT update_resource($f${
     "table_name": "categories",
+    "alias": "Evidence",
     "columns": [
       {"name":"name","type":"varchar(255)"},
       {"name":"summary","type":"text"},
@@ -81,32 +97,32 @@ SELECT update_resource($f${
 -- SELECT * from articles_current LIMIT 0;
 
 
--- SELECT update_resource($f${
---     "table_name": "works",
---     "columns": [
---       {"name":"name","type":"varchar(255)", "validations": [
---         "required"
---       ]},
---       {"name":"summary","type":"text"},
---       {"name":"content","type":"xml"},
---       {"name":"articles_content","type":"xml"},
---       {"name":"version","type":"integer"},
---       {"name":"deleted_at","type":"timestamptz"}
---     ]
--- }$f$::jsonb);
+SELECT update_resource($f${
+    "table_name": "works",
+    "alias": "Conjurations",
+    "columns": [
+      {"name":"name","type":"varchar(255)"},
+      {"name":"summary","type":"text"},
+      {"name":"content","type":"xml"},
+      {"name":"articles_content","type":"xml"},
+      {"name":"version","type":"integer"},
+      {"name":"deleted_at","type":"timestamptz"}
+    ]
+}$f$::jsonb);
 -- 
--- SELECT update_resource($f${
---     "table_name": "inquiries",
---     "columns": [
---       {"name":"author","type":"integer"},
---       {"name":"name","type":"varchar(255)", "validations": [
---         "required"
---       ]},
---       {"name":"content","type":"xml"},
---       {"name":"version","type":"integer"},
---       {"name":"deleted_at","type":"timestamptz"}
---     ]
--- }$f$::jsonb);
+--{"name":"author","type":"integer"},
+SELECT update_resource($f${
+    "table_name": "inquiries",
+    "alias": "Telepathy",
+    "columns": [
+      {"name":"name","type":"varchar(255)", "validations": [
+        "required"
+      ]},
+      {"name":"content","type":"xml"},
+      {"name":"version","type":"integer"},
+      {"name":"deleted_at","type":"timestamptz"}
+    ]
+}$f$::jsonb);
 -- 
 -- SELECT update_resource($f${
 --     "table_name": "answers",
@@ -197,3 +213,6 @@ select kx_discover();
 --       {"name":"things_content","type":"xml"}
 --     ]
 -- }$f$::jsonb);
+
+
+

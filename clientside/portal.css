@@ -1,0 +1,201 @@
+body, html {
+  padding: 0;
+  margin: 0;
+}
+
+article {
+  width: 100%;
+}
+
+
+nav {
+  width: 100%;
+  text-align: center
+}
+
+
+#sectionizer {
+  opacity: 1;
+  z-index: 70;
+}
+
+#saver {
+  opacity: 1;
+  z-index: 260;
+}
+
+body.editing .sitemap .edit {
+  opacity: 0;
+}
+/*
+body.portal .content:not(.small)[contenteditable]:before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  background: 0 -1px url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAyCAYAAACd+7GKAAAA6ElEQVQYVxXGLUyEcBgH4N9MhksWi+WSwWQwGUwWi8VkMBlMBpPFYjEZTAaTwWS5Yrl0MAZDGIMBgzFwfG0wBmN8U25/95ZnDxhjO2CM7RILYg993+9jHMcDTNO0xDzPh+i67gjDMByjaZoTtG17irquz1BV1TmKorhAWZaXtCvkeX6NLMtuaLdI0/QOSZLcI47jB0RR9IgwDJ+IZwRB8EK8wvf9N3ie9w7XdT/gOM4nbNv+Ir5hWdYKpmn+QNf1NQzD2EDTNIH4haqqGhRFsSDLskv8QZKkBKIo5hAEoSI68Dw/geO47T82iZvpWRHpNAAAAABJRU5ErkJggg==);
+}
+body.portal .content:not(.small)[contenteditable]:after {
+  content: '';
+  position: absolute;
+  bottom: -49px;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: 0 1px url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAyCAYAAACd+7GKAAAA6ElEQVQYVxXGLUyEABgG4HczmAyXLKYLlwyXDJcMJsulC5cuXDKYDCbLJYPJYDKYDJeuXDLIYAxkDAYyGAwYP2MwxmD8jBHccF959oBhmD+wLDuA47gGPM+XRAZBEGKIouhBkiSb+IUsyyoURfmBqqo88Q1N076g6/oRhmEciD1M0/yEZVkfsG37HY7jvBGvcF33BZ7nPcP3/R2CIHhCGIaPiKLoAXEc3yNN0zskSbKlbZBl2Rp5nq9QFMUSZVne0m5QVdU1mqZZoK7rK3RdN0fbtpcYhmFGTNH3/QXGcTwnJsQZcUqc/ANB7pv7ohEVCgAAAABJRU5ErkJggg==);
+
+}*/
+body.portal article.content.saving {
+  z-index: 50;
+  position: relative;
+}
+body.portal article.content {
+  transition: box-shadow 0.3s;
+  box-shadow: 0 0 0 #ccc;
+}
+body.portal .content[contenteditable] {
+  width: 100%;
+  box-shadow: 0 0 100px #ccc;
+  transition: box-shadow 0.3s;
+  z-index: 200;
+}
+body.portal .content[contenteditable].cke_focus {
+  box-shadow: 0 0 100px #bfc3cf;
+}
+body.portal .content[contenteditable] article > section,
+body.portal .content[contenteditable] article > .list section{
+  opacity: 0.3;
+  pointer-events: inherit;
+}
+
+body.portal .content[contenteditable] article > section *{
+  text-decoration: none;
+}
+
+.list {
+  z-index: 2;
+  width: 100%;
+}
+
+.list:empty {
+  display: none;
+}
+
+.list.has-editor {
+  position: relative;
+  z-index: 20;
+}
+
+#layout-root article[hidden] {
+  display: none;
+  opacity: 0;
+}
+
+
+article section ~ .list {
+  border-top: 1px dashed #ccc;
+}
+article section ~ .content.list:not(:last-child) {
+  border-bottom: 0;
+}
+
+.content.list{
+  border-bottom: 3px solid #ccc;
+}
+.content.list .list{
+  border-bottom: 1px solid #ccc;
+}
+
+body.portal article[itemname="my_precious_website"] .list {
+  display: flex;
+  flex-flow: row nowrap;
+  align-content: flex-start;
+  align-items: stretch;  
+  overflow: auto;
+  justify-content: flex-start;
+  padding-left: calc((100vw - 800px) / 2 - 1rem - 2px);
+}
+
+body.portal article[itemname="my_precious_website"] .list > *{
+  flex-basis: 278px;
+  width: 278px;
+  padding: 0;
+  align-items: stretch;
+  border: none;
+}
+body.portal article[itemname="my_precious_website"] .list .foreground{
+  height: auto;
+  width: auto;
+  top: 2px;
+  bottom: 2px;
+  right: 2px;
+  left: 2px;
+}
+body.portal article[itemname="my_precious_website"] .list > article > section{
+  flex-basis: 278px;
+  width: 278px ;
+}
+
+body > svg, body > .icons {
+  display: none;
+}
+
+
+article.content .list article.content  h1 {
+  font-size: 1.7rem;
+}
+
+
+body.editing.undoable #saver .cancel{
+  display: none;
+}
+body:not(.undoable) #saver .undo{
+  display: none;
+}
+body:not(.redoable) #saver .redo{
+  display: none;
+}
+body.editing .toolbar {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+}
+
+body.editing .content[contenteditable] .toolbar{
+  display: block;
+  opacity: 1;
+  pointer-events: inherit;
+}
+body.editing .content[contenteditable] article .toolbar{
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+}
+
+
+.list > header {
+  font-size: 2rem;
+  padding: 1rem 0 2rem;
+}
+
+.list > header a {
+  text-decoration: none;
+  color: #999;
+}
+
+
+.list .list > header {
+  font-size: 1.75rem;
+  padding: 1rem 0 0;
+  font-variant: small-caps;
+  text-transform: lowercase;
+}
+
+.list .list > header + .unsaved {
+  margin-top: 1rem;
+}
+.list {
+  padding-bottom: 2rem;
+}

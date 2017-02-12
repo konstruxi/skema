@@ -1,6 +1,9 @@
 CREATE materialized VIEW kx_resources_and_services AS
   SELECT 
     table_name,
+    singular,
+    alias,
+    index,
     columns,
     CASE WHEN table_name = 'services' THEN
       (SELECT jsonb_agg(s)
@@ -30,7 +33,7 @@ CREATE materialized VIEW kx_resources_and_services AS
                                           AND NOT EXISTS( SELECT 1 
                                                           from kx_resources_hierarchy q 
                                                           WHERE q.table_name = s.table_name
-                                                            AND q.second_resource != '')))
+                                                            AND q.second_resource != '')), 'div', 'resource')
     ELSE
       compose_sql
     END as compose_sql,

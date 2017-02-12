@@ -2,7 +2,7 @@
 		{{#biggles}}
 			<aside class="personal">
 			<a href="#" class="profile_link">
-				<img src="http://pbs.twimg.com/profile_images/479417817536536576/oWp4yM4M_bigger.png" onerror="this.classList.add('error')">
+				<!-- <img src="http://pbs.twimg.com/profile_images/479417817536536576/oWp4yM4M_bigger.png" onerror="this.classList.add('error')">-->
 				
 				{{biggles}}</a>
 				
@@ -13,9 +13,16 @@
 		{{/biggles}}
 
 </footer>
+</div>
+{{^vars:arg_no_js}}
 <script src="/clientside/script.js"></script>
 <script src="/tekxt/loader.dev.js" id="editor-loader"></script>
 <script src="/clientside/snapshot.layout.js"></script>
-		
+<script src="/clientside/builder.js"></script>
+<script src="/clientside/service.js"></script>
+<script src="/clientside/manager.js"></script>
+{{/vars:arg_no_js}}
+
 </body>
 </html>
+

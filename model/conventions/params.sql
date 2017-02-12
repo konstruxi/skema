@@ -31,7 +31,8 @@ begin
             key = 'slug' or
             key = 'title' or
             key = 'name' or
-            key = 'summary'
+            key = 'summary' or
+            key = 'alias'
   INTO ret;
   return ret;
 end $ff$;

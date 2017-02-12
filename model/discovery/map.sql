@@ -10,24 +10,27 @@ returns jsonb language plpgsql AS $ff$ begin
     SELECT json_agg(
       jsonb_build_object(
         'table_name', top.table_name,
+        'alias', top.alias,
         'columns', kx_simplify_columns(top.columns),
         'children', (SELECT json_agg(
                       jsonb_build_object(
                         'table_name', mid.table_name,
+                        'alias', top.alias,
                         'columns', kx_simplify_columns(mid.columns),
                         'children', (SELECT json_agg(
                                       jsonb_build_object(
                                         'table_name', bot.table_name,
+                                        'alias', top.alias,
                                         'columns', kx_simplify_columns(bot.columns)
-                                     ))
+                                     ) ORDER BY index)
                                      FROM kx_resources_hierarchy bot
                                      WHERE bot.third_resource  = top.table_name
                                        AND bot.second_resource = mid.table_name)
 
-                     ))
+                     ) ORDER BY index)
                      FROM kx_resources_hierarchy mid
                      WHERE mid.second_resource = top.table_name)
-      )
+      ) ORDER BY index
     )
 
     FROM kx_resources_hierarchy top

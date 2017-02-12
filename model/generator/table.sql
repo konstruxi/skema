@@ -17,6 +17,9 @@ begin
     return create_table(r);
   END IF;
 
+  EXECUTE 'COMMENT ON table ' || (r->>'table_name') ||
+        ' is ' || '''{"index": ' || coalesce((r->>'index')::int, 0) || ', "alias": ' || to_jsonb(r->>'alias')::text || '}''';
+
   SELECT jsonb_set(r, '{columns}', jsonb_agg(v) FILTER (WHERE n is not NULL))
   FROM (
 
@@ -59,6 +62,11 @@ begin
 
   -- Create new table
   EXECUTE 'CREATE TABLE ' || (r->>'table_name') || '(' || columns || ');';
+
+  -- Add comment keepin order and alias of the table
+  EXECUTE 'COMMENT ON table ' || (r->>'table_name') ||
+        ' is ' || '''{"index": ' || coalesce((r->>'index')::int, 0) || ', "alias": ' || to_jsonb(r->>'alias')::text || '}''';
+
 
   return r;
 end $$;

@@ -7,6 +7,7 @@ cat conventions/inflections.sql \
     conventions/blobs.sql \
     conventions/coersion.sql \
     composition/collection.sql \
+    conventions/sanitization.sql \
     discovery/map.sql \
     discovery/structures.sql \
     discovery/references.sql \
@@ -28,4 +29,5 @@ cat conventions/inflections.sql \
     generator/actions/update.sql \
     generator/actions/params.sql \
     generator/resource.sql \
-    generator/spec.sql | psql
+    generator/spec.sql \
+    generator/fixtures.sql | psql

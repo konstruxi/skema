@@ -10,7 +10,6 @@ FROM kx_resources_and_references q
 
 LEFT JOIN (
   SELECT 
-
     structs.table_name, 
     inflection_pluralize(replace(value->>'name', '_id', '')) as relation,
     row_to_json(x)::jsonb as relations

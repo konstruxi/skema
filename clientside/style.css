@@ -9,45 +9,50 @@ div.icons svg{
 	width: 1px;
 	display: none;	
 }
-html {
+html body {
 	background: #333;
 	background: linear-gradient(to right, #333, #222);
 	width: 0em;
 	padding-left: 10.4rem;
 	border-right: 0.1em solid #000;
+	font-size: 16px;
+	-webkit-text-size-adjust: none;
 }
-body {
+#layout-root {
 	width: calc(100vw - 10.45em);
 	margin-left: 0.05em;
 	background: #fff;
+	-webkit-text-size-adjust: none;
 }
 
 
-body > *:empty {
+body > div > *:empty {
 	display: none;
 }
 
-body > *:not(div) {
-	padding: 1rem 2rem 1rem 1rem;
+body > div > *:not(div):not(aside) {
+	padding: 1em 2em 1em 1em;
 	box-sizing: border-box;
 }
-body > header {
-	padding: 1rem 1rem 0;
+body > div > header {
+	padding: 1em 1em 0;
 }
 
-html > body > nav:not(:empty) {
+html > body > div > nav:not(:empty),
+html > body > div > form.sitemap {
 	background: rgba(0,0,0,0.1);
 	font-size: 1.4rem;
 	padding: 0;
 }
-body > nav *{
+body > div > nav.main,
+body > div > nav.secondary *{
 	display: inline-block;
 }
-body > nav a {
+body > div > form.sitemap a {
 	padding: 1rem 1rem;
 }
 
-body > .summary, body > form {
+body > div > .summary, body > div > form {
 	margin-top: 2rem;
 	border-top: 0;
 }
@@ -66,11 +71,15 @@ body ul.breadcrumbs {
 	margin: 0 0 1rem 0;
 }
 
+
+nav.secondary a {
+	padding: 1rem;
+}
 nav.secondary, .message {
 	margin: -1rem 0 1rem 0;
 }
 
-html > body > nav.secondary {
+html > body > div > nav.secondary {
 	background: rgba(0,0,0,0.03);
 }
 
@@ -81,9 +90,10 @@ body ul.breadcrumbs > li {
 	font-size: 1.5em;
 }
 
-.breadcrumbs li.home {
+body .breadcrumbs li.home {
 	vertical-align: top;
-	padding-left: 1rem;
+	padding: 0;
+	margin-right: 2.5rem;
 }
 .breadcrumbs a.home {
 	font: 0/0 '0';
@@ -101,9 +111,9 @@ body ul.breadcrumbs > li {
 .breadcrumbs a.home:before {
 	font: 3rem/0.45 Helvetica;
 	content: '\2302';
-	margin: -1rem 0 -1rem -1rem;
+	position: absolute;
 	background: #f7f7f7;
-	width: 0.5rem;
+	width: 0.6rem;
 	overflow: visible;
 	vertical-align: baseline;
 	padding: 1.20rem 1rem;
@@ -120,7 +130,7 @@ body ul.breadcrumbs > li {
 	border-top: 1.9rem solid transparent;
 	border-bottom: 1.9rem solid transparent;
 	border-left: 1.9rem solid #f7f7f7;
-	margin: -1rem 0rem -1rem 0;
+	position: absolute;
 	vertical-align: top;
 	display: inline-block;
 }
@@ -140,12 +150,15 @@ body {
 header {
 	border-bottom: 1px solid #ddd;
 }
-body > section, body > form, .breadcrumbs, body > nav {
+body > div > section, body > div > form, .breadcrumbs, body > div > nav {
 	padding-top: 1rem;
 	border-bottom: 1px solid #ccc;
 }
-form > span.field, form > fieldset, form > span.controls {
+form > div.field, form > fieldset{
 	float: left;
+	clear: both;
+}
+form > div.controls {
 	clear: both;
 }
 form > .subform {
@@ -204,7 +217,7 @@ footer {
 	border-top: 1px solid #eaeaea;
 }
 
-body > .message {
+body > div > .message {
 	padding: 1em 1em;
 	font-weight: normal;
 	background-color: #eee;
@@ -222,7 +235,7 @@ body > .message {
 }
 
 
-body > .message .undo {
+body > div > .message .undo {
 	display: inline-block;
 	margin: 0 -1em -1em 0.5em;
 	padding: 1em;
@@ -233,7 +246,7 @@ body > .message .undo {
 	top: 0;
 
 }
-body > .message .undo:hover {
+body > div > .message .undo:hover {
 	background: red;
 	color: white;
 }
@@ -569,6 +582,15 @@ form div.xml.field .content:after {
 
 
 
+/*
 
 
+article[itemtype=article] {
+	display: flex;
+	flex-flow: row nowrap;
+	width: 100%;
+}
+article.content[itemtype=article] > section{
+	flex: 0 1 50%;
+}*/
 
