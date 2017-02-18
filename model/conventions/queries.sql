@@ -59,7 +59,8 @@ BEGIN
        LEFT JOIN ' || plural || '_current
        ON (' || relname || '.' || name || ' = ' || plural || '_current.root_id) 
        GROUP BY ' || relname || '.id) ' || alias || ' 
-       ON ' || alias || '.id = ' || relname || '.id', ',')
+       ON ' || alias || '.id = ' || relname || '.id', '
+')
     FROM cols
     WHERE cols.name != 'root_id' and prefix != name
     into joins;

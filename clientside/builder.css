@@ -291,6 +291,7 @@ svg {
 
 .first-level > li{
   flex: 0 1 auto;
+  align-self: baseline;
 } 
 
 .resources ul.resources li.separated > details > summary {
@@ -332,14 +333,14 @@ nav details.open details.open details{
 nav details.open details.open details.open{
   width: 16rem;
 }
-nav details summary a{
+.sitemap.editing nav details summary a{
   padding: 1rem 0.5rem;
   margin: -1rem -0.5rem;
   pointer-events: none;
 }
 
-nav summary a,
-nav summary {
+.sitemap.editing nav summary a,
+.sitemap.editing nav summary {
   color: #454545;
   text-decoration: none;
 }
@@ -390,27 +391,27 @@ nav dd select {
 
 /* animation stuff*/
 
-.resources details.current.open > .contents > .button,
-.resources details.current.open > summary > .button,
-.resources details.current.open > .resources > .button {
+.sitemap.editing .resources details.current.open > .contents > .button,
+.sitemap.editing .resources details.current.open > summary > .button,
+.sitemap.editing .resources details.current.open > .resources > .button {
   display: block;
   opacity: 1;
 }
 
-.resources details .contents {
+.sitemap.editing .resources details .contents {
   display: none;
   opacity: 0;
 }
-.resources details.current.open.current > .contents {
+.sitemap.editing .resources details.current.open.current > .contents {
   display: block;
   opacity: 1;
 }
-.resources details.current.open > summary a{
+.sitemap.editing .resources details.current.open > summary a{
   position: absolute;
   opacity: 0;
 } 
-.resources details.current.open > summary input,
-.resources details.current.open > summary select{
+.sitemap.editing .resources details.current.open > summary input,
+.sitemap.editing .resources details.current.open > summary select{
   display: block;
   font-size: inherit;
   line-height: inherit;
@@ -421,6 +422,12 @@ nav dd select {
   opacity: 1;
   position: static;
   pointer-events: inherit;
+}
+.sitemap:not(.editing) details details,
+.sitemap:not(.editing) details .contents dl,
+.sitemap:not(.editing) details > ul {
+  display: none;
+  opacity: 0;
 }
 nav summary select {
   display: none;
@@ -446,8 +453,9 @@ ul.resources .third-level > li.add {
 ul > li.add,
 ul > li.save,
 ul > li.edit  {
-  align-self: flex-start;;
-  padding: 0.75rem 0 0.5rem 0.5rem;
+  align-self: flex-start;
+  margin-top: 1rem;
+  padding: 0rem 0 0.5rem 0.5rem;
 }
 
 .root.resources ul > li.edit {

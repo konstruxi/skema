@@ -4,6 +4,7 @@ CREATE OR REPLACE FUNCTION compose_sql(relname text, structure jsonb, relations 
 $BODY$DECLARE
   id_column text;
   list_content text;
+  url_prefix text;
 BEGIN
   SELECT (CASE WHEN EXISTS(SELECT 1 
                            FROM jsonb_array_elements(structure) c 
@@ -12,6 +13,20 @@ BEGIN
   ELSE
       'id'
   END) INTO id_column;
+
+
+  -- Quite an abstraction leak:
+  -- Process relative links in nested XML documents and rebase them on top of parent document
+  -- Each document/static file should have a single canonical URL within sitemap
+  -- But there's a way to reach document through subdomain and main domain:
+  -- `username.kx.com/slug/file.jpg` is equal `to kx.con/~username/slug/file.jpg`
+
+  -- Also adds ~username prefix which is a substitute for subdomain name
+  SELECT (CASE WHEN relname = 'services' THEN
+      ':prefix:suffix'
+  ELSE
+      'concat_ws(''/'', nullif(trim(:prefix, ''/''), ''''), nullif(trim(:suffix, ''/''), ''''), nullif(:slug3, ''''), nullif(:slug2, ''''), root.slug) || ''/'''
+  END) INTO url_prefix;
 
 
   -- Compose category.articles_content and category.articles[].content into a single thing
@@ -33,7 +48,7 @@ BEGIN
         '
         SELECT
           unnest(xpath) as xml,
-          (xpath(''//section/@order'', unnest(xpath)))[1]::varchar::int as index
+          (xpath(''//section/@order'', unnest(xpath)))[1]::varchar::float as index
           FROM xpath(''//section'', root.' || (value->>'table_name') || '_content)
 
         UNION ALL
@@ -47,9 +62,7 @@ BEGIN
           name header,
           xmlelement(
             name a,
-            xmlattributes(
-              root.slug || ''/' || (value->>'table_name') || '/'' as href
-            ),
+            xmlattributes(''./' || (value->>'table_name') || '/'' as href),
             ''' || (value->>'alias') || '''::xml
           )
         ) as xml,
@@ -59,7 +72,7 @@ BEGIN
       ||
 
       CASE WHEN relation.value->>'compose_sql' is not NULL THEN
-        replace(relation.value->>'compose_sql','root.*,', '')
+        replace(relation.value->>'compose_sql','root.*,', '') || ' and service_id = coalesce(nullif(:service_id, '''')::integer, service_id)'
         
       ELSE
         -- List children documents
@@ -80,7 +93,7 @@ BEGIN
               || '
               ' || (value->>'table_name') || '_current.slug as itemname
             ),
-            kx_prepend_permalink_url(xpath[1], root.slug)
+            xpath[1]
           ) as xml, 
           row_number() OVER (ORDER BY root_id DESC) as index
           
@@ -97,7 +110,7 @@ BEGIN
       END || '
       ORDER BY index ASC
     ) collection
-  )))', ', ')
+  ), ' || url_prefix || ', ''/''))', ', ')
     FROM jsonb_array_elements(relations) relation
     INTO list_content;
   END IF;
@@ -117,7 +130,7 @@ BEGIN
       ' || coalesce(list_content, '''''') || '
     )
     ) as xml,
-    0 as index
+    row_number() OVER(ORDER BY ' || id_column || ' DESC) as index
     FROM ' || relname || '_current root
     WHERE 1=1
   ';

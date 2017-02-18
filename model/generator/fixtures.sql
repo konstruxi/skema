@@ -1,10 +1,36 @@
-insert into categories(root_id, name, summary, content, articles_content)
+
+
+insert into services(root_id, name, summary, content)
   values (
+    -1,
+    'The Mystique',
+    'Curiousities of the otherworld',
+    xmlarticleroot('<section><x-div class="kx foreground"><svg /></x-div>
+      <x-div class="kx foreground"><svg /></x-div>
+      <h1>The Mystique</h1>
+      <p itempath="service[summary]">Curiousities of the otherworld</p>
+    </section>')
+  );
+
+insert into services(root_id, name, summary, content)
+  values (
+    -2,
+    'Origin',
+    'A template for the app',
+    xmlarticleroot('<section><x-div class="kx foreground"><svg /></x-div>
+      <x-div class="kx foreground"><svg /></x-div>
+      <h1>Origin</h1>
+      <p itempath="service[summary]">A template for the app</p>
+    </section>')
+  );
+
+insert into categories(service_id, root_id, name, summary, content, articles_content)
+  values (
+    -1, 
     666,
     'Places I''ve been to', 
     'From depths of cosmic horror to lifeless plains of ancient gods.',
     xmlarticleroot('<section><x-div class="kx foreground"><svg /></x-div>
-      <x-div class="kx foreground"><svg /></x-div>
       <h1>Places I''ve been to</h1>
       <p>From depths of cosmic horror to lifeless plains of ancient gods.</p>
       <p>Sometimes I go to church too</p>
@@ -17,13 +43,13 @@ insert into categories(root_id, name, summary, content, articles_content)
     </section>'::xml, 'categories', 'places_ive_been_to', 'content'),
     xmlarticleroot('
     <section class="forced position-2"><x-div class="kx foreground"><svg /></x-div>
-      <x-div class="kx foreground"><svg /></x-div>
       <h3>It''s dangerous to go alone</h3>
       <p>Take this. The knowledge presented here is hidden from the eye of regular fellow, and that is for a good reason.</p>
     </section>'::xml, 'categories', 'places_ive_been_to', 'articles_content'));
 
-insert into articles(root_id, category_id, title, summary, content)
+insert into articles(service_id, root_id, category_id, title, summary, content)
 values (
+  -1, 
   667,
   666,
   'Caves of unbeing', 
@@ -35,8 +61,9 @@ values (
   '::xml, 'articles', 'caves_of_unbeing'));
 
 
-insert into articles(root_id, category_id, title, summary, content)
+insert into articles(service_id, root_id, category_id, title, summary, content)
 values (
+  -1,
   668,
   666,
   'Dunwich swamps', 
@@ -47,8 +74,9 @@ values (
    <p>Dunwich is surrounded undated ceremonial burials. Each spring the unholy filth floods the streets of the town.</p>
    </section>'::xml, 'articles', 'dunwich_samps'));
 
-insert into articles(root_id, category_id, title, summary, content)
+insert into articles(service_id, root_id, category_id, title, summary, content)
 values (
+  -1,
   669,
   666,
   'Fourth dimension', 
@@ -61,8 +89,9 @@ values (
 
 
 
-insert into categories(root_id, name, summary, content)
+insert into categories(service_id, root_id, name, summary, content)
 values (
+  -1,
   766,
   'Things I wrote', 
   'Forbidden mysteries of unhuman lore, unseen manuscripts of unknown civilizations.',

@@ -7,13 +7,16 @@ kx_process_resource_parameters(r jsonb) returns jsonb language plpgsql AS $$ BEG
 
   -- Find which column contains value to generate slug against (name or title)
   -- falls back to id otherwise
-  SELECT jsonb_set(r, '{title_column}', to_jsonb('id'::text))
-    INTO r;
-  SELECT jsonb_set(r, '{title_column}', value->'name')
-    FROM jsonb_array_elements(r->'columns')
-    WHERE value->>'name' = 'title'
-       or value->>'name' = 'name'
-    LIMIT 1
+
+  SELECT jsonb_set(r, '{title_column}', name)
+    FROM (
+      SELECT value->'name' as name FROM jsonb_array_elements(r->'columns')
+      WHERE value->>'name' = 'title'
+         or value->>'name' = 'name'
+      UNION ALL
+      SELECT to_jsonb('id'::text) as name
+      LIMIT 1
+    ) q
     INTO r;
 
   -- Expand composite columns, filter out unmatching stuff

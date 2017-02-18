@@ -15,12 +15,12 @@ returns jsonb language plpgsql AS $ff$ begin
         'children', (SELECT json_agg(
                       jsonb_build_object(
                         'table_name', mid.table_name,
-                        'alias', top.alias,
+                        'alias', mid.alias,
                         'columns', kx_simplify_columns(mid.columns),
                         'children', (SELECT json_agg(
                                       jsonb_build_object(
                                         'table_name', bot.table_name,
-                                        'alias', top.alias,
+                                        'alias', bot.alias,
                                         'columns', kx_simplify_columns(bot.columns)
                                      ) ORDER BY index)
                                      FROM kx_resources_hierarchy bot
@@ -35,8 +35,7 @@ returns jsonb language plpgsql AS $ff$ begin
 
     FROM kx_resources_hierarchy top
 
-    WHERE top.second_resource = '' 
-    AND top.table_name != 'services'
+    WHERE top.table_name != 'services' 
     AND NOT EXISTS( SELECT 1 
                       from kx_resources_hierarchy q 
                       WHERE q.table_name = top.table_name

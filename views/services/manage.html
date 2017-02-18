@@ -1,0 +1,314 @@
+{{#url}}
+  <form action="{{url}}?{{vars:args}}" method="POST" accept-charset="utf-8" enctype="multipart/form-data" class="sitemap">
+{{/url}}
+{{^url}}
+  {{#vars:resource}}
+    <form action="./" method="POST" accept-charset="utf-8" enctype="multipart/form-data" class="sitemap">
+  {{/vars:resource}}
+  {{^vars:resource}}
+    <form action="../{{vars:slug}}" method="POST" accept-charset="utf-8" enctype="multipart/form-data" class="sitemap">
+  {{/vars:resource}}
+  
+{{/url}}
+
+{{#item}}
+  {{#root_id}}
+    <input type="hidden" name="{{meta:singular}}[previous_version]" value="{{version}}" /> 
+    <input type="hidden" name="{{meta:singular}}[root_id]" value="{{root_id}}" /> 
+  {{/root_id}}
+{{/item}}
+
+
+<nav class="root resources">
+  <ul class="first-level resources">
+{{#meta:map}}
+    <li{{#table_name:is:meta:resource_name}} class="current"{{/table_name:is:meta:resource_name}} id="{{table_name}}_nav_link">
+      <details tabindex="-1">
+        <summary><a href="/{{table_name}}">{{alias}}</a></summary>
+        <div class="contents">
+          <dl class="attributes">{{#columns}}
+            <dt>{{name}}</dt>
+            <dd>{{type}}</dd>    {{/columns}}
+          </dl>
+        </div>
+
+        <ul class="second-level resources">
+          {{#children}}
+          <li class="inline directory">
+            <details tabindex="-1">
+              <summary><a href="#">{{table_name}}</a></summary>
+              <div class="contents">
+                <dl class="attributes">{{#columns}}
+                  <dt>{{name}}</dt>
+                  <dd>{{type}}</dd>    {{/columns}}
+                </dl>
+              </div>
+              <ul class="third-level resources">
+                {{#children}}
+                <li class="inline directory">
+                  <details tabindex="-1">
+                    <summary><a href="#">{{table_name}}</a></summary>
+                    <div class="contents">
+                      <dl class="attributes">{{#columns}}
+                        <dt>{{name}}</dt>
+                        <dd>{{type}}</dd>    {{/columns}}
+                      </dl>
+                    </div>
+                  </details>
+                </li>
+                {{/children}}
+              </ul>
+            </details>
+          </li>
+          {{/children}}
+        </ul>
+      </details>
+    </li>
+{{/meta:map}}
+  </ul>
+</nav>
+
+<h2>{{title}}</h2>
+{{#item}}
+  {{#root_id}}
+    <input type="hidden" name="{{meta:singular}}[previous_version]" value="{{version}}" /> 
+    <input type="hidden" name="{{meta:singular}}[root_id]" value="{{root_id}}" /> 
+  {{/root_id}}
+{{/item}}
+
+{{#meta:columns}}
+  {{#is_editable}}
+    {{#type:integer}}
+
+      {{#relation_name}}
+        <div class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+          <label for="{{meta:singular}}_{{name}}_select">
+            {{name}}</label>
+          <select id="{{meta:singular}}_{{name}}_select" name="{{meta:singular}}[{{name}}]">
+            {{#meta:options:by:name}}
+                <option value="{{#root_id}}{{root_id}}{{/root_id}}{{^root_id}}{{id}}{{/root_id}}"
+                {{#parent::item:by:parent:relation_name}}
+                  {{#id:is:parent:id}}selected{{/id:is:parent:id}}
+                {{/parent::item:by:parent:relation_name}}
+                {{^parent::item:by:parent:relation_name}}
+                  {{#meta:second_resource:is:parent:relation_name}}
+                    {{#meta:second:slug:is:slug}}selected{{/meta:second:slug:is:slug}}
+                  {{/meta:second_resource:is:parent:relation_name}}
+                {{/parent::item:by:parent:relation_name}}> {{name}} {{title}} </option>
+            {{/meta:options:by:name}}
+           </select>
+         </div>
+
+      {{/relation_name}}
+      {{^relation_name}}
+        <div class="integer field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+          <label for="{{meta:singular}}_{{name}}_number">
+            {{name}}</label>
+          {{#parent:item}}
+            <input type="number" id="{{meta:singular}}_{{name}}_number" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
+          {{/parent:item}}
+          {{^parent:item}}
+            <input type="number" id="{{meta:singular}}_{{name}}_number" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
+          {{/parent:item}}
+        </div>
+      {{/relation_name}}
+
+    {{/type:integer}}
+
+    {{#type:file}}
+      <div class="file field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+        <label for="{{meta:singular}}_{{name}}_file">
+          {{name}}</label>
+        <div class="compound">
+          {{#parent:item:by:name}}
+            <label class="inline">
+              <input checked type="checkbox" name="{{meta:singular}}[{{parent:name}}]" value="{{name}}" />
+              {{name}} <em>{{size}}</em></label>
+          {{/parent:item:by:name}}
+          <input type="file" id="{{meta:singular}}_{{name}}_file" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
+        </div>
+      </div>
+    {{/type:file}}
+
+    {{#type:files}}
+      <div class="file field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+        <label for="{{meta:singular}}_{{name}}_file">
+          {{name}}</label>
+        <div class="compound">
+          {{#parent:item:by:name}}
+            <label class="inline">
+              <input checked type="checkbox" name="{{meta:singular}}[{{parent:name}}][]" value="{{name}}" />
+              {{name}} <em>{{size}}</em></label>  
+          {{/parent:item:by:name}}
+          <input type="file" multiple="multiple" id="{{meta:singular}}_{{name}}_file" name="{{meta:singular}}[{{name}}][]" value="{{by:parent:name}}" />
+        </div>
+      </div>
+    {{/type:files}}
+
+    {{#type:array}}
+
+      {{#relation_name}}
+        <div class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+          <label for="{{meta:singular}}_{{name}}_select">
+            {{name}}</label>
+          <select multiple="multiple" id="{{meta:singular}}_{{name}}_select" name="{{meta:singular}}[{{name}}][]">
+            {{#meta:options:by:name}}
+                <option value="{{#root_id}}{{root_id}}{{/root_id}}{{^root_id}}{{id}}{{/root_id}}"
+                {{#parent::item:by:table_name}}
+                  {{#id:is:parent:id}}selected{{/id:is:parent:id}}
+                {{/parent::item:by:table_name}}
+                {{^parent::item:by:table_name}}
+                  {{#meta:parent_resource_key:is:parent:name}}
+                    {{#slug:is:meta:parent_resource_id}}
+                    selected
+                    {{/slug:is:meta:parent_resource_id}}
+                  {{/meta:parent_resource_key:is:parent:name}}
+                {{/parent::item:by:table_name}}> {{name}} {{title}} </option>
+
+            {{/meta:options:by:name}}
+           </select>
+         </div>
+
+      {{/relation_name}}
+      {{^relation_name}}
+        {{#udt:int}}
+          <div class="integer field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+            <label for="{{meta:singular}}_{{name}}_number">
+              {{name}}</label>
+            {{#parent:item}}
+              <input type="number" id="{{meta:singular}}_{{name}}_number" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
+            {{/parent:item}}
+            {{^parent:item}}
+              <input type="number" id="{{meta:singular}}_{{name}}_number" name="{{meta:singular}}[{{name}}]" value="{{by:parent:name}}" />
+            {{/parent:item}}
+          </div>
+        {{/udt:int}}
+      {{/relation_name}}
+
+    {{/type:array}}
+
+    {{#type:string}}
+      {{^name:slug}}
+      <div class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+        <label for="{{meta:singular}}_{{name}}_text">
+          {{name}}</label>
+        {{#parent:item:errors:by:name}}
+          <span class="error">{{parent:item:errors:by:name}}</span>
+        {{/parent:item:errors:by:name}}
+
+
+        {{#parent:item:by:name}}
+          <input type="text" id="{{meta:singular}}_{{name}}_text" name="{{meta:singular}}[{{name}}]" value="{{parent:item:by:name}}" />
+        {{/parent:item:by:name}}
+        {{^parent:item:by:name}}
+          <input type="text" id="{{meta:singular}}_{{name}}_text" name="{{meta:singular}}[{{name}}]" />
+        {{/parent:item:by:name}}
+      </div>
+      {{/name:slug}}
+    {{/type:string}}
+
+    {{#type:text}}
+      {{^name:slug}}
+      <div class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+        <label for="{{meta:singular}}_{{name}}_text">
+          {{name}}</label>
+        {{#parent:item:errors:by:name}}
+          <span class="error">{{parent:item:errors:by:name}}</span>
+        {{/parent:item:errors:by:name}}
+
+        <textarea id="{{meta:singular}}_{{name}}_text" name="{{meta:singular}}[{{name}}]">{{parent:item:by:name}}</textarea>
+      </div>
+      {{/name:slug}}
+    {{/type:text}}
+
+    {{#type:xml}}
+      <div class="xml field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+        <label for="{{meta:singular}}_{{name}}_xml">
+          {{name}}</label>
+        {{#parent:item:errors:by:name}}
+          <span class="error">{{parent:item:errors:by:name}}</span>
+        {{/parent:item:errors:by:name}}
+
+        <article contenteditable="contenteditable" data-cke-editable="true" class="content" id="{{meta:singular}}_{{name}}_xml" name="{{meta:singular}}[{{name}}]">{{parent:item:by:name:XML}}</article>
+        <textarea class="rich" name="{{meta:singular}}[{{name}}]">{{parent:item:by:name}}</textarea>
+      </div>
+    {{/type:xml}}
+
+    {{#meta:references}}
+      {{#parent:relation_name:is:table_name}}
+        
+        <input type="checkbox" hidden id="new_{{table_name}}" onclick="new_{{table_name}}_fieldset.disabled = !this.checked" />
+        <label for="new_{{table_name}}">
+          or <span>create new
+          {{table_name}}</span></label>
+        <div class="subform">
+        {{#parent::item:by:table_name}}
+          <fieldset>
+          <h3>New {{parent:table_name}}</h3>
+          {{#parent:columns}}
+            {{#type:string}}
+              <div class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+                <label for="{{meta:singular}}_{{name}}_text">
+                  {{name}}</label>
+                {{#parent:errors:by:name}}
+                  <span class="error">{{parent:errors:by:name}}</span>
+                {{/parent:errors:by:name}}
+                <input type="text" name="{{meta:singular}}[{{parent::table_name}}][{{parent:id}}][{{name}}]" value="{{parent:by:name}}" />
+              </div>
+            {{/type:string}}
+            {{#type:text}}
+              <div class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+                <label for="{{meta:singular}}_{{name}}_text">
+                  {{name}}</label>
+                {{#parent:errors:by:name}}
+                  <span class="error">{{parent:errors:by:name}}</span>
+                {{/parent:errors:by:name}}
+                <textarea type="text" name="{{meta:singular}}[{{parent::table_name}}][{{parent:id}}][{{name}}]">{{parent:by:name}}</textarea>
+              </div>
+            {{/type:text}}
+          {{/parent:columns}}
+          </fieldset>
+        {{/parent::item:by:table_name}}
+        
+        <fieldset class="new" id="new_{{table_name}}_fieldset" disabled>
+          <h3>New {{table_name}}</h3>
+        {{#columns}}
+          {{#type:string}}
+            <div class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+              <label for="{{meta:singular}}_{{name}}_text">
+                {{name}}</label>
+              {{#parent:item:errors:by:name}}
+                <span class="error">{{parent:item:errors:by:name}}</span>
+              {{/parent:item:errors:by:name}}
+              <input type="text" name="{{meta:singular}}[{{parent:table_name}}][0][{{name}}]" />
+            </div>
+          {{/type:string}}
+          {{#type:text}}
+            <div class="string field of_{{meta:singular}} for_{{name}} for_{{meta:singular}}_{{name}}{{#parent:item:errors:by:name}} errored{{/parent:item:errors:by:name}}">
+              <label for="{{meta:singular}}_{{name}}_text">
+                {{name}}</label>
+              {{#parent:item:errors:by:name}}
+                <span class="error">{{parent:item:errors:by:name}}</span>
+              {{/parent:item:errors:by:name}}
+
+              <textarea id="{{meta:singular}}_{{name}}_text" name="{{meta:singular}}[{{parent:table_name}}][0][{{name}}]">{{parent:item:by:name}}</textarea>
+            </div>
+          {{/type:text}}
+        {{/columns}}
+        </fieldset>
+        </div>
+      {{/parent:relation_name:is:table_name}}
+      
+    {{/meta:references}}
+
+  {{/is_editable}}
+
+{{/meta:columns}}
+
+  <div class="controls after">
+    <input type="submit" value="{{#label}}{{label}}{{/label}}{{^label}}Submit{{/label}}"/>
+    <span class="alternative">
+      <em>or</em> <a href="./">Cancel</a>
+    </span>
+  </div>
+</form>

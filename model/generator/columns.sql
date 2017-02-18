@@ -14,7 +14,7 @@ BEGIN
     jsonb_build_object(
       'name', 'slug',        
       'type', 'varchar',
-      'insert', 'coalesce(new.slug, inflections_slugify(new.' || (r->>'title_column') || '))',
+      'insert', 'coalesce(nullif(new.slug, ''''), nullif(inflections_slugify(new.' || (r->>'title_column') || '), ''''), ''' || (r->>'singular') || '-'' || new.id::text)',
       'inherit', FALSE)::text || ',' ||
 
     -- timestamp of creation
@@ -43,8 +43,16 @@ BEGIN
     jsonb_build_object(
       'name', 'outdated',    
       'type', 'jsonb',
-      'patch', FALSE)::text || ','
+      'patch', FALSE)::text || ',' ||
 
+    -- data archived from removed columns
+    (CASE WHEN r->>'table_name' != 'services' THEN
+      jsonb_build_object(
+        'name', 'service_id',    
+        'type', 'integer')::text || ','
+    ELSE
+      ''
+    END)
 
   || string_agg(
 
@@ -54,7 +62,7 @@ BEGIN
       kx_process_column(col, jsonb_build_object(
         'name', col->>'name', 
         'type', 'jsonb',
-        'insert', 'assign_file_indecies(new.' || (value->>'name') || ')',
+        'insert', 'assign_file_indecies(assign_file_list(new.' || (value->>'name') || '))',
         'inherit', 'assign_file_indecies(' || 
                       'assign_file_list(new.' || (value->>'name') || '::jsonb, ' ||
                           'old.' || (value->>'name') || '::jsonb))'))::text || ',' ||
@@ -80,7 +88,7 @@ BEGIN
       kx_process_column(col, jsonb_build_object(
         'name', col->>'name' || '_embeds', 
         'type', 'jsonb',
-        'insert', 'assign_file_indecies(new.' || (value->>'name') || '_embeds)',
+        'insert', 'assign_file_indecies(assign_file_list(new.' || (value->>'name') || '_embeds))',
         'inherit', 'assign_file_indecies(' || 
                       'assign_file_list(new.' || (value->>'name') || '_embeds::jsonb, ' ||
                          'old.' || (value->>'name') || '_embeds::jsonb))'))::text || ',' ||
@@ -195,6 +203,7 @@ kx_is_allowed_type(type text) returns boolean language plpgsql AS $$ begin
          type = 'files' or
          type = 'timestamp' or
          type = 'timestamptz' or
+         type = 'uuid' or
          type = 'xml';
 END $$;
 
@@ -234,6 +243,7 @@ begin
           'ADD ' || (col->>'name') || ' ' || (col->>'type');
 
   -- Restore archived values for the column from "outdated" object
+  IF (col->>'name') != 'outdated' and (col->>'name' NOT LIKE '%_blobs') THEN
   
   EXECUTE 'UPDATE ' || (r->>'table_name') ||
           ' SET outdated = outdated - '''  || (col->>'name') || ''', '  
@@ -243,6 +253,7 @@ begin
           || '(outdated->>''' || (col->>'name') || ''''
           ') where outdated->>''' || (col->>'name') || ''' is not NULL' ||
           ' and ' || (col->>'name') || ' is NULL';
+  END IF;
 
   return jsonb_set(col, '{new}', to_jsonb(1));
   --RETURN CASE WHEN r->>'migrations' is NULL THEN
@@ -261,12 +272,13 @@ begin
   --EXECUTE 'ALTER TABLE ' || (r->>'table_name') || ' DISABLE TRIGGER USER';
   -- Store values from removed columns in json storage
   -- Side channel information to UPDATE trigger to avoid creation of a new version
+  IF (col->>'name') != 'outdated' and (col->>'name' NOT LIKE '%_blobs') THEN
   EXECUTE 'UPDATE ' || (r->>'table_name') ||
           ' SET outdated = jsonb_set(
                             coalesce(outdated, ''{}''::jsonb), ''{' || (col->>'name') || '}'', 
                             to_jsonb(' || (col->>'name') || '))' ||
           ' where ' || (col->>'name') || ' is not NULL';
-
+  END IF;
   --EXECUTE 'ALTER TABLE ' || (r->>'table_name') || ' ENABLE TRIGGER USER';
 
   EXECUTE 'ALTER TABLE ' || (r->>'table_name') || ' ' ||

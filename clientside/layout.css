@@ -1,0 +1,93 @@
+.list[layout="stream"] {
+  columns: 2;
+  max-width: 832px !important;
+  column-gap: 1rem;
+  display: block !important;
+}
+.list > header {
+  width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.list[layout="stream"] > header {
+  column-span: all;
+  margin: 0 auto;
+}
+.list[layout="stream"] > * {
+  width: calc(400px - 2rem);
+  margin: 1rem;
+  margin-bottom: 1rem;
+    -webkit-column-break-inside: avoid; /* Chrome, Safari */
+    page-break-inside: avoid;           /* Theoretically FF 20+ */
+    break-inside: avoid-column;         /* IE 11 */
+}
+.list[layout="stream"] section > *:not(.kx):not(picture) {
+  width: 100%;
+}
+.list[layout="stream"] section {
+  width: calc(400px - 2rem);
+  padding: 1rem 0;
+}
+.list[layout="stream"] section > .kx.foreground {
+  top: 0;
+  left: -1rem;
+  right: -1rem;
+  bottom: 0;
+  width: calc(100% + 2rem);
+  height: calc(100%);
+}
+
+
+
+#layout-root .list[layout="carousel"] {
+  display: flex;
+  flex-flow: row nowrap;
+  align-content: flex-start;
+  align-items: stretch;  
+  overflow: auto;
+  justify-content: flex-start;
+  padding-left: calc((100vw - 800px) / 2 - 1rem - 2px);
+  padding-top: 3rem;
+}
+
+.list[layout="carousel"] > header{
+  height: 3rem;
+  top: 0;
+  right: calc((100vw - 800px) / 2);
+  text-align: center;
+  left: calc((100vw - 800px) / 2);
+  position: absolute;
+}
+.list[layout="carousel"] section > *:not(.kx):not(picture) {
+  width: 100%;
+}
+.list[layout="carousel"] > *:not(header){
+  flex-basis: 278px;
+  width: 278px;
+  margin: 1rem 2rem 1rem 1rem;
+  align-items: stretch;
+  border: none;
+}
+#layout-root .list[layout="carousel"] .foreground{
+  height: auto;
+  width: auto;
+  top: -1rem;
+  bottom: -1rem;
+  right: -1rem;
+  left: -1rem;
+}
+.list[layout="carousel"] section{
+  flex-basis: 278px;
+  max-width: 278px ;
+  min-width: 278px ;
+}
+
+
+
+
+
+.list[layout="headlines"] article section > *:not(h1):not(h2):not(.kx){
+  display: none;
+  opacity: 0;
+}

@@ -28,6 +28,4 @@ cat conventions/inflections.sql \
     generator/actions/insert.sql \
     generator/actions/update.sql \
     generator/actions/params.sql \
-    generator/resource.sql \
-    generator/spec.sql \
-    generator/fixtures.sql | psql
+    generator/resource.sql | psql

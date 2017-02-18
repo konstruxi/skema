@@ -69,7 +69,7 @@ end; $ff$;
 -- new_files is one or multiple json values. 
 --   Objects represent newly uploaded files,
 --   string represent filenames of old files to keep
-CREATE OR REPLACE FUNCTION assign_file_list(new_files jsonb, old_files jsonb)
+CREATE OR REPLACE FUNCTION assign_file_list(new_files jsonb, old_files jsonb default null)
 RETURNS jsonb language plpgsql as $ff$ begin
   return CASE 
           -- recurse for each value in array

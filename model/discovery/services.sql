@@ -28,8 +28,7 @@ CREATE materialized VIEW kx_resources_and_services AS
         
       compose_sql('services', columns, (SELECT jsonb_agg(s)
                                         FROM kx_resources_and_queries s
-                                        WHERE second_resource = '' 
-                                          AND table_name != 'services'
+                                        WHERE table_name != 'services'
                                           AND NOT EXISTS( SELECT 1 
                                                           from kx_resources_hierarchy q 
                                                           WHERE q.table_name = s.table_name

@@ -112,13 +112,13 @@ Manager.processArticle = function(article, force) {
         return false;
         return 'menu-icon'
       } else {
-        return 'resize-section-icon'
+        return article.getAttribute('icon') || 'resize-section-icon'
       }
     })
   }
 }
 
-var articles = document.getElementsByTagName('article');
+var articles = document.querySelectorAll('article[itemtype], header[itemtype]');
 for (var i = 0; i < articles.length; i++) {
   Manager.processArticle(articles[i])
 }
@@ -129,7 +129,7 @@ document.addEventListener('click', function(e) {
     window.currentManager = null;
   }
   if (window.currentLister) {
-    var lister = window.currentLister;
+    var listing = window.currentLister;
     Lister.close(window, section);
     window.currentLister = null;
   }
@@ -146,6 +146,8 @@ document.addEventListener('click', function(e) {
       var redo = p;
     } else if (p.classList && p.classList.contains('add')) {
       var add = p;
+    } else if (p.classList && p.classList.contains('split')) {
+      var split = p;
     } else if (p.id == 'sectionizer') {
       var clickedSectionizer = p;
     } else if (p.id == 'manager') {
@@ -166,6 +168,14 @@ document.addEventListener('click', function(e) {
       var section =  p;
       if (p.parentNode.getAttribute('contenteditable') != null)
         return false;
+    } else if (p.classList && p.classList.contains('layout-headlines')) {
+      var layout = 'headlines';
+    } else if (p.classList && p.classList.contains('layout-stream')) {
+      var layout = 'stream';
+    } else if (p.classList && p.classList.contains('layout-carousel')) {
+      var layout = 'carousel';
+    } else if (p.classList && p.classList.contains('layout-thumbnails')) {
+      var layout = 'thumbnails';
     }
   }
   if (toolbar && header && list) {
@@ -188,10 +198,15 @@ document.addEventListener('click', function(e) {
   } else if (redo && clickedSaver) {
     if (Service.editor) Service.editor.undoManager.redo()
   } else if (add && clickedLister) {
-    Service.new(lister)
-    Lister.close(window, lister);
-  } else {
-
+    Service.new(listing)
+    Lister.close(window, listing);
+  } else if (split && clickedLister) {
+    Service.editList(listing)
+    Lister.close(window, listing);
+  } else if (layout && listing) {
+    listing.setAttribute('layout', layout)
+    Lister.close(window, listing)
+    Manager.animate()
   }
 
 })
@@ -217,9 +232,9 @@ saver.id = 'saver';
 saver.setAttribute('hidden', 'hidden')
 saver.className = 'circle-menu';
 saver.innerHTML = '\
-  <svg viewBox="1 0 49 48" class="left undo icon"><use xlink:href="#undo-icon"></use></svg>\
+  <svg viewBox="1 0 49 48" class="bottom-left undo icon"><use xlink:href="#undo-icon"></use></svg>\
   <svg viewBox="1 0 49 48" class="left cancel icon"><use xlink:href="#close-icon"></use></svg>\
-  <svg viewBox="1 0 49 48" class="bottom-left redo icon"><use xlink:href="#redo-icon"></use></svg>\
+  <svg viewBox="1 0 49 48" class="bottom-right redo icon"><use xlink:href="#redo-icon"></use></svg>\
   <svg viewBox="-2 2 48 48" class="right redo icon"><use xlink:href="#redo-icon"></use></svg>\
   <svg viewBox="-2 2 48 48" class="right save icon"><use xlink:href="#apply-icon"></use></svg>\
 '
@@ -232,11 +247,11 @@ lister.id = 'lister';
 lister.setAttribute('hidden', 'hidden')
 lister.className = 'circle-menu';
 lister.innerHTML = '\
-  <svg viewBox="0 0 48 48" class="center add icon"><use xlink:href="#add-icon"></use></svg>\
-  <svg viewBox="1 0 49 48" class="left undo icon"><use xlink:href="#undo-icon"></use></svg>\
-  <svg viewBox="1 0 49 48" class="left cancel icon"><use xlink:href="#close-icon"></use></svg>\
-  <svg viewBox="1 0 49 48" class="bottom-left redo icon"><use xlink:href="#redo-icon"></use></svg>\
-  <svg viewBox="-2 2 48 48" class="right redo icon"><use xlink:href="#redo-icon"></use></svg>\
-  <svg viewBox="-2 2 48 48" class="right save icon"><use xlink:href="#apply-icon"></use></svg>\
+  <svg viewBox="0 0 48 48" class="top add icon"><use xlink:href="#add-icon"></use></svg>\
+  <svg viewBox="0 0 48 48" class="left layout-carousel icon"><use xlink:href="#layout-carousel-icon"></use></svg>\
+  <svg viewBox="-2 -2 52 52" class="right layout-stream icon"><use xlink:href="#layout-stream-icon"></use></svg>\
+  <svg viewBox="0 0 48 48" class="bottom-left layout-thumbnails icon"><use xlink:href="#layout-thumbnails-icon"></use></svg>\
+  <svg viewBox="0 0 48 48" class="bottom-right layout-headlines icon"><use xlink:href="#layout-headlines-icon"></use></svg>\
+  <svg viewBox="-2 2 48 48" class="center split icon"><use xlink:href="#split-section-icon"></use></svg>\
 '
 document.body.appendChild(lister);

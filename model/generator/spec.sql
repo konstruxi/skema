@@ -70,10 +70,11 @@ SELECT update_resource($f${
 
 SELECT update_resource($f${
     "table_name": "comments",
+    "alias": "Comments",
     "columns": [
       {"name":"article_id","type":"integer"},
-      {"name":"title","type":"varchar(255)"},
       {"name":"content","type":"xml"},
+      {"name":"summary","type":"text"},
       {"name":"deleted_at","type":"timestamptz"}
     ]
 }$f$::jsonb);
@@ -86,6 +87,7 @@ SELECT update_resource($f${
       {"name":"summary","type":"text"},
       {"name":"content","type":"xml"},
       {"name":"articles_content","type":"xml"},
+      {"name":"photos_content","type":"xml"},
       {"name":"version","type":"integer"},
       {"name":"deleted_at","type":"timestamptz"}
     ]
@@ -139,6 +141,24 @@ SELECT update_resource($f${
 --       {"name":"deleted_at","type":"timestamptz"}
 --     ]
 -- }$f$::jsonb);
+SELECT kx_process_columns_parameters($f${
+    "table_name": "services",
+    "alias": "Personas",
+    "columns": [
+      {"name":"name","type":"varchar(255)"},
+      {"name":"version","type":"integer"},
+      {"name":"uuid","type":"uuid"},
+      {"name":"type","type":"text"},
+      {"name":"url", "type":"text"},
+      {"name":"summary","type":"text"},
+      {"name":"content","type":"xml"},
+      {"name":"inquiries_content","type":"xml"},
+      {"name":"categories_content","type":"xml"},
+      {"name":"works_content","type":"xml"},
+      {"name":"deleted_at","type":"timestamptz"}
+    ]
+}$f$::jsonb);
+
 
 
 select kx_discover();
@@ -197,22 +217,5 @@ select kx_discover();
 --     ]
 -- }$f$::jsonb);
 -- 
--- SELECT create_resource($f${
---     "table_name": "services",
---     "columns": [
---       {"name":"name","type":"varchar(255)", "validations": [
---         "required"
---       ]},
---       {"name":"version","type":"integer"},
---       {"name":"uuid","type":"uuid"},
---       {"name":"type","type":"text"},
---       {"name":"url", "type":"text"},
---       {"name":"summary","type":"text"},
---       {"name":"content","type":"xml"},
---       {"name":"categories_content","type":"xml"},
---       {"name":"things_content","type":"xml"}
---     ]
--- }$f$::jsonb);
-
 
 

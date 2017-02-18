@@ -35,6 +35,28 @@ end;
 $$ language plpgsql immutable;
 
 
+CREATE OR REPLACE FUNCTION
+kx_best_effort_uuid(input anyelement) returns uuid as $$
+begin
+  return input::uuid;
+exception 
+  when others then
+     return null;
+end;
+$$ language plpgsql immutable;
+
+
+CREATE OR REPLACE FUNCTION
+kx_best_effort_timestamptz(input anyelement) returns timestamptz as $$
+begin
+  return input::timestamptz;
+exception 
+  when others then
+     return null;
+end;
+$$ language plpgsql immutable;
+
+
 
 
 
@@ -65,7 +87,7 @@ $$ language plpgsql immutable;
 CREATE OR REPLACE FUNCTION
 kx_best_effort_xml(input anyelement) returns xml as $$
 begin
-  return xmlarticleroot(anyelement::xml);
+  return xmlarticleroot(anyelement::xml, '', '');
 exception 
   when others then
      return null;

@@ -1,21 +1,50 @@
 
-CREATE OR REPLACE FUNCTION xmlarray(input xml[])
+-- CREATE OR REPLACE FUNCTION xmlarray(input xml[])
+-- returns xml AS $BODY$
+-- BEGIN
+--   return array_to_string(input, '')::xml;
+-- END
+-- $BODY$
+-- LANGUAGE plpgsql VOLATILE;
+    
+
+-- Convert XML array into a single xml island and rebase urls 
+CREATE OR REPLACE FUNCTION xmlarray(input xml[], linkPath text default '', prefix text default '')
 returns xml AS $BODY$
 BEGIN
-  return array_to_string(input, '')::xml;
+  IF linkPath = '' and prefix = '' THEN
+    return array_to_string(input, '')::xml;
+  END IF;
+  return  regexp_replace(
+            array_to_string(input, ''),
+            '(src|href)="\.(/)?([^"]*)"',
+            '\1="' || prefix || './' || 
+              (CASE WHEN linkPath != '' THEN
+                trim(linkPath, '/') || '\2'
+              ELSE
+                ''
+              END) || '\3"',
+            'gi'
+          );
 END
 $BODY$
 LANGUAGE plpgsql VOLATILE;
     
 
 -- Convert xml content into valid xml root with article on top
-CREATE OR REPLACE FUNCTION xmlarticleroot(input xml, resource text, slug text, column_name text)
+CREATE OR REPLACE FUNCTION xmlarticleroot(input xml, resource text DEFAULT '', slug text DEFAULT '', column_name text DEFAULT '')
 returns xml AS $BODY$
 BEGIN
   return xmlelement(
     name article,
     xmlarray(Array(
-      select kx_process_section_xml(xml, row_number() OVER(), '/' || slug, column_name)
+      select kx_process_section_xml(xml, row_number() OVER(), 
+            case when resource = 'services' then
+              ''
+            else
+              slug
+            end, 
+            column_name)
       from (
         SELECT unnest(sections) as xml
         FROM xpath('//section', xmlelement(name article, 
@@ -30,13 +59,7 @@ LANGUAGE plpgsql VOLATILE;
 
 CREATE OR REPLACE FUNCTION kx_process_section_xml(input xml, index bigint, url text, column_name text)
 returns xml AS $BODY$
-declare
-  itemorder text;
 BEGIN
-  select unnest(m)
-  from regexp_matches(input::text, '<section[^>]+index="(\d+)">') m
-  LIMIT 1
-  into itemorder;
 
   return xmlelement(
     name section,
@@ -45,19 +68,20 @@ BEGIN
       -- pattern & index are editor-specific attributes
       (xpath('@pattern', input))[1]::text as pattern,
       (xpath('@index', input))[1]::text as index,
+      (xpath('@order', input))[1]::text as order,
+
       'chapters' as itemprop,
       'chapter' as itemtype,
      
-      itemorder as order, 
 
       index as itemindex
     ),
     xmlarray((
       SELECT array_agg(
         CASE WHEN tag = 'h1' and index = 1 and column_name = 'content' THEN
-          kx_replace_link_xml(xml, tag, url)
+          kx_replace_link_xml(xml, tag, '.')
         WHEN tag = 'h2' and index = 1 and column_name = 'content' THEN
-          kx_replace_link_xml(xml, tag, url)
+          kx_replace_link_xml(xml, tag, '.')
         WHEN tag = 'h1'
           or tag = 'h2'
           or tag = 'h3' -- todo clean nested elements
@@ -68,7 +92,7 @@ BEGIN
           or tag = 'picture'
           or tag = 'x-div'
           or tag = 'a' THEN
-          xml
+          kx_localize_link_xml(xml)
         END
       )
 
@@ -78,7 +102,7 @@ BEGIN
           unnest(i) as xml
         FROM xpath('/section/*', input) i
       ) q
-    ))
+    ), url)
   );
 END
 $BODY$
@@ -107,20 +131,31 @@ $BODY$
 LANGUAGE plpgsql VOLATILE;  
 
 
-CREATE OR REPLACE FUNCTION kx_prepend_permalink_url(input xml, url text)
+
+-- keep only filenames in references to attached files
+CREATE OR REPLACE FUNCTION kx_localize_link_xml(input xml)
 returns xml AS $BODY$
 BEGIN
-  return (
-    regexp_replace(
-      input::text,
-      '(<a class="permalink" href=")([^"]+)',
-      '\1/' || url || '\2'
-    )
-  )::xml
-;
+  return regexp_replace(input::text, '(href|src)="\./[^"]*?([^/"]+)"', '\1="./\2"', 'g')::xml;
 END
 $BODY$
 LANGUAGE plpgsql VOLATILE;  
+
+
+-- CREATE OR REPLACE FUNCTION kx_prepend_permalink_url(input xml, url text, prefix text DEFAULT '')
+-- returns xml AS $BODY$
+-- BEGIN
+--   return (
+--     regexp_replace(
+--       input::text,
+--       '(<a class="permalink" href=")([^"]+)',
+--       '\1/' || coalesce(prefix, '') || url || '\2'
+--     )
+--   )::xml
+-- ;
+-- END
+-- $BODY$
+-- LANGUAGE plpgsql VOLATILE;  
 
 
 -- Convert xml content into valid xml root with article on top

@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // Thanks safari
   document.body.parentNode.style.fontSize = '16.0000001px'
 
-  Builder.init();
   Manager.animate()
 
   window.addEventListener('scroll', function() {

@@ -52,13 +52,13 @@ body.portal article.content.saving {
   position: relative;
 }
 body.portal article.content {
-  transition: box-shadow 0.3s;
+  transition: box-shadow 0.3s 0.2s;
   box-shadow: 0 0 0 #ccc;
 }
 body.portal .content[contenteditable] {
   width: 100%;
   box-shadow: 0 0 100px #ccc;
-  transition: box-shadow 0.3s;
+  transition: box-shadow 0.3s 0.2s;
   z-index: 200;
 }
 body.portal .content[contenteditable].cke_focus {
@@ -83,7 +83,7 @@ body.portal .content[contenteditable] article > section *{
   display: none;
 }
 
-.list.has-editor {
+.has-editor {
   position: relative;
   z-index: 20;
 }
@@ -95,48 +95,33 @@ body.portal .content[contenteditable] article > section *{
 
 
 article section ~ .list {
+  border-top: 1px solid #ccc;
+}
+article article section ~ .list {
   border-top: 1px dashed #ccc;
+}
+article + article {
+  border-top: 1px solid #ccc;
+}
+article .list .list article + article {
+  border-top: 0;
 }
 article section ~ .content.list:not(:last-child) {
   border-bottom: 0;
 }
 
 .content.list{
-  border-bottom: 3px solid #ccc;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 0;
 }
 .content.list .list{
-  border-bottom: 1px solid #ccc;
+  padding-bottom: 3rem;
+  border-bottom: 1px dashed #ccc;
+}
+.content.list .list:last-child{
+  border-bottom: 0;
 }
 
-body.portal article[itemname="my_precious_website"] .list {
-  display: flex;
-  flex-flow: row nowrap;
-  align-content: flex-start;
-  align-items: stretch;  
-  overflow: auto;
-  justify-content: flex-start;
-  padding-left: calc((100vw - 800px) / 2 - 1rem - 2px);
-}
-
-body.portal article[itemname="my_precious_website"] .list > *{
-  flex-basis: 278px;
-  width: 278px;
-  padding: 0;
-  align-items: stretch;
-  border: none;
-}
-body.portal article[itemname="my_precious_website"] .list .foreground{
-  height: auto;
-  width: auto;
-  top: 2px;
-  bottom: 2px;
-  right: 2px;
-  left: 2px;
-}
-body.portal article[itemname="my_precious_website"] .list > article > section{
-  flex-basis: 278px;
-  width: 278px ;
-}
 
 body > svg, body > .icons {
   display: none;
@@ -147,10 +132,6 @@ article.content .list article.content  h1 {
   font-size: 1.7rem;
 }
 
-
-body.editing.undoable #saver .cancel{
-  display: none;
-}
 body:not(.undoable) #saver .undo{
   display: none;
 }
@@ -178,6 +159,7 @@ body.editing .content[contenteditable] article .toolbar{
 .list > header {
   font-size: 2rem;
   padding: 1rem 0 2rem;
+  white-space: nowrap;
 }
 
 .list > header a {
@@ -198,4 +180,145 @@ body.editing .content[contenteditable] article .toolbar{
 }
 .list {
   padding-bottom: 2rem;
+}
+
+
+
+
+
+
+.sitemap.editing > nav.resources {
+  position: absolute;
+  z-index: 350;
+  top: 0;
+  background: #fff;
+}
+
+.sitemap > nav.main ul li{
+  display: inline-block;
+  vertical-align: top;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+}
+.sitemap > nav.main li.current > a {
+  font-weight: bold;
+} 
+.sitemap > nav.main ul {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+.sitemap > nav.main ul ul{
+  display: none;
+}
+.sitemap > nav.main li:hover ul {
+  display: block;
+  position: absolute;
+  background: #fff;
+}
+
+.sitemap > nav.main ul li li{
+  display: block;
+}
+
+.sitemap > nav.main li a{
+  display: inline-block;
+  padding: 1rem;
+}
+
+.sitemap h1 {
+  white-space: nowrap;
+}
+.sitemap header.content[contenteditable]{
+  margin-top: 0rem;
+}
+.sitemap header.content[contenteditable] section{
+  margin-top: 3rem;
+}
+.sitemap header[contenteditable] section {
+  transition: box-shadow 0.3s 0.3s, background-color 0.3s;
+}
+.sitemap header:not([contenteditable]),
+.sitemap header:not([contenteditable]) section {
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  background: none;
+  display: block;
+}
+.sitemap header:not([contenteditable]) .foreground {
+  display: none;
+}
+
+.sitemap header:not([contenteditable]) .kx.toolbar {
+  display: inline-block;
+  position: relative;
+  margin: 0;
+  vertical-align: middle;
+  left: auto;
+}
+#layout-root .sitemap header:not([contenteditable]) h1 {
+  display: inline-block;
+  width: auto;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.sitemap header:not([contenteditable]) > section > :not(h1):not(.kx) {
+  display: none;
+  opacity: 0;
+}
+
+
+
+
+.sitemap nav.main > ul > li > .list {
+  display: none;
+}
+.sitemap nav.main > ul > li:hover .list {
+  display: block;
+  opacity: 1;
+  background: #fff;
+  width: 220px;
+  position: absolute;
+  z-index: 0;
+}
+
+.sitemap nav.main section {
+  margin: 0 0.5rem;
+  margin: 0;
+  text-align: left;
+
+}
+
+.sitemap nav.main section > * {
+  margin: 0;
+  padding: 0;
+}
+.sitemap nav.main section > *:not(h1):not(h2) {
+  display: none;
+}
+
+
+
+
+
+.breadcrumbs li.home {
+  display: none;
+}
+.breadcrumbs {
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5rem;
+  padding: 1rem;
+}
+.breadcrumbs li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#layout-root aside.aside {
+  display: none;
 }

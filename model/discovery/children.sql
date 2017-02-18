@@ -29,6 +29,7 @@ LEFT JOIN (
 
   WHERE position('_id' in rls.value->>'name') > 0 
     and rls.value->>'name' != 'root_id'
+    and rls.value->>'name' != 'service_id'
 
 ) s
 ON (q.table_name = s.table_name);
@@ -74,7 +75,10 @@ on ((inflection_pluralize(replace(parent.column_name, '_id', '')) = grandparent.
   AND (position('_id' in grandparent.column_name) > 0 
     AND position('_ids' in grandparent.column_name) = 0) 
   AND grandparent.column_name != 'root_id')
-  or grandparent.table_name = '');
+  or grandparent.table_name = '')
+
+WHERE parent.column_name != 'service_id'
+AND grandparent.column_name != 'service_id';
 
 
 
