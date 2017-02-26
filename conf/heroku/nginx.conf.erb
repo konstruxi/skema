@@ -93,9 +93,6 @@ http {
           break;
         }
 
-        location ~* (/?.*)/purge {
-          proxy_cache_purge  my_zone $1$is_args$args;
-        }
         location /favicon.ico {
           return 404;
         }
