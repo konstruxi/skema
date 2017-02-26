@@ -23,9 +23,9 @@ BEGIN
 
   -- Also adds ~username prefix which is a substitute for subdomain name
   SELECT (CASE WHEN relname = 'services' THEN
-      ':prefix:suffix'
+      ':prefix'
   ELSE
-      'concat_ws(''/'', nullif(trim(:prefix, ''/''), ''''), nullif(trim(:suffix, ''/''), ''''), nullif(:slug3, ''''), nullif(:slug2, ''''), root.slug) || ''/'''
+      'concat_ws(''/'', nullif(trim(:prefix, ''/''), ''''), nullif(:slug3, ''''), nullif(:slug2, ''''), root.slug) || ''/'''
   END) INTO url_prefix;
 
 

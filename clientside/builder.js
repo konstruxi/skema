@@ -1,7 +1,7 @@
 Builder = {};
 
 Builder.init = function() {
-  var sitemap = document.querySelector('nav.sitemap');
+  var sitemap = document.querySelector('.sitemap');
   if (!sitemap) return;
   var list = sitemap.getElementsByTagName('ul')[0];
 
@@ -179,10 +179,10 @@ buildNav = function() {
 
 
     var li = document.createElement('li');
-    li.className = 'save button';
+    li.className = 'link button';
     var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
     svg.setAttribute('viewBox', '0 0 48 48');
-    svg.innerHTML = '<use xlink:href="#save-icon" /></svg>';
+    svg.innerHTML = '<use xlink:href="#link-icon" /></svg>';
     var button = document.createElement('button')
     button.appendChild(svg);
 

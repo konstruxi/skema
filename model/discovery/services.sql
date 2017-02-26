@@ -37,6 +37,7 @@ CREATE materialized VIEW kx_resources_and_services AS
       compose_sql
     END as compose_sql,
     update_sql,
+    delete_sql,
     insert_sql,
     file_sql,
     columns_sql,

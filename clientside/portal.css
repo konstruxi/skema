@@ -51,18 +51,18 @@ body.portal article.content.saving {
   z-index: 50;
   position: relative;
 }
-body.portal article.content {
-  transition: box-shadow 0.3s 0.2s;
-  box-shadow: 0 0 0 #ccc;
+body.portal article.content,
+body.portal .sitemap {
+  transition: outline 0.2s;
+  outline: 0px solid transparent;
 }
-body.portal .content[contenteditable] {
+body.portal .sitemap.editing:not(.resources) {
   width: 100%;
-  box-shadow: 0 0 100px #ccc;
-  transition: box-shadow 0.3s 0.2s;
-  z-index: 200;
+  outline: 2rem solid #bfc3cf;
+  transition: outline 0.2s;
 }
-body.portal .content[contenteditable].cke_focus {
-  box-shadow: 0 0 100px #bfc3cf;
+body.portal article.content[contenteditable].cke_focus {
+  outline: 2rem solid #bfc3cf;
 }
 body.portal .content[contenteditable] article > section,
 body.portal .content[contenteditable] article > .list section{
@@ -99,9 +99,6 @@ article section ~ .list {
 }
 article article section ~ .list {
   border-top: 1px dashed #ccc;
-}
-article + article {
-  border-top: 1px solid #ccc;
 }
 article .list .list article + article {
   border-top: 0;
@@ -175,7 +172,7 @@ body.editing .content[contenteditable] article .toolbar{
   text-transform: lowercase;
 }
 
-.list .list > header + .unsaved {
+.list .list > header + .new-post {
   margin-top: 1rem;
 }
 .list {
@@ -185,13 +182,19 @@ body.editing .content[contenteditable] article .toolbar{
 
 
 
+.new-post .delete {
+  display: none;
+}
+.editing-list .delete {
+  display: none;
+}
 
-
-.sitemap.editing > nav.resources {
+.sitemap.resources.editing {
+  z-index: 20000;
   position: absolute;
-  z-index: 350;
-  top: 0;
-  background: #fff;
+}
+.sitemap.resources.editing + .sitemap {
+  padding-top: 4rem;
 }
 
 .sitemap > nav.main ul li{
@@ -237,7 +240,7 @@ body.editing .content[contenteditable] article .toolbar{
   margin-top: 3rem;
 }
 .sitemap header[contenteditable] section {
-  transition: box-shadow 0.3s 0.3s, background-color 0.3s;
+  transition: border-color 0.3s, background-color 0.3s;
 }
 .sitemap header:not([contenteditable]),
 .sitemap header:not([contenteditable]) section {
@@ -282,17 +285,23 @@ body.editing .content[contenteditable] article .toolbar{
   background: #fff;
   width: 220px;
   position: absolute;
-  z-index: 0;
+  z-index: 500;
+  padding: 0.5rem 0;
+  margin-top: -1rem;
+  box-shadow: 0 0 20px #ccc;
 }
 
 .sitemap nav.main section {
-  margin: 0 0.5rem;
-  margin: 0;
+  padding: 0.5rem 1rem;
   text-align: left;
 
 }
 
 .sitemap nav.main section > * {
+  margin: 0;
+  padding: 0;
+}
+.sitemap nav.main section > h1 > a{
   margin: 0;
   padding: 0;
 }

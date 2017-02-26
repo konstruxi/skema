@@ -452,9 +452,10 @@ ul.resources .third-level > li.add {
 } 
 ul > li.add,
 ul > li.save,
+ul > li.link,
 ul > li.edit  {
   align-self: flex-start;
-  margin-top: 1rem;
+  margin-top: 0.75rem;
   padding: 0rem 0 0.5rem 0.5rem;
 }
 

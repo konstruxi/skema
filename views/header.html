@@ -40,18 +40,18 @@
 		{{#meta:table_name:is:table_name}}class="current"{{/meta:table_name:is:table_name}}
 		{{#meta:second_resource:is:table_name}}class="current"{{/meta:second_resource:is:table_name}}
 		{{#meta:third_resource:is:table_name}}class="current"{{/meta:third_resource:is:table_name}}>
-			<a href="/{{table_name}}/" id="{{table_name}}_nav_link">{{alias}}</a>
+			<a href="/{{vars:prefix}}{{table_name}}/" id="{{table_name}}_nav_link">{{alias}}</a>
 			<ul>{{#children}}<li>
-				<a href="/{{table_name}}/">{{alias}}</a>
+				<a href="/{{vars:prefix}}{{table_name}}/">{{alias}}</a>
 				<ul>{{#children}}<li>
-					<a href="/{{table_name}}/">{{alias}}</a>
+					<a href="/{{vars:prefix}}{{table_name}}/">{{alias}}</a>
 				</li>{{/children}}</ul>
 			</li>{{/children}}</ul>
 		</li>{{/meta:map}}</ul>
 	</nav>
 	<header itemtype="service" itemname="{{meta:service:slug}}" itemid="{{meta:service:root_id}}" class="content" icon="settings-icon">
 			<section>
-				<h1><a href="~{{meta:service:slug}}">{{meta:service:name}}</a></h1>
+				<h1><a href="/{{vars:prefix}}">{{meta:service:name}}</a></h1>
 			</section>
 	</header>
 </div>

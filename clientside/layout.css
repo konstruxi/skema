@@ -5,7 +5,7 @@
   display: block !important;
 }
 .list > header {
-  width: 800px;
+  width: 832px;
   margin: 0 auto;
   text-align: center;
 }
@@ -15,9 +15,8 @@
   margin: 0 auto;
 }
 .list[layout="stream"] > * {
-  width: calc(400px - 2rem);
-  margin: 1rem;
-  margin-bottom: 1rem;
+  width: calc(400px - 1.5rem);
+  margin: 1rem auto;
     -webkit-column-break-inside: avoid; /* Chrome, Safari */
     page-break-inside: avoid;           /* Theoretically FF 20+ */
     break-inside: avoid-column;         /* IE 11 */
@@ -26,8 +25,9 @@
   width: 100%;
 }
 .list[layout="stream"] section {
-  width: calc(400px - 2rem);
+  width: calc(400px - 1.5rem);
   padding: 1rem 0;
+  margin: 0 auto;
 }
 .list[layout="stream"] section > .kx.foreground {
   top: 0;
@@ -85,8 +85,13 @@
 
 
 
+article[hidden]{
+  display: none;
+}
 
-
+article .list {
+  margin: 0 2rem;
+}
 .list[layout="headlines"] article section > *:not(h1):not(h2):not(.kx){
   display: none;
   opacity: 0;

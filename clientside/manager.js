@@ -140,6 +140,8 @@ document.addEventListener('click', function(e) {
       var save = p;
     } else if (p.classList && p.classList.contains('cancel')) {
       var cancel = p;
+    } else if (p.classList && p.classList.contains('delete')) {
+      var Delete = p;
     } else if (p.classList && p.classList.contains('undo')) {
       var undo = p;
     } else if (p.classList && p.classList.contains('redo')) {
@@ -191,6 +193,9 @@ document.addEventListener('click', function(e) {
     Service.edit(section.parentNode)
   } else if (save && clickedSaver) {
     Service.save(Service.currentElement)
+  } else if (Delete && clickedSaver) {
+    if (confirm('Are you sure to delete this ' + Service.currentElement.getAttribute('itemtype') + '?'))
+      Service.delete(Service.currentElement)
   } else if (cancel && clickedSaver) {
     Service.cancel(Service.currentElement)
   } else if (undo && clickedSaver) {
@@ -237,6 +242,7 @@ saver.innerHTML = '\
   <svg viewBox="1 0 49 48" class="bottom-right redo icon"><use xlink:href="#redo-icon"></use></svg>\
   <svg viewBox="-2 2 48 48" class="right redo icon"><use xlink:href="#redo-icon"></use></svg>\
   <svg viewBox="-2 2 48 48" class="right save icon"><use xlink:href="#apply-icon"></use></svg>\
+  <svg viewBox="1 0 49 48" class="top delete icon"><use xlink:href="#delete-icon"></use></svg>\
 '
 document.body.appendChild(saver);
 

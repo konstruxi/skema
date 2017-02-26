@@ -10,7 +10,7 @@ CREATE OR REPLACE FUNCTION columns_sql(relname text, structure jsonb, prefix boo
       ''
     END) || (value->>'name'), ', ')
     FROM jsonb_array_elements(structure)
-    WHERE value->>'type' NOT LIKE 'bytea'
+    WHERE value->>'type' NOT LIKE 'bytea%'
       AND value->>'name' NOT LIKE '%password%'
 $ff$ LANGUAGE sql VOLATILE;
 
@@ -176,5 +176,31 @@ UNION
 END;
 $BODY$
 LANGUAGE plpgsql VOLATILE;
+
+
+CREATE OR REPLACE FUNCTION delete_sql(relname text, structure jsonb)
+  RETURNS text AS
+$BODY$DECLARE
+  all_files_in_row text;
+BEGIN
+  
+  RETURN 'DELETE from ' || relname || '_current WHERE 1=1 ';
+END;
+$BODY$
+LANGUAGE plpgsql VOLATILE;
+
+
+
+CREATE OR REPLACE FUNCTION undo_sql(relname text, structure jsonb)
+  RETURNS text AS
+$BODY$DECLARE
+  all_files_in_row text;
+BEGIN
+  
+  RETURN 'DELETE from ' || relname || '_current WHERE 1=1 ';
+END;
+$BODY$
+LANGUAGE plpgsql VOLATILE;
+
 
 

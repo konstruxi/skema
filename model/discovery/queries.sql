@@ -26,6 +26,9 @@ CREATE VIEW kx_resources_and_queries AS
   END AS update_sql,
     insert_sql(table_name, kx_resources.columns)  AS insert_sql,
       file_sql(table_name, kx_resources.columns)    AS file_sql,
+   
+   delete_sql(table_name, kx_resources.columns) AS delete_sql,
+   
    columns_sql(table_name, kx_resources.columns) AS columns_sql,
  
   (table_name = 'services')                   AS initialized

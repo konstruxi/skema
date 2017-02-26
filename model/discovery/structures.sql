@@ -36,7 +36,7 @@ FROM (
     'timestamptz'
   WHEN data_type = 'timestamp' THEN 
     'timestamp'
-  WHEN udt_name = 'bytea' THEN 
+  WHEN udt_name LIKE '%bytea%' THEN 
     'bytea'
   ELSE 
     -- check if column represents binary file
@@ -55,9 +55,6 @@ FROM (
 
   END                                              as type, -- wrapping data type (e.g. array)
   character_maximum_length                         as maxlength,
-  --(CASE WHEN position('_id' in column_name) > 0 and position('root_id' in column_name) = 0 THEN
-  --   jsonb_from(replace(column_name, '_id', ''), v.value::text::int)->'jsonb_agg'
-  -- END)                                            as options,
   (column_name != 'id' and column_name != 'root_id' and 
    position('version' in column_name) = 0) or NULL as is_editable,
   (SELECT c.column_name FROM INFORMATION_SCHEMA.COLUMNS c

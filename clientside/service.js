@@ -18,9 +18,12 @@ Service = function() {
   })
 }
 Service.a = document.createElement('a');
-Service.HTMLRequest = function(url, callback, fallback, data) {
+Service.HTMLRequest = function(url, callback, fallback, data, method) {
   if (!Service.xhr) Service.xhr = new XMLHttpRequest;
-  Service.xhr.open(data != null ? 'POST' : 'GET', url);
+  //if (method && method.toLowerCase() != 'get' && method.toLowerCase() != 'post') {
+  //  url += '?method' + method;
+  //}
+  Service.xhr.open(method || (data != null ? 'POST' : 'GET'), url, true);
   Service.xhr.onreadystatechange = function(e) {
     if (Service.xhr.readyState == 4) {
       
@@ -39,7 +42,7 @@ Service.HTMLRequest = function(url, callback, fallback, data) {
       }
     }
   }
-  Service.xhr.send(data || '')
+  Service.xhr.send(data || undefined)
 }
 Service.XMLRequest = function(url, callback) {
   if (!Service.xhr) Service.xhr = new XMLHttpRequest;
@@ -80,19 +83,24 @@ Service.new = function(element, focusInitially) {
       if (first.tagName != 'HEADER' && !first.classList.contains('kx') && !(parseFloat(first.getAttribute('order') || 1) < 1))
         break;
     element.insertBefore(article, first)
-    article.classList.add('unsaved')
+    article.classList.add('new-post')
+    document.body.classList.add('new-post');
     window.snapshot.appear(article);
     Service.currentElement = article;
+    Service.hook('beforeEdit', element, doc);
     Service.createEditor(article, doc, null, function() {
       Service.hook('afterEdit', element, doc);
+    }, function() {
       if (focusInitially !== false) {
         Service.editor.focus()
-        var title = element.querySelector('h1, h2') || element.querySelector('p');
-        if (title)
-          Editor.Placeholder.focus(Service.editor, title)
+        Service.editor.once('focus', function() {
+
+          var title = element.querySelector('h1, h2') || element.querySelector('p');
+          if (title)
+            Editor.Placeholder.focus(Service.editor, title)
+        })
       }
     }, null, focusInitially);
-
     Saver.open(window, article.getElementsByTagName('section')[0]);
   }, function() {
     Service.cancel(element)
@@ -129,11 +137,14 @@ Service.edit = function(element) {
     // remove link from title, it'll be added back by back end
     var header = element.querySelector('section:first-of-type h1, section:first-of-type h2');
     if (header && header.firstElementChild && header.firstElementChild.tagName == 'A' && header.firstElementChild == header.lastElementChild) {
+      header.setAttribute('kx-link', header.firstElementChild.innerHTML)
       header.innerHTML = header.firstElementChild.innerHTML
     }
+    Service.hook('beforeEdit', element, doc);
     Service.createEditor(element, doc, true, function() {
-      Service.editor.focus()
       Service.hook('afterEdit', element, doc);
+    }, function() {
+      Service.editor.focus()
       Editor.Placeholder.focus(Service.editor, element.querySelector('h1, h2'))
     });
     Saver.open(window, element.getElementsByTagName('section')[0]);
@@ -164,14 +175,15 @@ Service.hook = function(name, element, argument) {
 Service.editList = function(element) {
   Service.currentURL = Service.getURL(element.parentNode);
   Service.currentElement = element;
+  document.body.classList.add('editing-list');
   Service.HTMLRequest(Service.currentURL + '/edit?no_js=true&rand=' + Math.random(), function(doc) {
     Editor.Content.prepare(element)
     
 
-    Service.createEditor(element, doc, false, function(editor) {
-    for (var first = element.firstElementChild; first; first = first.nextElementSibling)
-      if (first.tagName != 'HEADER' && !first.classList.contains('kx'))
-        break;
+    Service.createEditor(element, doc, false, null, function(editor) {
+      for (var first = element.firstElementChild; first; first = first.nextElementSibling)
+        if (first.tagName != 'HEADER' && !first.classList.contains('kx'))
+          break;
       Editor.Section.insertBefore(editor, first, element)
     }, false);
     Saver.open(window, element);
@@ -181,7 +193,7 @@ Service.editList = function(element) {
   })
 }
 
-Service.createEditor = function(element, doc, placeholders, callback, processInitially, focusInitially) {
+Service.createEditor = function(element, doc, placeholders, callback, onReady, processInitially, focusInitially) {
   if (Service.editor)
     Service.cancel(Service.editor.element.$);
 
@@ -216,7 +228,7 @@ Service.createEditor = function(element, doc, placeholders, callback, processIni
     }
   })
 
-  var articles = element.getElementsByTagName('article');
+  var articles = element.querySelectorAll('article');
   for (var i = 0; i < articles.length; i++) {
     Service.makeUnselectable(articles[i])
   }
@@ -228,9 +240,11 @@ Service.createEditor = function(element, doc, placeholders, callback, processIni
   Manager.editor = editor;
 
   editor.once('instanceReady', function() {
-    if (callback)
-      callback(editor)
+    if (onReady)
+      onReady(editor)
   })
+  if (callback)
+    callback(editor)
   Editor.Section(editor, null, editor.observer)
 
   return editor
@@ -238,6 +252,16 @@ Service.createEditor = function(element, doc, placeholders, callback, processIni
 
 Service.invalidate = function(element) {
 
+}
+
+Service.delete = function(element) {
+  var url = Service.currentURL;
+  Service.HTMLRequest(url, function(doc) {
+    Service.cancel(element, true)
+  }, function() {
+    Service.cancel(element)
+
+  }, null, 'DELETE');
 }
 
 Service.save = function(element) {
@@ -266,15 +290,15 @@ Service.save = function(element) {
   }
 
   Editor.Content.cleanEmpty(Service.editor, true, true)
-  var articles = element.getElementsByTagName('article');
-  for (var i = 0; i < articles.length; i++) {
+  var articles = element.querySelectorAll('article, header');
+  for (var i = 0; i < articles.length; i++)
     Service.makeSelectable(articles[i])
-  }
 
   element.classList.add('saving')
 
   document.body.classList.remove('undoable');
   document.body.classList.remove('redoable');
+  document.body.classList.remove('editing-list');
 
   var data = new FormData(Service.form);
   if (Service.form.onfakesubmit)
@@ -282,7 +306,7 @@ Service.save = function(element) {
 
 
   var url = Service.currentURL;
-  if (element.classList.contains('unsaved') || element.getAttribute('itemtype') == 'service')
+  if (element.classList.contains('new-post') || element.getAttribute('itemtype') == 'service')
     url += '/';
   setTimeout(function() {
   Service.HTMLRequest(url, function(doc) {
@@ -305,16 +329,24 @@ Service.save = function(element) {
       }
     // dont show nested lists when creating items within lists
     } else if (element.parentNode.classList.contains('list')) {
-      var lists = newArticle.querySelectorAll('.list');
-      for (var i = 0; i < lists.length; i++)
-        lists[i].parentNode.removeChild(lists[i])
+      for (var p = element.parentNode; p = p.parentNode;) {
+        if (p.nodeType == 1 && p.classList.contains('list')) {
+
+          var lists = newArticle.querySelectorAll('.list');
+          for (var i = 0; i < lists.length; i++)
+            lists[i].parentNode.removeChild(lists[i])
+
+          break;
+        }
+      }
     }
     for (var i = 0; i < newArticle.attributes.length; i++)
       element.setAttribute(newArticle.attributes[i].name, newArticle.attributes[i].value)
     snapshot.migrate(element, newArticle);
 
     Manager.processArticle(element);
-    element.classList.remove('unsaved')
+    element.classList.remove('new-post')
+    document.body.classList.remove('new-post');
 
     document.body.classList.remove('editing');
     Manager.animate()
@@ -336,7 +368,7 @@ Service.save = function(element) {
         Manager.processArticle(element);
       }    
 
-      var articles = element.getElementsByTagName('article');
+      var articles = element.querySelectorAll('article, header');
       for (var i = 0; i < articles.length; i++) {
         Service.makeUnselectable(articles[i])
       }
@@ -347,9 +379,12 @@ Service.save = function(element) {
 
 }
 
-Service.cancel = function(element) {
+Service.cancel = function(element, remove) {
   document.body.classList.remove('undoable');
   document.body.classList.remove('redoable');
+  document.body.classList.remove('editing-list');
+  document.body.classList.remove('editing');
+  document.body.classList.remove('new-post');
 
   Saver.close();
 
@@ -358,29 +393,36 @@ Service.cancel = function(element) {
 
     if (Service.editor.undoManager.snapshots.length && Service.editor.undoManager.undoable())
       Service.editor.undoManager.restoreImage(Service.editor.undoManager.snapshots[0])
-
+    
+    Editor.Content.cleanEmpty(Service.editor, true, true)
     Service.editor.fire('detachElement');
     Service.editor = null;
     element.removeAttribute('tabindex')
     element.blur()
 
-    document.body.classList.remove('editing');
     Manager.processArticle(element, true);
 
-    if (element.classList.contains('unsaved'))
+    var articles = element.querySelectorAll('article, header');
+    for (var i = 0; i < articles.length; i++)
+      Service.makeSelectable(articles[i])
+
+    if (element.classList.contains('new-post'))
       element.setAttribute('hidden', 'hidden')
-    element.classList.remove('unsaved')
-    Service.makeSelectable(element);
+    else if (remove)
+      element.parentNode.removeChild(element)
     Manager.animate()
   }
   setTimeout(function() {
+    debugger
     element.classList.remove('saving')
     for (var p = element; p; p = p.parentNode)
       if (p.classList)
         p.classList.remove('has-editor')
 
-    if (element.classList.contains('unsaved'))
+    if (element.classList.contains('new-post')) {
       element.parentNode.removeChild(element)
+      element.classList.remove('new-post')
+    }
   }, 500);
 }
 
@@ -391,8 +433,9 @@ Service.revert = function(element) {
 
 // request content from mainpage and put article titles into nav
 Service.populateNavigation = function(sitemap) {
-  Service.HTMLRequest('/', function(doc) {
+  Service.HTMLRequest(location.pathname.match(/(?:\/(?:~[^\/]+\/)?\/)?/), function(doc) {
     var links = sitemap.querySelectorAll('.sitemap > nav.main > ul > li > a');
+    debugger
     for (var i = 0; i < links.length; i++) {
       var bits = links[i].pathname.split('/');
       var resource = bits.pop();
@@ -400,21 +443,22 @@ Service.populateNavigation = function(sitemap) {
       var container = document.createElement('div');
       container.classList.add('list');
       links[i].parentNode.appendChild(container)
-      var list = document.querySelector('[itemtable="' + resource + '"]');
+      var list = doc.querySelector('[itemtable="' + resource + '"]');
       if (list) {
         links[i].parentNode.parentNode.setAttribute('open', 'open')
         for (var j = 0; j < list.children.length; j++) {
           if (list.children[j].tagName == 'ARTICLE') {
             var excerpt = list.children[j].getElementsByTagName('section')[0];
             if (excerpt) {
-              var clone = excerpt.cloneNode(true);
-              var children = clone.children;
+              var clone = excerpt.cloneNode(false);
+              var children = excerpt.children;
               for (var k = 0; k < children.length; k++)
                 if (children[k].classList 
                   && !children[k].classList.contains('kx')
                   && children[k].tagName != 'HEADER'
                   && !children[k].classList.contains('list'))
-                  container.appendChild(excerpt.cloneNode(true))
+                  clone.appendChild(children[k].cloneNode(true))
+              container.appendChild(clone)
             }
           }
         }
@@ -427,7 +471,7 @@ Service.populateNavigation = function(sitemap) {
 }
 
 Service.makeUnselectable = function(element) {
-  var elements = element.querySelectorAll('p, li, h1, h2, h3');
+  var elements = element.querySelectorAll('p, li, h1, h2, h3, header > a, header');
   for (var i = 0; i < elements.length; i++) {
     if (elements[i].firstElementChild 
     &&  elements[i].firstElementChild == elements[i].lastElementChild 
@@ -470,12 +514,16 @@ Service.hooks.cancel.service = function(element, doc) {
 }
 
 
-Service.hooks.afterEdit.service = function(element, doc) {
+Service.hooks.beforeEdit.service = function(element, doc) {
   var sitemap = doc.querySelector('form.sitemap nav');
   element.parentNode.classList.add('editing')
   if (sitemap) {
-    element.parentNode.insertBefore(sitemap, element)
-    buildNav()
+    var header = document.createElement('div');
+    header.className = 'sitemap editing resources'
+    header.appendChild(sitemap)
+    element.parentNode.parentNode.insertBefore(header, element.parentNode)
+    Builder.init()
+    Builder.open(sitemap)
   }
 }
 
