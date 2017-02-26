@@ -27,32 +27,59 @@ http {
     log_format l2met 'measure#nginx.service=$request_time request_id=$http_x_request_id';
     access_log ../logs/access.log l2met;
     error_log ../logs/error.log;
-    #gzip on;
-    #gzip_comp_level 2;
-    #gzip_min_length 512;
-    server_tokens off;
+
+
+    sendfile        on;
 
     #keepalive_timeout  0;
     keepalive_timeout  65;
     keepalive_requests 500;
-    client_max_body_size 1m;
-    client_body_buffer_size 1m;
-    client_body_in_single_buffer on;
 
-
-    #Must read the body in 5 seconds.
-    #client_body_timeout 5;
+    client_max_body_size 10m;
+    client_body_buffer_size 10m;
 
     #log_format compression '"$request" $status $bytes_sent ';
     #proxy_cache_path  /tmp/cache levels=1:2 keys_zone=my-test-cache:8m max_size=5000m inactive=300m;
 
+
+    map "$resource.$action" $sql {
+      hostnames;
+      include ./app/conventions/**/queries.conf;
+      include ./app/conventions/queries.conf;
+      default "SELECT '$resource.$action'";
+    }
+    map "$resource.$action" $variables {
+      hostnames;
+      include ./app/conventions/**/variables.conf;
+      include ./app/conventions/variables.conf;
+    }
+
+    map "$resource.$action" $query {
+      hostnames;
+      include ./app/conventions/**/params.conf;
+      include ./app/conventions/params.conf;
+    }
+    map "$filename" $auto_content_type {
+      hostnames;
+      *.gif  image/gif;
+      *.jpg  image/jpeg;
+      *.jpeg image/jpeg;
+      *.css  text/css;
+      *.png  image/png;
+      *.svg  image/svg+xml;
+    }
+    proxy_cache_path  ../temp/cache levels=1:2 keys_zone=my_zone:10m inactive=60m;
+    proxy_cache_key "$uri$is_args$args";
     server {
         listen <%= ENV["PORT"] %>;
-        server_name _;
-        include ./production/views.conf;
-        include ./app/params.conf;
-        lingering_close always;
-        lingering_timeout 30s;
+        include production/views.conf;
+        include app/server/params.conf;
+        include app/server/queries.conf;
+
+        access_log  ../logs/access.log;
+        error_log  ../logs/error.log debug;
+
+        server_name  ~^(?<subdomain>[a-z0-9-_]+)?\.?localhost$ localhost "";
 
         # Dont let nginx add heroku-specific port to redirects
         port_in_redirect off;
@@ -60,19 +87,60 @@ http {
         root ..;
         #error_log  /users/invizko/sites/data/logs/error.log debug ;
 
-        location /stylesheets {
-          try_files $uri $uri/;
+        location /tekxt/ {
+          alias ../../beauty/;
+          gzip on;
+          break;
         }
+
+        location ~* (/?.*)/purge {
+          proxy_cache_purge  my_zone $1$is_args$args;
+        }
+        location /favicon.ico {
+          return 404;
+        }
+
+
+        gzip on;
+        gzip_types    text/plain application/javascript application/x-javascript text/javascript text/xml text/css;
+        
         location / {
+          gzip on;
+          try_files $uri @frontend;
+          sendfile           on;
+          sendfile_max_chunk 1m;
+          expires max;
+          access_log off;
+          add_header Cache-Control "public";
+          mustache off;
+        }
+        location @frontend {
+          proxy_pass $scheme://127.0.0.1:$server_port/api/v1$request_uri;
+          proxy_http_version 1.1;
+          #proxy_cache my_zone;
+          proxy_pass_request_body on;
+          proxy_set_header Host $host;
+          add_header X-Proxy-Cache $upstream_cache_status;
+
+          proxy_cache_bypass $should_bypass_cache$arg_flash;
+          proxy_no_cache $should_bypass_cache;
+        }
+
+        location /api/v1 {
           autoindex on;
           postgres_output  json;
           default_type text/html;
           #eval_subrequest_in_memory off;
-          eval_buffer_size 128k; # default 4k, truncated if overflown
-          eval_escalate on; # inherit status from preflight request
+          eval_buffer_size 64k; # default 4k, truncated if overflown
+          eval_escalate on;
           mustache on;
+          location /api/v1/app {
+            include app/routes/qualified.conf;
+          }
+          include app/routes/mainpage.conf;
+          include app/routes/pretty.conf;
 
-          include ./app/routes.conf;
+          expires 1M;
+          access_log off;
         }
-    }
 }
