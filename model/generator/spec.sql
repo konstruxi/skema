@@ -141,7 +141,7 @@ SELECT update_resource($f${
 --       {"name":"deleted_at","type":"timestamptz"}
 --     ]
 -- }$f$::jsonb);
-SELECT kx_process_columns_parameters($f${
+SELECT update_resource($f${
     "table_name": "services",
     "alias": "Personas",
     "columns": [

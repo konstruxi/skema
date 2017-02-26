@@ -1,3 +1,5 @@
+echo 'CREATE EXTENSION "uuid-ossp";';
+
 cat conventions/inflections.sql \
     conventions/queries.sql \
     conventions/insertion.sql \
