@@ -32,7 +32,6 @@ body > div > *:empty {
 
 body > div > *:not(div):not(aside) {
 	padding: 1em 2em 1em 1em;
-	box-sizing: border-box;
 }
 body > div > header {
 	padding: 1em 1em 0;

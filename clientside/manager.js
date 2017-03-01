@@ -3,7 +3,7 @@ var Manager = {
 var Saver = {}
 var Lister = {}
 
-Manager.animate = function() {
+Manager.animate = function(callback) {
   if (!window.snapshot)
     window.snapshot = Editor.Snapshot.take(document.getElementById('layout-root') || document.body, new Editor.Snapshot);
   else {
@@ -13,12 +13,19 @@ Manager.animate = function() {
   }
 }
 
+
+
 Manager.open = function(editor, section, button) {
-  var indexF = editor.snapshot.elements.indexOf(section.getElementsByClassName('toolbar')[0]);
+  var anchor = section.getElementsByClassName('toolbar')[0]
+  var indexF = editor.snapshot.elements.indexOf(anchor);
   if (indexF > -1) {
     var box = editor.snapshot.dimensions[indexF]
     var offsetTop = box.top + document.body.offsetTop;
     var offsetLeft = box.left + document.body.offsetLeft;
+    for (var p = anchor; (p = p.parentNode) != document.body; ) {
+      offsetTop -= p.scrollTop
+      offsetLeft -= p.scrollLeft
+    }
   } else {
     return;
   }
@@ -62,11 +69,18 @@ Saver.close = function() {
 
 
 Saver.open = function(editor, section, button) {
-  var indexF = editor.snapshot.elements.indexOf(section.getElementsByClassName('toolbar')[0]);
+  var anchor = section.getElementsByClassName('toolbar')[0];
+  var indexF = editor.snapshot.elements.indexOf(anchor);
   if (indexF > -1) {
     var box = editor.snapshot.dimensions[indexF]
     var offsetTop = box.top// + document.body.offsetTop;
     var offsetLeft = box.left// + document.body.offsetLeft;
+    for (var p = anchor; (p = p.parentNode) != document.body; ) {
+      if (p.classList.contains('list')) {
+        offsetTop -= p.scrollTop
+        offsetLeft -= p.scrollLeft
+      }
+    }
   } else {
     return;
   }
@@ -85,10 +99,15 @@ Manager.close = function() {
 
 Manager.processArticle = function(article, force) {
   if (force) {
-    var toolbars = article.querySelectorAll('.toolbar.kx');
-    // fixme: skipping 1st toolbar
-    for (var i = 1; i < toolbars.length; i++) {
-      toolbars[i].parentNode.removeChild(toolbars[i])
+    for (var j = 0; j < article.children.length; j++) {
+      if (article.children[j].tagName == 'SECTION') {
+        var toolbars = article.children[j].querySelectorAll('.toolbar.kx');
+        // fixme: skipping 1st toolbar
+        for (var i = 0; i < toolbars.length; i++) {
+          toolbars[i].parentNode.removeChild(toolbars[i])
+        }
+      }
+
     }
   }
   var headers = article.getElementsByTagName('header');
@@ -108,9 +127,9 @@ Manager.processArticle = function(article, force) {
         if (p.classList && p.classList.contains('list'))
           depth++;
       }
-      if (depth == 2) {
+      if (depth == 2 || (element.parentNode.classList.contains('list'))) {
         return false;
-        return 'menu-icon'
+        //return 'menu-icon'
       } else {
         return article.getAttribute('icon') || 'resize-section-icon'
       }
@@ -211,6 +230,7 @@ document.addEventListener('click', function(e) {
   } else if (layout && listing) {
     listing.setAttribute('layout', layout)
     Lister.close(window, listing)
+    Layout()
     Manager.animate()
   }
 

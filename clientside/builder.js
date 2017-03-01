@@ -3,6 +3,7 @@ Builder = {};
 Builder.init = function() {
   var sitemap = document.querySelector('.sitemap');
   if (!sitemap) return;
+  /*
   var list = sitemap.getElementsByTagName('ul')[0];
 
   var button = document.createElement('li')
@@ -14,7 +15,7 @@ Builder.init = function() {
 
 
   list.insertBefore(button, list.querySelector('li.home') || list.firstChild)
-
+*/
   sitemap.addEventListener('click', function(e) {
     for (var p = e.target; p; p = p.parentNode) {
       if (p.tagName && p.classList.contains('edit')) {
@@ -43,15 +44,16 @@ Builder.init = function() {
 
 };
 
-Builder.open = function(sitemap) {
+Builder.open = function(sitemap, animate) {
   if (!Builder.built) {
     Builder.built = true;
     Builder.current = sitemap;
     buildNav(sitemap);
-    sitemap.classList.add('editing');
+  }
+  sitemap.classList.add('editing');
+  if (animate !== false)
     Manager.animate();
 
-  }
 }
 
 Builder.close = function() {

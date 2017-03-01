@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
   })
   window.addEventListener('resize', function() {
     window.snapshot.updateVisibility();
+    Manager.animate();
   })
 })
 //window.addEventListener('load', function() {

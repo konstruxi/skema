@@ -7,6 +7,10 @@ article {
   width: 100%;
 }
 
+*:not(svg) {
+  box-sizing: border-box;
+}
+
 
 nav {
   width: 100%;
@@ -28,7 +32,7 @@ body.editing .sitemap .edit {
   opacity: 0;
 }
 /*
-body.portal .content:not(.small)[contenteditable]:before {
+body.portal .content:not(.small)[contenteditable="true"]:before {
   content: '';
   position: absolute;
   top: -50px;
@@ -37,7 +41,7 @@ body.portal .content:not(.small)[contenteditable]:before {
   right: 0;
   background: 0 -1px url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAyCAYAAACd+7GKAAAA6ElEQVQYVxXGLUyEcBgH4N9MhksWi+WSwWQwGUwWi8VkMBlMBpPFYjEZTAaTwWS5Yrl0MAZDGIMBgzFwfG0wBmN8U25/95ZnDxhjO2CM7RILYg993+9jHMcDTNO0xDzPh+i67gjDMByjaZoTtG17irquz1BV1TmKorhAWZaXtCvkeX6NLMtuaLdI0/QOSZLcI47jB0RR9IgwDJ+IZwRB8EK8wvf9N3ie9w7XdT/gOM4nbNv+Ir5hWdYKpmn+QNf1NQzD2EDTNIH4haqqGhRFsSDLskv8QZKkBKIo5hAEoSI68Dw/geO47T82iZvpWRHpNAAAAABJRU5ErkJggg==);
 }
-body.portal .content:not(.small)[contenteditable]:after {
+body.portal .content:not(.small)[contenteditable="true"]:after {
   content: '';
   position: absolute;
   bottom: -49px;
@@ -52,25 +56,37 @@ body.portal article.content.saving {
   position: relative;
 }
 body.portal article.content,
+body.portal .list.content,
 body.portal .sitemap {
   transition: outline 0.2s;
   outline: 0px solid transparent;
 }
 body.portal .sitemap.editing:not(.resources) {
-  width: 100%;
+  width: calc(100% - 4rem);
   outline: 2rem solid #bfc3cf;
+  margin: 2rem;
   transition: outline 0.2s;
 }
-body.portal article.content[contenteditable].cke_focus {
+body.portal .sitemap.editing nav.main {
+  display: none;
+}
+
+
+body.portal article.content[contenteditable="true"],
+body.portal .list.content[contenteditable="true"] {
+  outline: 2rem solid #ccc;
+}
+body.portal article.content[contenteditable="true"].cke_focus,
+body.portal .list.content[contenteditable="true"].cke_focus {
   outline: 2rem solid #bfc3cf;
 }
-body.portal .content[contenteditable] article > section,
-body.portal .content[contenteditable] article > .list section{
+body.portal .content[contenteditable="true"] article > section,
+body.portal .content[contenteditable="true"] article > .list section{
   opacity: 0.3;
   pointer-events: inherit;
 }
 
-body.portal .content[contenteditable] article > section *{
+body.portal .content[contenteditable="true"] article > section *{
   text-decoration: none;
 }
 
@@ -135,19 +151,24 @@ body:not(.undoable) #saver .undo{
 body:not(.redoable) #saver .redo{
   display: none;
 }
-body.editing .toolbar {
-  position: absolute;
+body.editing #layout-root .toolbar {
   pointer-events: none;
   opacity: 0;
 }
 
-body.editing .content[contenteditable] .toolbar{
+body.editing #layout-root .content[contenteditable="true"] .toolbar{
   display: block;
   opacity: 1;
+}
+body.editing #layout-root .content[contenteditable="true"] .toolbar:not(.dragging){
   pointer-events: inherit;
 }
-body.editing .content[contenteditable] article .toolbar{
-  position: absolute;
+body.editing #layout-root .content[contenteditable="true"] article .toolbar,
+body.editing #layout-root .content[contenteditable="true"] header .toolbar{
+  pointer-events: none;
+  opacity: 0;
+}
+body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
   pointer-events: none;
   opacity: 0;
 }
@@ -180,7 +201,9 @@ body.editing .content[contenteditable] article .toolbar{
 }
 
 
-
+[contenteditable="false"] {
+  pointer-events: none;
+}
 
 .new-post .delete {
   display: none;
@@ -233,46 +256,52 @@ body.editing .content[contenteditable] article .toolbar{
 .sitemap h1 {
   white-space: nowrap;
 }
-.sitemap header.content[contenteditable]{
+.sitemap header.content[contenteditable="true"]{
   margin-top: 0rem;
 }
-.sitemap header.content[contenteditable] section{
+.sitemap header.content[contenteditable="true"] section{
   margin-top: 3rem;
 }
-.sitemap header[contenteditable] section {
+.sitemap header[contenteditable="true"] section {
   transition: border-color 0.3s, background-color 0.3s;
 }
-.sitemap header:not([contenteditable]),
-.sitemap header:not([contenteditable]) section {
+.sitemap header:not([contenteditable="true"]),
+.sitemap header:not([contenteditable="true"]) section {
   padding: 0;
   margin: 0;
   text-align: center;
   background: none;
   display: block;
 }
-.sitemap header:not([contenteditable]) .foreground {
-  display: none;
+.sitemap header:not([contenteditable="true"]) .foreground {
+  top:0;
+  bottom: 0;
+  right: 0;
+  left: 0;
 }
 
-.sitemap header:not([contenteditable]) .kx.toolbar {
+.sitemap header:not([contenteditable="true"]) .kx.toolbar {
   display: inline-block;
   position: relative;
   margin: 0;
   vertical-align: middle;
   left: auto;
 }
-#layout-root .sitemap header:not([contenteditable]) h1 {
+#layout-root .sitemap header:not([contenteditable="true"]) h1 {
   display: inline-block;
   width: auto;
   margin: 0 auto;
   text-align: left;
 }
 
-.sitemap header:not([contenteditable]) > section > :not(h1):not(.kx) {
+.sitemap header:not([contenteditable="true"]) > section > :not(h1):not(.kx) {
   display: none;
   opacity: 0;
 }
 
+.sitemap nav.main {
+  font-size: 1.2rem;
+}
 
 
 

@@ -154,7 +154,6 @@ document.addEventListener('focusin', function(e) {
     }
   }
   document.focusedElement = e.target;
-  console.error('focusin', e);
 }, true)
 document.addEventListener('focusout', function(e) {
   var focused = document.focusedElement;
@@ -172,5 +171,4 @@ document.addEventListener('focusout', function(e) {
       }
     }
   }, 20);
-  console.error('focusout', e)  
 })
