@@ -101,8 +101,7 @@ article[hidden]{
 }
 
 article .list:not([layout="carousel"]) {
-  margin: 0 2rem;
-  max-width: calc(100% - 4rem);
+  padding: 0 2rem;
 }
 article .list[layout="carousel"] {
   max-width: calc(100% - 4rem);

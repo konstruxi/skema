@@ -111,10 +111,10 @@ body.portal .content[contenteditable="true"] article > section *{
 
 
 article section ~ .list {
-  border-top: 1px solid #ccc;
+  border-top: 1px solid currentColor;
 }
 article article section ~ .list {
-  border-top: 1px dashed #ccc;
+  border-top: 1px dashed currentColor;
 }
 article .list .list article + article {
   border-top: 0;
@@ -203,6 +203,10 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
 
 [contenteditable="false"] {
   pointer-events: none;
+}
+
+.dragging [contenteditable="false"] {
+  pointer-events: inherit;
 }
 
 .new-post .delete {

@@ -309,7 +309,6 @@ Service.save = function(element) {
   var url = Service.currentURL;
   if (element.classList.contains('new-post') || element.getAttribute('itemtype') == 'service')
     url += '/';
-  setTimeout(function() {
   Service.HTMLRequest(url, function(doc) {
     Service.hook('save', element);
     element.blur()
@@ -346,7 +345,14 @@ Service.save = function(element) {
       element.setAttribute(newArticle.attributes[i].name, newArticle.attributes[i].value)
     snapshot.migrate(element, newArticle);
 
+
     Manager.processArticle(element);
+    var articles = element.querySelectorAll('article, header');
+    for (var i = 0; i < articles.length; i++) 
+      Manager.processArticle(articles[i]);
+
+
+
     element.classList.remove('new-post')
     document.body.classList.remove('new-post');
 
@@ -377,7 +383,6 @@ Service.save = function(element) {
       Editor.Section(Service.editor, null, Service.editor.observer)
 //    }
   }, data)
-  }, 10)
 
 }
 
@@ -422,8 +427,9 @@ Service.cancel = function(element, remove) {
 
 
     var articles = element.querySelectorAll('article, header');
-    for (var i = 0; i < articles.length; i++)
+    for (var i = 0; i < articles.length; i++) {
       Service.makeSelectable(articles[i])
+    }
 
     if (remove)
       element.setAttribute('hidden', 'hidden')

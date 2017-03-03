@@ -4,14 +4,17 @@ var Saver = {}
 var Lister = {}
 
 Manager.animate = function(callback) {
-  if (!window.snapshot)
+  if (!window.snapshot) {
     window.snapshot = Editor.Snapshot.take(document.getElementById('layout-root') || document.body, new Editor.Snapshot);
-  else {
+  } else {
     window.snapshot = window.snapshot.animate();
     if (Manager.editor)
       Manager.editor.snapshot = window.snapshot;
   }
 }
+
+Manager.stylesheet = document.createElement('style');
+document.body.appendChild(Manager.stylesheet)
 
 
 
@@ -130,8 +133,14 @@ Manager.processArticle = function(article, force) {
       if (depth == 2 || (element.parentNode.classList.contains('list'))) {
         return false;
         //return 'menu-icon'
+      } else if (article.tagName == 'HEADER') {
+        if (article.getAttribute('itemname') == 'origin') {
+          return 'fork-icon'
+        } else {
+          return 'settings-icon'
+        }
       } else {
-        return article.getAttribute('icon') || 'resize-section-icon'
+        return 'resize-section-icon'
       }
     })
   }
@@ -141,6 +150,9 @@ var articles = document.querySelectorAll('article[itemtype], header[itemtype]');
 for (var i = 0; i < articles.length; i++) {
   Manager.processArticle(articles[i])
 }
+
+Editor.Style.recompute(document.body)
+
 document.addEventListener('click', function(e) {
   if (window.currentManager) {
     var section = window.currentManager;
@@ -203,9 +215,16 @@ document.addEventListener('click', function(e) {
     window.currentLister = header.parentNode;
     Lister.open(window, header.parentNode);
   } else if (toolbar && section) {
-    if (manager.getAttribute('hidden')) {
-      window.currentManager = section;
-      Manager.open(window, section);
+
+
+    var use = toolbar.querySelector('use');
+    if (use && use.getAttribute('href').indexOf('fork') > -1) {
+      Service.edit(section.parentNode)
+    } else {
+      if (manager.getAttribute('hidden')) {
+        window.currentManager = section;
+        Manager.open(window, section);
+      }
     }
     e.preventDefault()
   } else if (edit && clickedManager) {

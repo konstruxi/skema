@@ -70,6 +70,10 @@ BEGIN
       (xpath('@index', input))[1]::text as index,
       (xpath('@order', input))[1]::text as order,
 
+      -- specific styles chosen
+      (xpath('@palette', input))[1]::text as palette,
+      (xpath('@schema', input))[1]::text as schema,
+
       'chapters' as itemprop,
       'chapter' as itemtype,
      
