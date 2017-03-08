@@ -101,48 +101,63 @@ Manager.close = function() {
 }
 
 Manager.processArticle = function(article, force) {
+  var oldToolbars = [];
+  var newToolbars = [];
   if (force) {
     for (var j = 0; j < article.children.length; j++) {
       if (article.children[j].tagName == 'SECTION') {
         var toolbars = article.children[j].querySelectorAll('.toolbar.kx');
-        // fixme: skipping 1st toolbar
-        for (var i = 0; i < toolbars.length; i++) {
-          toolbars[i].parentNode.removeChild(toolbars[i])
-        }
+        for (var i = 0; i < toolbars.length; i++)
+          oldToolbars.push(toolbars[i]);
       }
 
     }
   }
   var headers = article.getElementsByTagName('header');
   for (var i = 0; i < headers.length; i++) {
-    var toolbar = headers[i].querySelector('.kx.toolbar');
-    if (!toolbar) {
+    newToolbars.push(
       Editor.Chrome.Toolbar(null, headers[i], function(element) {
-        return 'menu-icon'
-      });
-    }
+        if (headers[i].parentNode.getElementsByTagName('section')[0]) {
+          headers[i].parentNode.classList.remove('empty')
+          return 'menu-icon'
+        } else {
+          headers[i].parentNode.classList.add('empty')
+          return 'add-icon'
+        }
+      })
+    )
   }
   var section = article.getElementsByTagName('section')[0];
-  if (section && !section.querySelector('.toolbar.kx')) {
-    Editor.Chrome.Toolbar(null, section, function(element) {
-      var depth = 0;
-      for (var p = element; p = p.parentNode;) {
-        if (p.classList && p.classList.contains('list'))
-          depth++;
-      }
-      if (depth == 2 || (element.parentNode.classList.contains('list'))) {
-        return false;
-        //return 'menu-icon'
-      } else if (article.tagName == 'HEADER') {
-        if (article.getAttribute('itemname') == 'origin') {
-          return 'fork-icon'
-        } else {
-          return 'settings-icon'
+  if (section) {
+    newToolbars.push(
+      Editor.Chrome.Toolbar(null, section, function(element) {
+        var depth = 0;
+        for (var p = element; p = p.parentNode;) {
+          if (p.classList && p.classList.contains('list'))
+            depth++;
         }
-      } else {
-        return 'resize-section-icon'
-      }
-    })
+        if (depth == 2 || (element.parentNode.classList.contains('list'))) {
+          return false;
+          //return 'menu-icon'
+        } else if (article.tagName == 'HEADER') {
+          if (article.getAttribute('itemname') == 'origin') {
+            return 'fork-icon'
+          } else {
+            return 'settings-icon'
+          }
+        } else if (element.classList.contains('starred')) {
+          return 'star-icon'
+        } else {
+          return 'edit-icon'
+        }
+      })
+    )
+  }
+
+  for (var i = 0; i < oldToolbars.length; i++) {
+    if (oldToolbars[i].parentNode && newToolbars.indexOf(oldToolbars[i]) == -1) {
+      oldToolbars[i].parentNode.removeChild(oldToolbars[i])
+    }
   }
 }
 
@@ -152,7 +167,9 @@ for (var i = 0; i < articles.length; i++) {
 }
 
 Editor.Style.recompute(document.body)
-
+setTimeout(function() {
+  document.body.classList.add('ready')
+}, 50)
 document.addEventListener('click', function(e) {
   if (window.currentManager) {
     var section = window.currentManager;
@@ -169,6 +186,8 @@ document.addEventListener('click', function(e) {
       var edit = p;
     } else if (p.classList && p.classList.contains('save')) {
       var save = p;
+    } else if (p.classList && p.classList.contains('menu')) {
+      var menu = p;
     } else if (p.classList && p.classList.contains('cancel')) {
       var cancel = p;
     } else if (p.classList && p.classList.contains('delete')) {
@@ -212,14 +231,22 @@ document.addEventListener('click', function(e) {
     }
   }
   if (toolbar && header && list) {
-    window.currentLister = header.parentNode;
-    Lister.open(window, header.parentNode);
+    if (toolbar && (toolbar.querySelector('use').getAttribute('href').indexOf('add-icon') > -1)) {
+      Service.new(header.parentNode)
+    } else {
+      window.currentLister = header.parentNode;
+      Lister.open(window, header.parentNode);
+    }
   } else if (toolbar && section) {
-
-
     var use = toolbar.querySelector('use');
-    if (use && use.getAttribute('href').indexOf('fork') > -1) {
+
+    debugger
+    if (use && (use.getAttribute('href').indexOf('fork') > -1 || 
+                use.getAttribute('href').indexOf('edit') > -1 || 
+                use.getAttribute('href').indexOf('star') > -1) || 
+                use.getAttribute('href').indexOf('settings') > -1) {
       Service.edit(section.parentNode)
+
     } else {
       if (manager.getAttribute('hidden')) {
         window.currentManager = section;
@@ -261,8 +288,8 @@ manager.setAttribute('hidden', 'hidden')
 manager.className = 'circle-menu';
 manager.innerHTML = '\
   <svg viewBox="0 0 48 48" class="top edit handler icon"><use xlink:href="#edit-icon"></use></svg>\
-  <svg viewBox="-2 0 48 48" class="center unstar icon"><use xlink:href="#unstar-icon"></use></svg>\
-  <svg viewBox="-2 0 48 48" class="center star icon"><use xlink:href="#star-icon"></use></svg>\
+  <svg viewBox="0 0 48 48" class="center unstar icon"><use xlink:href="#unstar-icon"></use></svg>\
+  <svg viewBox="0 0 48 48" class="center star icon"><use xlink:href="#star-icon"></use></svg>\
   <svg viewBox="-1 0 50 50" class="left pick palette icon"><use xlink:href="#palette-icon"></use></svg>\
   <svg viewBox="-1 0 50 50" class="right pick settings icon"><use xlink:href="#settings-icon"></use></svg>\
   <svg viewBox="-2 2 48 48" class="bottom-left shrink zoomer icon"><use xlink:href="#zoom-out-icon"></use></svg>\

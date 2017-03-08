@@ -162,7 +162,7 @@ details.open.current {
 }
 
 
-
+/*
 .resources details > summary.has-focus,
 .resources details.focus > summary {
   background-color: #668cec !important;
@@ -181,7 +181,7 @@ details.open.current {
 .resources details > input.deletion:checked + summary {
   background-color: #ec666f !important;
   outline-color: #ec666f;
-}
+}*/
 .resources details:not(.open) > input.deletion:checked + summary {
   padding-right: 2.5rem;
 }
@@ -240,7 +240,10 @@ ul.resources li .add.button {
   width: auto;
 }
 svg {
-  fill: #666;
+  fill: currentColor;
+}
+button {
+  color: inherit;
 }
 .resources details > .contents > .button ~ .attributes {
   padding-right: 3rem;
@@ -318,6 +321,7 @@ form.sitemap {
 }
 
 
+
 nav details.open {
   width: 17rem;
 }
@@ -341,7 +345,7 @@ nav details.open details.open details.open{
 
 .sitemap.editing nav summary a,
 .sitemap.editing nav summary {
-  color: #454545;
+  /*color: #454545*/;
   text-decoration: none;
 }
 

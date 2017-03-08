@@ -19,10 +19,11 @@ Service = function() {
 }
 Service.a = document.createElement('a');
 Service.HTMLRequest = function(url, callback, fallback, data, method) {
-  if (!Service.xhr) Service.xhr = new XMLHttpRequest;
+  /*if (!Service.xhr) */Service.xhr = new XMLHttpRequest;
   //if (method && method.toLowerCase() != 'get' && method.toLowerCase() != 'post') {
   //  url += '?method' + method;
   //}
+  setTimeout(function() {
   Service.xhr.open(method || (data != null ? 'POST' : 'GET'), url, true);
   Service.xhr.onreadystatechange = function(e) {
     if (Service.xhr.readyState == 4) {
@@ -43,6 +44,8 @@ Service.HTMLRequest = function(url, callback, fallback, data, method) {
     }
   }
   Service.xhr.send(data || undefined)
+
+  }, 300)
 }
 Service.XMLRequest = function(url, callback) {
   if (!Service.xhr) Service.xhr = new XMLHttpRequest;
@@ -75,6 +78,7 @@ Service.IframeRequest = function(url, callback) {
 
 Service.new = function(element, focusInitially) {
   Service.currentURL = Service.getURL(element);
+  element.classList.add('loading');
   Service.HTMLRequest(Service.currentURL + '/new', function(doc) {
     Service.form = doc.querySelector('#layout-root > form:not(.sitemap)');
     var article = Service.form.querySelector('article')
@@ -82,7 +86,9 @@ Service.new = function(element, focusInitially) {
     for (var first = element.firstElementChild; first; first = first.nextElementSibling)
       if (first.tagName != 'HEADER' && !first.classList.contains('kx') && !(parseFloat(first.getAttribute('order') || 1) < 1))
         break;
+    article.classList.add('new')
     element.insertBefore(article, first)
+    element.classList.remove('empty');
     article.classList.add('new-post')
     document.body.classList.add('new-post');
     window.snapshot.appear(article);
@@ -91,6 +97,7 @@ Service.new = function(element, focusInitially) {
     Service.createEditor(article, doc, null, function() {
       Service.hook('afterEdit', element, doc);
     }, function() {
+      element.classList.remove('loading');
       if (focusInitially !== false) {
         Service.editor.once('focus', function() {
 
@@ -101,6 +108,7 @@ Service.new = function(element, focusInitially) {
         Service.editor.focus()
       }
     }, null, focusInitially);
+    //Editor.Style.recompute(document.body)
     Saver.open(window, article.getElementsByTagName('section')[0]);
   }, function() {
     Service.cancel(element)
@@ -132,22 +140,36 @@ Service.getURL = function(element) {
 Service.edit = function(element) {
   Service.currentURL = Service.getURL(element);
   Service.currentElement = element;
-  Service.HTMLRequest(Service.currentURL + '/edit?no_js=true&rand=' + Math.random(), function(doc) {
-    Editor.Content.prepare(element)
-    // remove link from title, it'll be added back by back end
+
+  Editor.Content.prepare(element)
+  element.classList.add('loading')
+
+  // remove link from title, it'll be added back by back end
+  
+
+  Service.createEditor(element, null, true, function() {
     var header = element.querySelector('section:first-of-type h1, section:first-of-type h2');
     if (header && header.firstElementChild && header.firstElementChild.tagName == 'A' && header.firstElementChild == header.lastElementChild) {
       Service.editorTitleContent = header.innerHTML
       header.innerHTML = header.firstElementChild.innerHTML
     }
+
+    if (Service.doc)
+      Service.setEditorDocument(Service.editor, Service.doc);
+    Service.hook('afterEdit', element);
+  }, function() {
+    Service.editor.focus()
+    Editor.Placeholder.focus(Service.editor, element.querySelector('h1, h2'))
+  }, false);
+
+  Service.HTMLRequest(Service.currentURL + '/edit?no_js=true&rand=' + Math.random(), function(doc) {
+    
     Service.hook('beforeEdit', element, doc);
-    Service.createEditor(element, doc, true, function() {
-      Service.hook('afterEdit', element, doc);
-    }, function() {
-      Service.editor.focus()
-      Editor.Placeholder.focus(Service.editor, element.querySelector('h1, h2'))
-    });
-    Saver.open(window, element.getElementsByTagName('section')[0]);
+    Service.doc = doc;
+    if (Service.editor)
+      Service.setEditorDocument(Service.editor, doc);
+
+    //Editor.Style.recompute(document.body)
   }, function() {
     Service.cancel(element)
   })
@@ -177,21 +199,35 @@ Service.editList = function(element) {
   Service.currentURL = Service.getURL(element.parentNode);
   Service.currentElement = element;
   document.body.classList.add('editing-list');
-  Service.HTMLRequest(Service.currentURL + '/edit?no_js=true&rand=' + Math.random(), function(doc) {
-    Editor.Content.prepare(element)
+  Editor.Content.prepare(element)
 
-    Service.editorContent = element.innerHTML;
-    Service.createEditor(element, doc, false, null, function(editor) {
-      for (var first = element.firstElementChild; first; first = first.nextElementSibling)
-        if (first.tagName != 'HEADER' && !first.classList.contains('kx'))
-          break;
-      Editor.Section.insertBefore(editor, first, element)
-    }, false);
+  Service.editorContent = element.innerHTML;
+  Service.createEditor(element, null, false, null, function(editor) {
+    for (var first = element.firstElementChild; first; first = first.nextElementSibling)
+      if (first.tagName != 'HEADER' && !first.classList.contains('kx'))
+        break;
+    Editor.Section.insertBefore(editor, first, element)
+    element.classList.remove('empty')
+  }, false);
+  
+  Service.HTMLRequest(Service.currentURL + '/edit?no_js=true&rand=' + Math.random(), function(doc) {
+    Service.setEditorDocument(Service.editor, doc, false)
     Saver.open(window, element);
+    //Editor.Style.recompute(document.body)
 
   }, function() {
     Service.cancel(element)
   })
+}
+
+Service.setEditorDocument = function(editor, doc, placeholders) {
+
+  Service.form = doc.querySelector('#layout-root > form');
+  editor.options.form = Service.form;
+  editor.options.placeholders = placeholders;
+  editor.element.$.classList.remove('loading')
+  Editor.Section(editor, null, editor.observer)
+  Saver.open(window, editor.element.$.getElementsByTagName('section')[0]);
 }
 
 Service.createEditor = function(element, doc, placeholders, callback, onReady, processInitially, focusInitially) {
@@ -199,10 +235,13 @@ Service.createEditor = function(element, doc, placeholders, callback, onReady, p
     Service.cancel(Service.editor.element.$);
 
   element.setAttribute('contenteditable', 'true')
-
-  Service.form = doc.querySelector('#layout-root > form');
+  formatting.style.top = formatting.style.left = '';
+  formatting.setAttribute('hidden', 'hidden')
 
   if (!Service.editor) {
+    if (doc)
+      Service.form = doc.querySelector('#layout-root > form');
+
     var editor = Service.editor = new Editor(element, {
       form: Service.form,
       snapshot: window.snapshot,
@@ -300,6 +339,7 @@ Service.save = function(element) {
   document.body.classList.remove('undoable');
   document.body.classList.remove('redoable');
   document.body.classList.remove('editing-list');
+  Service.doc = null;
 
   var data = new FormData(Service.form);
   if (Service.form.onfakesubmit)
@@ -358,6 +398,7 @@ Service.save = function(element) {
 
     document.body.classList.remove('editing');
     Manager.animate()
+    Editor.Style.recompute(document.body)
 
     setTimeout(function() {
       element.classList.remove('saving')
@@ -381,6 +422,7 @@ Service.save = function(element) {
         Service.makeUnselectable(articles[i])
       }
       Editor.Section(Service.editor, null, Service.editor.observer)
+      Editor.Style.recompute(document.body)
 //    }
   }, data)
 
@@ -393,6 +435,7 @@ Service.cancel = function(element, remove) {
   document.body.classList.remove('editing');
   document.body.classList.remove('new-post');
 
+  Service.doc = null;
   Saver.close();
 
   if (element.classList.contains('new-post'))
@@ -433,6 +476,14 @@ Service.cancel = function(element, remove) {
 
     if (remove)
       element.setAttribute('hidden', 'hidden')
+
+    var parent = element.parentNode;
+
+    if (parent.classList.contains('list') && parent.getElementsByTagName('section').length == element.getElementsByTagName('section').length)
+      parent.classList.add('empty')
+    else if (element.classList.contains('list') && !element.getElementsByTagName('section').length)
+      element.classList.add('empty')
+
     Manager.animate()
   }
   setTimeout(function() {
@@ -444,6 +495,8 @@ Service.cancel = function(element, remove) {
     if (remove) {
       element.parentNode.removeChild(element)
       element.classList.remove('new-post')
+
+      Editor.Style.recompute(document.body)
     }
   }, 500);
 }
@@ -471,7 +524,8 @@ Service.populateNavigation = function(sitemap) {
           if (list.children[j].tagName == 'ARTICLE') {
             var excerpt = list.children[j].getElementsByTagName('section')[0];
             if (excerpt) {
-              var clone = excerpt.cloneNode(false);
+              var clone = document.createElement('div');
+              clone.classList.add('section');
               var children = excerpt.children;
               for (var k = 0; k < children.length; k++)
                 if (children[k].classList 
@@ -484,7 +538,6 @@ Service.populateNavigation = function(sitemap) {
           }
         }
       }
-      console.log(links[i], resource)
     }
     Manager.animate()
 
