@@ -45,7 +45,7 @@ Service.HTMLRequest = function(url, callback, fallback, data, method) {
   }
   Service.xhr.send(data || undefined)
 
-  }, 300)
+  }, String(location.domain).indexOf('localhost') > -1 ? 300 : 0)
 }
 Service.XMLRequest = function(url, callback) {
   if (!Service.xhr) Service.xhr = new XMLHttpRequest;
