@@ -108,6 +108,9 @@ article[hidden]{
 article .list:not([layout="carousel"]):not([layout="stream"]) {
   padding: 0 2rem 1rem;
 }
+#layout-root .content .list > header > .toolbar svg:not(:hover) {
+  background-color: transparent;
+}
 article .list[layout="carousel"] {
   max-width: calc(100% - 4rem);
 }

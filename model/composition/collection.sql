@@ -19,9 +19,7 @@ BEGIN
   -- Process relative links in nested XML documents and rebase them on top of parent document
   -- Each document/static file should have a single canonical URL within sitemap
   -- But there's a way to reach document through subdomain and main domain:
-  -- `username.kx.com/slug/file.jpg` is equal `to kx.con/~username/slug/file.jpg`
-
-  -- Also adds ~username prefix which is a substitute for subdomain name
+  -- `username.kx.com/slug/file.jpg` is equal `to kx.com/~username/slug/file.jpg`
   SELECT (CASE WHEN relname = 'services' THEN
       ':prefix'
   ELSE

@@ -45,7 +45,7 @@ Service.HTMLRequest = function(url, callback, fallback, data, method) {
   }
   Service.xhr.send(data || undefined)
 
-  }, String(location.domain).indexOf('localhost') > -1 ? 300 : 0)
+  }, String(location.host).indexOf('localhost') > -1 ? 300 : 0)
 }
 Service.XMLRequest = function(url, callback) {
   if (!Service.xhr) Service.xhr = new XMLHttpRequest;
@@ -429,23 +429,25 @@ Service.save = function(element) {
 }
 
 Service.cancel = function(element, remove) {
-  document.body.classList.remove('undoable');
-  document.body.classList.remove('redoable');
-  document.body.classList.remove('editing-list');
-  document.body.classList.remove('editing');
-  document.body.classList.remove('new-post');
-
-  Service.doc = null;
   Saver.close();
 
   if (element.classList.contains('new-post'))
     remove = true;
-
-  Service.hook('cancel', element);
   if (Service.editor) {
     var el = Service.editor.element.$;
     if (Service.editor.undoManager.undoable() && !confirm('Are you sure to discard changes in this ' + (element.getAttribute('itemtype') || 'list') + '?'))
       return false;
+
+    Service.hook('cancel', element);
+    Service.doc = null;
+
+    document.body.classList.remove('undoable');
+    document.body.classList.remove('redoable');
+    document.body.classList.remove('editing-list');
+    document.body.classList.remove('editing');
+    document.body.classList.remove('new-post');
+
+
     if (Service.editorContent && Service.editor.undoManager.undoable()) {
       Service.editor.element.$.innerHTML = Service.editorContent;
     } else if (Service.editor.undoManager.snapshots.length && Service.editor.undoManager.undoable()) {

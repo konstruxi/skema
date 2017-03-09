@@ -125,18 +125,6 @@ body.portal .content[contenteditable="true"] article > section *{
 }
 
 
-.content.list{
-  border-top-width: 2px;
-  border-top-style: solid;
-  padding-bottom: 0;
-}
-
-.content.list .list{
-  border-top-width: 0px;
-  padding-bottom: 3rem;
-}
-
-
 body > svg, body > .icons {
   display: none;
 }
@@ -177,7 +165,7 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
 
 .list > header {
   font-size: 2rem;
-  padding: 1rem 0 2rem;
+  padding: 1rem 0 1rem;
   white-space: nowrap;
 }
 

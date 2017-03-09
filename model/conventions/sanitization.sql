@@ -17,7 +17,7 @@ BEGIN
   END IF;
   return  regexp_replace(
             array_to_string(input, ''),
-            '(src|href)="\.(/)?([^"]*)"',
+            '(src|href)="\.(/)?([^"/]*)"',
             '\1="' || prefix || './' || 
               (CASE WHEN linkPath != '' THEN
                 trim(linkPath, '/') || '\2'
