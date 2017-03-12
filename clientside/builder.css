@@ -119,15 +119,15 @@
 details {
   align-self: stretch;
 }
-/*details[open], */
+/*details[open], 
 details.open {
   outline: 1px solid #ddd;
   outline-offset: -1px;
-}
-/*details[open].current, */
+}*/
+/*details[open].current, 
 details.open.current {
-  outline: 1px solid #999;
-}
+  outline: 1px solid currentColor;
+}*/
 /*.second-level > li > details[open],*/
 .second-level > li > details.open {
   margin-right: -2.5rem;
@@ -262,7 +262,7 @@ button {
 
 .attributes dd {
   float: right;
-  color: #666;
+  /*color: #666;*/
 }
 
 /*ul.resources > li details[open],*/
@@ -348,9 +348,12 @@ nav details.open details.open details.open{
   /*color: #454545*/;
   text-decoration: none;
 }
+.sitemap.editing nav details details summary {
+  font-variant: small-caps;
 
+}
 nav dt select {
-  color: #999;
+  color: inherit;
   line-height: inherit;
   appearance: none;
   -webkit-appearance: none;
@@ -359,7 +362,7 @@ nav dt select {
   background: transparent;
 }
 nav dd select {
-  color: #999;
+  color: inherit;
   font-size: 0.8em;
   line-height: inherit;
   appearance: none;

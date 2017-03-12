@@ -274,7 +274,10 @@ document.addEventListener('click', function(e) {
     Service.editList(listing)
     Lister.close(window, listing);
   } else if (layout && listing) {
-    listing.setAttribute('layout', layout)
+    if (layout == 'thumbnails')
+      listing.removeAttribute('layout')
+    else
+      listing.setAttribute('layout', layout)
     Lister.close(window, listing)
     Layout()
     Manager.animate()

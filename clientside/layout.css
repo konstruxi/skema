@@ -16,19 +16,18 @@
 
 .list[layout="stream"] > header {
   column-span: all;
-  margin: 0 auto 1rem;
+  margin: 0 auto -1rem;
 }
 .list[layout="stream"] > * {
   width: 432px;
-  margin: 0 0;
+  margin: 2rem 0 2rem;
   background-clip: content-box;
-    -webkit-column-break-inside: avoid; /* Chrome, Safari */
-    page-break-inside: avoid;           /* Theoretically FF 20+ */
-    break-inside: avoid-column;         /* IE 11 */
+  -webkit-column-break-inside: avoid; /* Chrome, Safari */
+  page-break-inside: avoid;           /* Theoretically FF 20+ */
+  break-inside: avoid-column;         /* IE 11 */
 }
-.list[layout="stream"] > article {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+.list[layout="stream"] > article > section:first-of-type > .toolbar {
+  top: 0;
 }
 .list[layout="stream"] section > *:not(.kx):not(picture) {
   width: 100%;
@@ -105,7 +104,7 @@ article[hidden]{
   display: none;
 }
 
-article .list:not([layout="carousel"]):not([layout="stream"]) {
+article .list:not([layout]) {
   padding: 0 2rem 1rem;
 }
 #layout-root .content .list > header > .toolbar svg:not(:hover) {

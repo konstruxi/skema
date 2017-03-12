@@ -200,6 +200,7 @@ Service.editList = function(element) {
   Service.currentElement = element;
   document.body.classList.add('editing-list');
   Editor.Content.prepare(element)
+  element.classList.add('loading');
 
   Service.editorContent = element.innerHTML;
   Service.createEditor(element, null, false, null, function(editor) {
@@ -216,6 +217,7 @@ Service.editList = function(element) {
     //Editor.Style.recompute(document.body)
 
   }, function() {
+    element.classList.remove('loading');
     Service.cancel(element)
   })
 }
@@ -603,6 +605,7 @@ Service.hooks.cancel.service = function(element, doc) {
   var sitemap = document.querySelector('.sitemap.editing');
   if (sitemap)
     sitemap.classList.remove('editing')
+  Builder.built = null
 }
 Service.hooks.save.service = function(element, doc) {
   var sitemap = document.querySelector('.sitemap.editing.resources');
@@ -612,6 +615,7 @@ Service.hooks.save.service = function(element, doc) {
   var sitemap = document.querySelector('.sitemap.editing');
   if (sitemap)
     sitemap.classList.remove('editing')
+  Builder.built = null
 }
 
 

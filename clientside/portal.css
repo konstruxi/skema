@@ -33,34 +33,16 @@ body.editing .sitemap .edit {
 }
 
 
-.loading > section:first-of-type > .toolbar svg,
-.loading > header > .toolbar svg {
+article.loading > section:first-of-type > .toolbar svg,
+header.loading > section:first-of-type > .toolbar svg,
+.list.loading > header > .toolbar svg {
   animation: spinner .6s linear infinite;
 
 }
 @keyframes spinner {
   to {transform: rotate(360deg);}
 }
-/*
-body.portal .content:not(.small)[contenteditable="true"]:before {
-  content: '';
-  position: absolute;
-  top: -50px;
-  bottom: 100%;
-  left: 0;
-  right: 0;
-  background: 0 -1px url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAyCAYAAACd+7GKAAAA6ElEQVQYVxXGLUyEcBgH4N9MhksWi+WSwWQwGUwWi8VkMBlMBpPFYjEZTAaTwWS5Yrl0MAZDGIMBgzFwfG0wBmN8U25/95ZnDxhjO2CM7RILYg993+9jHMcDTNO0xDzPh+i67gjDMByjaZoTtG17irquz1BV1TmKorhAWZaXtCvkeX6NLMtuaLdI0/QOSZLcI47jB0RR9IgwDJ+IZwRB8EK8wvf9N3ie9w7XdT/gOM4nbNv+Ir5hWdYKpmn+QNf1NQzD2EDTNIH4haqqGhRFsSDLskv8QZKkBKIo5hAEoSI68Dw/geO47T82iZvpWRHpNAAAAABJRU5ErkJggg==);
-}
-body.portal .content:not(.small)[contenteditable="true"]:after {
-  content: '';
-  position: absolute;
-  bottom: -49px;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: 0 1px url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAyCAYAAACd+7GKAAAA6ElEQVQYVxXGLUyEABgG4HczmAyXLKYLlwyXDJcMJsulC5cuXDKYDCbLJYPJYDKYDJeuXDLIYAxkDAYyGAwYP2MwxmD8jBHccF959oBhmD+wLDuA47gGPM+XRAZBEGKIouhBkiSb+IUsyyoURfmBqqo88Q1N076g6/oRhmEciD1M0/yEZVkfsG37HY7jvBGvcF33BZ7nPcP3/R2CIHhCGIaPiKLoAXEc3yNN0zskSbKlbZBl2Rp5nq9QFMUSZVne0m5QVdU1mqZZoK7rK3RdN0fbtpcYhmFGTNH3/QXGcTwnJsQZcUqc/ANB7pv7ohEVCgAAAABJRU5ErkJggg==);
 
-}*/
 body.portal article.content.saving {
   z-index: 50;
   position: relative;
@@ -91,9 +73,9 @@ body.portal article.content[contenteditable="true"].cke_focus,
 body.portal .list.content[contenteditable="true"].cke_focus {
   outline: 1rem solid rgba(100,100,100,0.2);
 }
-body.portal .content[contenteditable="true"] article > section,
-body.portal .content[contenteditable="true"] article > .list section,
-body.portal .content[contenteditable="true"] > .list section{
+body.portal .content[contenteditable="true"]:not(.loading) article > section,
+body.portal .content[contenteditable="true"]:not(.loading) article > .list section,
+body.portal .content[contenteditable="true"]:not(.loading) > .list section{
   opacity: 0.3;
   pointer-events: inherit;
 }
@@ -165,13 +147,17 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
 
 .list > header {
   font-size: 2rem;
-  padding: 1rem 0 1rem;
+  padding: 1rem 0 2rem;
   white-space: nowrap;
 }
 
 .list > header a {
   text-decoration: none;
   color: #999;
+}
+
+.list > header a:hover {
+  text-decoration: underline;
 }
 
 
@@ -219,7 +205,12 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
 .content .list.empty ~ .list.empty{
   margin-top: 0;
 }
-section.new, article.new {
+
+/*avoid color animation when inserting new stuff*/
+#layout-root section.new, 
+#layout-root article.new,
+#layout-root section.new > .foreground, 
+#layout-root article.new > section > .foreground {
   transition: none;
   -webkit-transition: none;
 }
