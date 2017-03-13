@@ -247,12 +247,12 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
 .sitemap > nav.main ul ul{
   display: none;
 }
-.sitemap > nav.main li:hover ul {
+.sitemap.populated > nav.main li:hover ul {
   display: block;
   position: absolute;
   z-index: 100;
 }
-.sitemap > nav.main:hover {
+.sitemap.populated > nav.main:hover {
   position: relative;
   z-index: 100;
 }
@@ -273,21 +273,21 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
   margin-top: 0rem;
 }
 .sitemap header.content[contenteditable="true"]:not(.loading) section{
-  margin-top: 3rem;
+  margin-top: 1.5rem;
 }
 .sitemap header[contenteditable="true"] section {
   transition: border-color 0.3s, background-color 0.3s;
 }
-.sitemap header:not([contenteditable="true"]),
-.sitemap header:not([contenteditable="true"]) section,
-.sitemap header.loading,
-.sitemap header.loading section {
-  padding: 0;
+.sitemap header:not(:target):not([contenteditable="true"]),
+.sitemap header:not(:target):not([contenteditable="true"]) section,
+.sitemap header:not(:target).loading,
+.sitemap header:not(:target).loading section {
   margin: 0;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   text-align: center;
   background: none;
-  display: inline-block;
-  padding: 1.04rem;
+  display: inline-flex;
 }
 .sitemap {
   text-align: center;
@@ -298,31 +298,60 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
 .sitemap section h1 a {
   text-decoration: none;
 }
-.sitemap header.content:not([contenteditable="true"]) .kx.foreground,
-.sitemap header.content.loading .kx.foreground {
+.sitemap header.content:not(:target):not([contenteditable="true"]) .kx.foreground,
+.sitemap header.content.loading:not(:target) .kx.foreground {
   top:0;
   bottom: 0;
-  right: 0;
-  left: 0;
+  right: -1rem;
+  left: -1rem;
   width: auto;
-  max-width: 100%;
   height: auto;
+  opacity: 0;
 }
 
-.sitemap header:not([contenteditable="true"]) .kx.toolbar,
-.sitemap header.loading .kx.toolbar {
+.sitemap header:not(.expanded):not([contenteditable="true"]) .kx.toolbar,
+.sitemap header:not(.expanded).loading .kx.toolbar {
   margin-top: -0.5rem;
 }
-#layout-root .sitemap header:not([contenteditable="true"]) h1,
-#layout-root .sitemap header.loading h1 {
+#layout-root .sitemap header:not(:target):not([contenteditable="true"]) h1,
+#layout-root .sitemap header:not(:target).loading h1,
+#layout-root .sitemap header:not(:target):not([contenteditable="true"]) [itempath*="summary"],
+#layout-root .sitemap header:not(:target).loading [itempath*="summary"],
+#layout-root .sitemap header:not(:target):not([contenteditable="true"]) section > a[href*="#"] {
   display: inline-block;
   width: auto;
-  margin: 0 auto;
+  margin: 1rem auto 0;
   text-align: left;
+  opacity: 1;
+}
+#layout-root .sitemap.sitemap.sitemap header section > a[href*="#"] {
+  text-align: center;
+  opacity: 1;
+  margin: 1rem auto 0;
+  display: block;
+  width: 100%;
 }
 
-.sitemap header:not([contenteditable="true"]) > section > :not(h1):not(.kx),
-.sitemap header.loading > section > :not(h1):not(.kx) {
+#layout-root .sitemap header:not(:target):not([contenteditable="true"]) section > a:not([href*="#"]),
+#layout-root .sitemap header:not(:target):not([contenteditable="true"]) section > picture,
+#layout-root .sitemap header:not(:target).loading section > a:not([href*="#"]),
+#layout-root .sitemap header:not(:target).loading section > picture {
+  display: block;
+  width: auto;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100px;
+  height: 100px;
+  opacity: 1;
+  flex-order: -1;
+  border-radius: 50%;
+  order: -1;
+}
+
+.sitemap header:not(:target):not([contenteditable="true"]) > section > :not(h1):not(.kx),
+.sitemap header:not(:target):not([contenteditable="true"]) > section + section,
+.sitemap header:not(:target).loading > section > :not(h1):not(.kx),
+.sitemap header:not(:target).loading > section + section {
   display: none;
   opacity: 0;
 }
@@ -331,8 +360,20 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
   font-size: 1.2rem;
 }
 
-
-
+#layout-root .sitemap header:not(:target) > section.has-picture:first-child .toolbar{
+  top: 4.5rem;
+  z-index: 10;
+}
+#layout-root .sitemap header[contenteditable="true"]:not(.loading) > section.has-picture:first-child .toolbar{
+  top: 0rem;
+  z-index: 10;
+}
+#layout-root .sitemap header > section.has-picture:first-child .toolbar{
+  opacity: 0.01;
+}
+#layout-root .sitemap header:hover > section.has-picture:first-child .toolbar{
+  opacity: 1;
+}
 .sitemap nav.main > ul > li > .list {
   display: none;
 }
@@ -372,6 +413,9 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
 }
 
 
+body.portal #layout-root article[itemtype="service"] > section {
+  display: none;
+}
 
 
 

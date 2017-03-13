@@ -104,7 +104,7 @@ article[hidden]{
   display: none;
 }
 
-article .list:not([layout]) {
+article:not(.compacted) .list:not([layout]) {
   padding: 0 2rem 1rem;
 }
 #layout-root .content .list > header > .toolbar svg:not(:hover) {

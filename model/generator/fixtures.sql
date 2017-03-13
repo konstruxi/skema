@@ -27,7 +27,7 @@ insert into services(root_id, name, summary, content)
 insert into categories(service_id, root_id, name, summary, content, articles_content)
   values (
     -1, 
-    666,
+    -666,
     'Places I''ve been to', 
     'From depths of cosmic horror to lifeless plains of ancient gods.',
     xmlarticleroot('<section><x-div class="kx foreground"><svg /></x-div>
@@ -50,8 +50,8 @@ insert into categories(service_id, root_id, name, summary, content, articles_con
 insert into articles(service_id, root_id, category_id, title, summary, content)
 values (
   -1, 
-  667,
-  666,
+  -667,
+  -666,
   'Caves of unbeing', 
   'The time has stalled in these eternal ruins that seen original inhabitants of Earth',
   xmlarticleroot('<section><x-div class="kx foreground"><svg /></x-div>
@@ -64,8 +64,8 @@ values (
 insert into articles(service_id, root_id, category_id, title, summary, content)
 values (
   -1,
-  668,
-  666,
+  -668,
+  -666,
   'Dunwich swamps', 
   'A den of witchraft, forsaken by the nature itself is a pulsating heart of evil',
   xmlarticleroot('<section><x-div class="kx foreground"><svg /></x-div>
@@ -77,8 +77,8 @@ values (
 insert into articles(service_id, root_id, category_id, title, summary, content)
 values (
   -1,
-  669,
-  666,
+  -669,
+  -666,
   'Fourth dimension', 
   'A pocket of ungodly geometry is accessible to a bearer of the skeleton key.',
   xmlarticleroot('<section><x-div class="kx foreground"><svg /></x-div>
@@ -88,11 +88,10 @@ values (
    </section>'::xml, 'articles', 'fourth_dimension'));
 
 
-
 insert into categories(service_id, root_id, name, summary, content)
 values (
   -1,
-  766,
+  -766,
   'Things I wrote', 
   'Forbidden mysteries of unhuman lore, unseen manuscripts of unknown civilizations.',
   xmlarticleroot('
@@ -102,3 +101,57 @@ values (
     <p>There is no way back to sanity.</p>
   </section>'::xml, 'categories', 'things_i_wrote'));
 
+
+insert into articles(service_id, root_id, category_id, title, summary, content)
+values (
+  -1, 
+  -767,
+  -766,
+  'Necronomicon digest', 
+  'Ancient writings hold numerous secrets. Millenias passed since old gods, and the understanding of subjects is long lost.',
+  xmlarticleroot('<section><x-div class="kx foreground"><svg /></x-div>
+    <h1>Necronomicon digest</h1>
+    <p>Ancient writings hold numerous secrets. Millenias passed since old gods, and the understanding of subjects is long lost.</p>
+    <p>An attempt at rediscovering and evolving work of known mystical scholars like Aesoteph IV and the Poe twins.</p></section>
+  '::xml, 'articles', 'necronomicon_digest'));
+
+
+
+insert into articles(service_id, root_id, category_id, title, summary, content)
+values (
+  -1, 
+  -768,
+  -766,
+  'Kerangasem investigation', 
+  'Villages of a small fishing set large jungle forest on fire. The fire kills thousands.',
+  xmlarticleroot('<section><x-div class="kx foreground"><svg /></x-div>
+    <h1>Kerangasem investigation</h1>
+    <p>Villages of a small fishing set large jungle forest on fire. The fire kills thousands.</p>
+    <p>Investigation led by local government halted as villages would not cooperate. One of the elders tells the fire is the only way to stop the spirits of corruption.</p></section>
+  '::xml, 'articles', 'sunset_shriek'));
+
+
+insert into categories(service_id, root_id, name, summary, content)
+values (
+  -1,
+  -768,
+  'Things I dont know', 
+  'Everybody does not know something. Just like any other mortal, I can not see beneath the veil of ignorance.',
+  xmlarticleroot('
+    <section><x-div class="kx foreground"><svg /></x-div>
+    <h1>Things I dont know</h1>
+    <p>Everybody does not know something. I dont know what I dont know, personally.</p>
+  </section>'::xml, 'categories', 'things_i_dont_know'));
+
+
+insert into inquiries(service_id, root_id, name, summary, content)
+values (
+  -1,
+  -766,
+  'How to cope with cosmic horror?', 
+  'The first step to maturation of human psyque is to acknowledge human insignificance at the scale of universe.',
+  xmlarticleroot('
+    <section><x-div class="kx foreground"><svg /></x-div>
+    <h1>Things I dont know</h1>
+    <p>Everybody does not know something. I dont know what I dont know, personally.</p>
+  </section>'::xml, 'categories', 'things_i_wrote'));

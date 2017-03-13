@@ -455,6 +455,7 @@ Service.cancel = function(element, remove) {
     } else if (Service.editor.undoManager.snapshots.length && Service.editor.undoManager.undoable()) {
       Service.editor.undoManager.restoreImage(Service.editor.undoManager.snapshots[0])
     }
+    Editor.Content.cleanEmpty(Service.editor, true, true)
     if (Service.editorTitleContent) {
       var title = el.querySelector('h1, h2');
       if (title) title.innerHTML = Service.editorTitleContent;
@@ -513,6 +514,7 @@ Service.revert = function(element) {
 // request content from mainpage and put article titles into nav
 Service.populateNavigation = function(sitemap) {
   Service.HTMLRequest(location.pathname.match(/\/(?:~[^\/]+\/)?/), function(doc) {
+    sitemap.classList.add('populated')
     var links = sitemap.querySelectorAll('.sitemap > nav.main > ul > li > a');
     for (var i = 0; i < links.length; i++) {
       var bits = links[i].pathname.split('/');

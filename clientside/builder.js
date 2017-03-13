@@ -3,6 +3,8 @@ Builder = {};
 Builder.init = function() {
   var sitemap = document.querySelector('.sitemap');
   if (!sitemap) return;
+
+  
   /*
   var list = sitemap.getElementsByTagName('ul')[0];
 

@@ -167,6 +167,30 @@ for (var i = 0; i < articles.length; i++) {
 }
 
 Editor.Style.recompute(document.body)
+
+Array.prototype.forEach.call(document.querySelectorAll('img[crop-x]'), function(img) {
+  Editor.Image.crop(img)
+});
+
+Manager.initHeader = function() {
+
+var header = document.querySelector('header[itemtype] > section:first-child');
+header.parentNode.setAttribute('id', 'about');
+var more = document.createElement('a');
+more.onclick = function() {
+  location.hash = more.hash;
+  more.setAttribute('href', location.hash == '#about' ? '#' : '#about')
+  more.innerHTML = location.hash == '#about' ? 'Collapse' : 'Read more'
+  window.scrollTo(0, 0)
+  Manager.animate()
+  return false;
+}
+more.href = location.hash == '#about' ? '#' : '#about'
+more.innerHTML = location.hash == '#about' ? 'Collapse' : 'Read more'
+header.appendChild(more)
+
+};
+Manager.initHeader()
 setTimeout(function() {
   document.body.classList.add('ready')
 }, 50)
