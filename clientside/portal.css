@@ -324,6 +324,7 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
   text-align: left;
   opacity: 1;
 }
+#layout-root .sitemap header:not(:target):not([contenteditable="true"]) [itempath*="summary"],
 #layout-root .sitemap header:not(:target).loading [itempath*="summary"] {
   width: 102%;
   text-align: center;
