@@ -324,6 +324,10 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
   text-align: left;
   opacity: 1;
 }
+#layout-root .sitemap header:not(:target).loading [itempath*="summary"] {
+  width: 102%;
+  text-align: center;
+}
 #layout-root .sitemap.sitemap.sitemap header section > a[href*="#"] {
   text-align: center;
   opacity: 1;
