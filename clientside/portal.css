@@ -454,3 +454,8 @@ body.portal #layout-root article[itemtype="service"] > section {
 #layout-root aside.aside {
   display: none;
 }
+
+body.public svg {
+  display: none !important;
+  opacity: 0 !important;
+}

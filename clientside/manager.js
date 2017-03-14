@@ -200,6 +200,8 @@ header.appendChild(more)
 Manager.initHeader()
 setTimeout(function() {
   document.body.classList.add('ready')
+  if (location.search.indexOf('public') > -1)
+    document.body.classList.add('public')
 }, 50)
 document.addEventListener('click', function(e) {
   if (window.currentManager) {
