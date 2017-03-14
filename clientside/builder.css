@@ -469,3 +469,8 @@ ul > li.edit  {
 .root.resources ul > li.edit {
   margin-left: -4rem;
 }
+
+
+#layout-root summary svg {
+  background-color: transparent;
+}

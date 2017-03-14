@@ -246,17 +246,9 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
 .sitemap > nav.main ul {
   margin: 0;
   padding: 0;
-  display: inline-block;
-}
-.sitemap > nav.main ul ul{
-  display: none;
-}
-.sitemap.populated > nav.main li:hover ul {
   display: block;
-  position: absolute;
-  z-index: 100;
 }
-.sitemap.populated > nav.main:hover {
+.sitemap > nav.main:hover {
   position: relative;
   z-index: 100;
 }
@@ -282,10 +274,10 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
 .sitemap header[contenteditable="true"] section {
   transition: border-color 0.3s, background-color 0.3s;
 }
-.sitemap header:not(:target):not([contenteditable="true"]),
-.sitemap header:not(:target):not([contenteditable="true"]) section,
-.sitemap header:not(:target).loading,
-.sitemap header:not(:target).loading section {
+.sitemap header:not(.expanded):not([contenteditable="true"]),
+.sitemap header:not(.expanded):not([contenteditable="true"]) section,
+.sitemap header:not(.expanded).loading,
+.sitemap header:not(.expanded).loading section {
   margin: 0;
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -302,8 +294,8 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
 .sitemap section h1 a {
   text-decoration: none;
 }
-.sitemap header.content:not(:target):not([contenteditable="true"]) .kx.foreground,
-.sitemap header.content.loading:not(:target) .kx.foreground {
+.sitemap header.content:not(.expanded):not([contenteditable="true"]) .kx.foreground,
+.sitemap header.content.loading:not(.expanded) .kx.foreground {
   top:0;
   bottom: 0;
   right: -1rem;
@@ -317,19 +309,19 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
 .sitemap header:not(.expanded).loading .kx.toolbar {
   margin-top: -0.5rem;
 }
-#layout-root .sitemap header:not(:target):not([contenteditable="true"]) h1,
-#layout-root .sitemap header:not(:target).loading h1,
-#layout-root .sitemap header:not(:target):not([contenteditable="true"]) [itempath*="summary"],
-#layout-root .sitemap header:not(:target).loading [itempath*="summary"],
-#layout-root .sitemap header:not(:target):not([contenteditable="true"]) section > a[href*="#"] {
+#layout-root .sitemap header:not(.expanded):not([contenteditable="true"]) h1,
+#layout-root .sitemap header:not(.expanded).loading h1,
+#layout-root .sitemap header:not(.expanded):not([contenteditable="true"]) [itempath*="summary"],
+#layout-root .sitemap header:not(.expanded).loading [itempath*="summary"],
+#layout-root .sitemap header:not(.expanded):not([contenteditable="true"]) section > a[href*="#"] {
   display: inline-block;
   width: auto;
   margin: 1rem auto 0;
   text-align: left;
   opacity: 1;
 }
-#layout-root .sitemap header:not(:target):not([contenteditable="true"]) [itempath*="summary"],
-#layout-root .sitemap header:not(:target).loading [itempath*="summary"] {
+#layout-root .sitemap header:not(.expanded):not([contenteditable="true"]) [itempath*="summary"],
+#layout-root .sitemap header:not(.expanded).loading [itempath*="summary"] {
   width: 102%;
   text-align: center;
 }
@@ -341,10 +333,10 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
   width: 100%;
 }
 
-#layout-root .sitemap header:not(:target):not([contenteditable="true"]) section > a:not([href*="#"]),
-#layout-root .sitemap header:not(:target):not([contenteditable="true"]) section > picture,
-#layout-root .sitemap header:not(:target).loading section > a:not([href*="#"]),
-#layout-root .sitemap header:not(:target).loading section > picture {
+#layout-root .sitemap header:not(.expanded):not([contenteditable="true"]) section > a:not([href*="#"]),
+#layout-root .sitemap header:not(.expanded):not([contenteditable="true"]) section > picture,
+#layout-root .sitemap header:not(.expanded).loading section > a:not([href*="#"]),
+#layout-root .sitemap header:not(.expanded).loading section > picture {
   display: block;
   width: auto;
   margin-left: auto;
@@ -357,10 +349,10 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
   order: -1;
 }
 
-.sitemap header:not(:target):not([contenteditable="true"]) > section > :not(h1):not(.kx),
-.sitemap header:not(:target):not([contenteditable="true"]) > section + section,
-.sitemap header:not(:target).loading > section > :not(h1):not(.kx),
-.sitemap header:not(:target).loading > section + section {
+.sitemap header:not(.expanded):not([contenteditable="true"]) > section > :not(h1):not(.kx),
+.sitemap header:not(.expanded):not([contenteditable="true"]) > section + section,
+.sitemap header:not(.expanded).loading > section > :not(h1):not(.kx),
+.sitemap header:not(.expanded).loading > section + section {
   display: none;
   opacity: 0;
 }
@@ -369,7 +361,7 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
   font-size: 1.2rem;
 }
 
-#layout-root .sitemap header:not(:target) > section.has-picture:first-child .toolbar{
+#layout-root .sitemap header:not(.expanded) > section.has-picture:first-child .toolbar{
   top: 4.5rem;
   z-index: 10;
 }
@@ -383,8 +375,9 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
 #layout-root .sitemap header:hover > section.has-picture:first-child .toolbar{
   opacity: 1;
 }
-.sitemap nav.main > ul > li > .list {
+.sitemap nav.main > ul > li > ul {
   display: none;
+  opacity: 0;
 }
 .sitemap nav.main > ul > li:hover > a{
   position: relative;
@@ -392,16 +385,14 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
   background-color: inherit;
   display: inline-block;
 }
-.sitemap nav.main > ul > li:hover .list {
+.sitemap.populated nav.main > ul > li:hover > .list {
   display: inline-block;
   opacity: 1;
   width: auto;
-  min-width: 220px;
   position: absolute;
   z-index: 500;
   margin-top: -1rem;
-  padding: 0;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  padding: 0 1rem 1rem 0;
   background-color: inherit;
 }
 
@@ -429,6 +420,15 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
   display: none;
 }
 
+.sitemap nav.main > ul > li > ul ul{
+  font-size: 0.9rem;
+  padding: 0;
+  margin: 0;
+  margin-left: 1rem;
+}
+.sitemap nav.main > ul > li > ul ul a{ 
+  padding: 0rem 0.5rem 0.5rem;
+}
 
 body.portal #layout-root article[itemtype="service"] > section {
   display: none;

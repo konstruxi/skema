@@ -7,7 +7,7 @@ Manager.animate = function(callback) {
   if (!window.snapshot) {
     window.snapshot = Editor.Snapshot.take(document.getElementById('layout-root') || document.body, new Editor.Snapshot);
   } else {
-    window.snapshot = window.snapshot.animate(callback);
+    window.snapshot = window.snapshot.animate();
     if (Manager.editor)
       Manager.editor.snapshot = window.snapshot;
   }
@@ -175,22 +175,24 @@ Array.prototype.forEach.call(document.querySelectorAll('img[crop-x]'), function(
 Manager.initHeader = function() {
 
 var header = document.querySelector('header[itemtype] > section:first-child');
-header.parentNode.setAttribute('id', 'about');
 var more = document.createElement('a');
 more.onclick = function() {
-  location.hash = more.hash;
-  more.setAttribute('href', location.hash == '#about' ? '#' : '#about')
-  more.innerHTML = location.hash == '#about' ? 'Collapse' : 'Read more'
-  window.scrollTo(0, 0)
-  window.slowdown = 3;
-  Manager.animate()
+  //location.hash = more.hash;
+  header.parentNode.classList[!header.parentNode.classList.contains('expanded') ? 'add' : 'remove']('expanded')
+  more.setAttribute('href', header.parentNode.classList.contains('expanded') ? '#' : '#about')
+  more.textContent   = header.parentNode.classList.contains('expanded') ? 'Collapse' : 'Read more'
+  window.slowdown = 2;
+  window.scrollTo(0,0)
   clearTimeout(window.slowindown)
+  Manager.animate()
   window.slowindown = setTimeout(function() {
     window.slowdown = 1;
   }, 1000)
   return false;
 }
 more.href = location.hash == '#about' ? '#' : '#about'
+if (location.hash == '#about')
+  header.parentNode.classList.add('expanded')
 more.innerHTML = location.hash == '#about' ? 'Collapse' : 'Read more'
 header.appendChild(more)
 

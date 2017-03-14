@@ -520,34 +520,47 @@ Service.populateNavigation = function(sitemap) {
       var bits = links[i].pathname.split('/');
       var resource = bits.pop();
       if (!resource) resource = bits.pop();
-      var container = document.createElement('div');
-      container.classList.add('list');
-      links[i].parentNode.appendChild(container)
       var list = doc.querySelector('[itemtable="' + resource + '"]');
       if (list) {
-        links[i].parentNode.parentNode.setAttribute('open', 'open')
-        for (var j = 0; j < list.children.length; j++) {
-          if (list.children[j].tagName == 'ARTICLE') {
-            var excerpt = list.children[j].getElementsByTagName('section')[0];
-            if (excerpt) {
-              var clone = document.createElement('div');
-              clone.classList.add('section');
-              var children = excerpt.children;
-              for (var k = 0; k < children.length; k++)
-                if (children[k].classList 
-                  && !children[k].classList.contains('kx')
-                  && children[k].tagName != 'HEADER'
-                  && !children[k].classList.contains('list'))
-                  clone.appendChild(children[k].cloneNode(true))
-              container.appendChild(clone)
-            }
-          }
+        var sublist = Service.getLinkList(list);
+        if (sublist) {
+
+          links[i].parentNode.appendChild(sublist)
+          links[i].parentNode.parentNode.setAttribute('open', 'open')
         }
       }
     }
     Manager.animate()
 
   })
+}
+
+Service.getLinkList = function(list) {
+  var container = document.createElement('ul');
+  container.classList.add('list');
+  for (var j = 0; j < list.children.length; j++) {
+    if (list.children[j].tagName == 'ARTICLE') {
+      var li = document.createElement('li');
+      container.appendChild(li)
+
+      var excerpt = list.children[j].getElementsByTagName('section')[0];
+      if (excerpt) {
+        var a = excerpt.querySelector('h1 a, h2 a, h3 a')
+        if (a)
+          li.appendChild(a);
+      }
+
+      for (var k = 0; k < list.children[j].children.length; k++) {
+        if (list.children[j].children[k].classList.contains('list')) {
+          var sublist = Service.getLinkList(list.children[j].children[k]);
+          if (sublist)
+            li.appendChild(sublist)
+        }
+      }
+    }
+  }
+  if (container.children.length)
+    return container;
 }
 
 Service.makeUnselectable = function(element) {
