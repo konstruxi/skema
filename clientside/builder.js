@@ -4,7 +4,7 @@ Builder.init = function() {
   var sitemap = document.querySelector('.sitemap');
   if (!sitemap) return;
 
-  
+
   /*
   var list = sitemap.getElementsByTagName('ul')[0];
 
@@ -111,7 +111,8 @@ function buildList(root, prefix, counter) {
 
       var select = document.createElement('select')
       select.name = name + '[table_name]'
-      select.innerHTML = '<option>' + link.pathname.replace(/\//g, '') + '</option>';
+      debugger
+      select.innerHTML = '<option>' + link.pathname.replace(/\/(?:~[^/]+\/)?/g, '') + '</option>';
       summary.appendChild(select)
 
       var dls = root.children[k].getElementsByTagName('dl');

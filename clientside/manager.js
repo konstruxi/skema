@@ -7,7 +7,7 @@ Manager.animate = function(callback) {
   if (!window.snapshot) {
     window.snapshot = Editor.Snapshot.take(document.getElementById('layout-root') || document.body, new Editor.Snapshot);
   } else {
-    window.snapshot = window.snapshot.animate();
+    window.snapshot = window.snapshot.animate(callback);
     if (Manager.editor)
       Manager.editor.snapshot = window.snapshot;
   }
@@ -182,7 +182,12 @@ more.onclick = function() {
   more.setAttribute('href', location.hash == '#about' ? '#' : '#about')
   more.innerHTML = location.hash == '#about' ? 'Collapse' : 'Read more'
   window.scrollTo(0, 0)
+  window.slowdown = 3;
   Manager.animate()
+  clearTimeout(window.slowindown)
+  window.slowindown = setTimeout(function() {
+    window.slowdown = 1;
+  }, 1000)
   return false;
 }
 more.href = location.hash == '#about' ? '#' : '#about'
@@ -264,7 +269,6 @@ document.addEventListener('click', function(e) {
   } else if (toolbar && section) {
     var use = toolbar.querySelector('use');
 
-    debugger
     if (use && (use.getAttribute('href').indexOf('fork') > -1 || 
                 use.getAttribute('href').indexOf('edit') > -1 || 
                 use.getAttribute('href').indexOf('star') > -1) || 
