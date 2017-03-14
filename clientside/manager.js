@@ -79,6 +79,8 @@ Saver.open = function(editor, section, button) {
     var offsetTop = box.top// + document.body.offsetTop;
     var offsetLeft = box.left// + document.body.offsetLeft;
     for (var p = anchor; (p = p.parentNode) != document.body; ) {
+      if (!p)
+        return;
       if (p.classList.contains('list')) {
         offsetTop -= p.scrollTop
         offsetLeft -= p.scrollLeft
