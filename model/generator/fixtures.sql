@@ -49,7 +49,7 @@ insert into categories(service_id, root_id, name, summary, content, articles_con
 
 insert into articles(service_id, root_id, category_id, title, summary, content)
 values (
-  -1, 
+  -3, 
   -1667,
   -1666,
   'Caves of unbeing', 

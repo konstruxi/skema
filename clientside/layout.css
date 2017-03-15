@@ -14,10 +14,6 @@
   padding: 0 calc((100% - 864px) / 2);
 }
 
-.list[layout="stream"] > header {
-  column-span: all;
-  margin: 0 auto -1rem;
-}
 .list[layout="stream"] > * {
   width: 432px;
   margin: 2rem 0 2rem;
@@ -25,6 +21,18 @@
   -webkit-column-break-inside: avoid; /* Chrome, Safari */
   page-break-inside: avoid;           /* Theoretically FF 20+ */
   break-inside: avoid-column;         /* IE 11 */
+}
+.list[layout="stream"] > article > .list{
+  -webkit-column-break-inside: avoid; /* Chrome, Safari */
+  page-break-inside: avoid;           /* Theoretically FF 20+ */
+  break-inside: avoid-column;         /* IE 11 */
+}
+.list[layout="stream"] > header {
+  column-span: all;
+  margin: 0 auto -1rem;
+  width: 100%;
+}
+.list[layout="stream"] > *:not(header) {
 }
 .list[layout="stream"] > article > section:first-of-type > .toolbar {
   top: 0;
@@ -145,6 +153,9 @@ article .list[layout="carousel"] {
 }
 .list[layout="headlines"] section > *:not(.kx):not(picture) {
   width: 100%;
+}
+.list[layout="headlines"] section {
+  padding: 2rem;
 }
 
 #layout-root .list[layout="headlines"] .foreground{
