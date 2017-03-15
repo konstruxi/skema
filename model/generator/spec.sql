@@ -45,7 +45,7 @@ SELECT update_resource($f${
     "alias": "Manuscripts",
     "columns": [
       {"name":"category_id","type":"integer"},
-      {"name":"thumbnail","type":"file"},
+      --{"name":"thumbnail","type":"file"},
       {"name":"title","type":"varchar(255)"},
       {"name":"content","type":"xml"},
       {"name":"summary","type":"text"},
@@ -59,7 +59,7 @@ SELECT update_resource($f${
     "alias": "Visions",
     "columns": [
       {"name":"category_id","type":"integer"},
-      {"name":"thumbnail","type":"file"},
+      --{"name":"thumbnail","type":"file"},
       {"name":"title","type":"varchar(255)"},
       {"name":"content","type":"xml"},
       {"name":"summary","type":"text"},
@@ -120,6 +120,7 @@ SELECT update_resource($f${
       {"name":"name","type":"varchar(255)", "validations": [
         "required"
       ]},
+      {"name":"summary","type":"text"},
       {"name":"content","type":"xml"},
       {"name":"version","type":"integer"},
       {"name":"deleted_at","type":"timestamptz"}

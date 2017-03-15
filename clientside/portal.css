@@ -391,6 +391,8 @@ body.editing #layout-root .content[contenteditable="true"] .list .toolbar{
   width: auto;
   position: absolute;
   z-index: 500;
+  max-width: 300px;
+  min-width: 200px;
   margin-top: -1rem;
   padding: 0 1rem 1rem 0;
   background-color: inherit;
